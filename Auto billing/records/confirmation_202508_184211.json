@@ -1,0 +1,92 @@
+{
+  "batch_id": "20250901_184211",
+  "timestamp": "2025-09-01T18:42:11.197380",
+  "period": "2025年08月",
+  "pdf_package": "output\\账单PDF包_202508_184211.zip",
+  "merchant_count": 20,
+  "total_amount": 23966.730542220004,
+  "merchants": {
+    "A99AU": {
+      "amount": 66.96378520000002,
+      "pdf_file": "A99AU_2025年08月_賬單.pdf"
+    },
+    "AAFUN": {
+      "amount": 1006.1995827,
+      "pdf_file": "AAFUN_2025年08月_賬單.pdf"
+    },
+    "Barbet": {
+      "amount": 0,
+      "pdf_file": "Barbet_2025年08月_賬單.pdf"
+    },
+    "Betfarms": {
+      "amount": 8882.08507938,
+      "pdf_file": "Betfarms_2025年08月_賬單.pdf"
+    },
+    "Epoch Game": {
+      "amount": 16.207290479999998,
+      "pdf_file": "Epoch Game_2025年08月_賬單.pdf"
+    },
+    "Game Plus": {
+      "amount": 13.852567599999999,
+      "pdf_file": "Game Plus_2025年08月_賬單.pdf"
+    },
+    "JBgame": {
+      "amount": 260.6457,
+      "pdf_file": "JBgame_2025年08月_賬單.pdf"
+    },
+    "Jogar": {
+      "amount": 2.2196,
+      "pdf_file": "Jogar_2025年08月_賬單.pdf"
+    },
+    "JR": {
+      "amount": 0,
+      "pdf_file": "JR_2025年08月_賬單.pdf"
+    },
+    "Mxlobo": {
+      "amount": 1345.6287824400001,
+      "pdf_file": "Mxlobo_2025年08月_賬單.pdf"
+    },
+    "MxnGame777": {
+      "amount": 56.93946984,
+      "pdf_file": "MxnGame777_2025年08月_賬單.pdf"
+    },
+    "Nicegame": {
+      "amount": 140.22597347999996,
+      "pdf_file": "Nicegame_2025年08月_賬單.pdf"
+    },
+    "PUBCGAME": {
+      "amount": 80.400177,
+      "pdf_file": "PUBCGAME_2025年08月_賬單.pdf"
+    },
+    "RD1": {
+      "amount": 0,
+      "pdf_file": "RD1_2025年08月_賬單.pdf"
+    },
+    "RichGroup": {
+      "amount": 42.41887056,
+      "pdf_file": "RichGroup_2025年08月_賬單.pdf"
+    },
+    "sortebot": {
+      "amount": 11357.771900900003,
+      "pdf_file": "sortebot_2025年08月_賬單.pdf"
+    },
+    "Togame": {
+      "amount": 8.315069099999999,
+      "pdf_file": "Togame_2025年08月_賬單.pdf"
+    },
+    "Unicorn66": {
+      "amount": 426.6720639,
+      "pdf_file": "Unicorn66_2025年08月_賬單.pdf"
+    },
+    "VG": {
+      "amount": 9.5763888,
+      "pdf_file": "VG_2025年08月_賬單.pdf"
+    },
+    "winwinbet": {
+      "amount": 250.60824084,
+      "pdf_file": "winwinbet_2025年08月_賬單.pdf"
+    }
+  },
+  "message": "[SUMMARY] 聚单发送总览\n\n[ID] 批次ID: 20250901_184211\n[SENT] 已发送: 20 个账单\n[AMOUNT] 总金额: 23966.73 USDT\n[PERIOD] 账期: 2025年08月\n\n商户列表 (共20个):\n- A99AU: 66.96 USDT\n- AAFUN: 1006.20 USDT\n- Barbet: 0.00 USDT\n- Betfarms: 8882.09 USDT\n- Epoch Game: 16.21 USDT\n- Game Plus: 13.85 USDT\n- JBgame: 260.65 USDT\n- Jogar: 2.22 USDT\n- JR: 0.00 USDT\n- Mxlobo: 1345.63 USDT\n- MxnGame777: 56.94 USDT\n- Nicegame: 140.23 USDT\n- PUBCGAME: 80.40 USDT\n- RD1: 0.00 USDT\n- RichGroup: 42.42 USDT\n- sortebot: 11357.77 USDT\n- Togame: 8.32 USDT\n- Unicorn66: 426.67 USDT\n- VG: 9.58 USDT\n- winwinbet: 250.61 USDT\n\n请仔细核对以下合规信息发送给客户:\n/confirm 20250901_184211\n\n或回复 /reject 20250901_184211 拒绝发送",
+  "status": "pending"
+}

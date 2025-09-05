@@ -1,0 +1,21 @@
+{
+  "batch_id": "20250904_200447",
+  "period": "2025年07月",
+  "created_at": "2025-09-04T20:04:47.873412",
+  "status": "pending",
+  "summary_data": {
+    "merchants": {
+      "TestMerchant": {
+        "amount": 100.0
+      }
+    },
+    "total_count": 1,
+    "total_amount": 100.0,
+    "period": "2025年07月"
+  },
+  "zip_files": [],
+  "confirm_url": "http://127.0.0.1:8787/confirm?bid=20250904_200447&action=confirm&code=287e201ba1e3f870",
+  "reject_url": "http://127.0.0.1:8787/confirm?bid=20250904_200447&action=reject&code=86324df7a838b818",
+  "confirm_token": "287e201ba1e3f870",
+  "reject_token": "86324df7a838b818"
+}

@@ -1,0 +1,277 @@
+{
+  "batch_id": "20250904_104210",
+  "period": "2025年07月",
+  "created_at": "2025-09-04T10:42:10.724451",
+  "status": "confirmed",
+  "summary_data": {
+    "merchants": {
+      "RD1": {
+        "amount": 0.0,
+        "fee_rate": 0.0,
+        "sub_merchants_count": 4,
+        "transactions_count": 4
+      },
+      "sortebot": {
+        "amount": 11357.771900900003,
+        "fee_rate": 2.5,
+        "sub_merchants_count": 1,
+        "transactions_count": 7
+      },
+      "Game Plus": {
+        "amount": 13.852567599999999,
+        "fee_rate": 2.5,
+        "sub_merchants_count": 1,
+        "transactions_count": 2
+      },
+      "JR": {
+        "amount": 0.0,
+        "fee_rate": 0.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 1
+      },
+      "slotsapi": {
+        "amount": 178.449886525,
+        "fee_rate": 2.5,
+        "sub_merchants_count": 2,
+        "transactions_count": 13
+      },
+      "Betfarms": {
+        "amount": 8882.08507938,
+        "fee_rate": 3.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 13
+      },
+      "Epoch Game": {
+        "amount": 16.207290479999998,
+        "fee_rate": 6.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 1
+      },
+      "Mxlobo": {
+        "amount": 1345.6287824400001,
+        "fee_rate": 6.0,
+        "sub_merchants_count": 2,
+        "transactions_count": 2
+      },
+      "VG": {
+        "amount": 9.5763888,
+        "fee_rate": 6.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 3
+      },
+      "Nicegame": {
+        "amount": 140.22597348,
+        "fee_rate": 3.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 1
+      },
+      "Togame": {
+        "amount": 8.3150691,
+        "fee_rate": 3.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 1
+      },
+      "Unicorn66": {
+        "amount": 426.6720639,
+        "fee_rate": 5.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 1
+      },
+      "RichGroup": {
+        "amount": 42.41887056,
+        "fee_rate": 8.0,
+        "sub_merchants_count": 19,
+        "transactions_count": 19
+      },
+      "MxnGame777": {
+        "amount": 56.93946984,
+        "fee_rate": 8.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 1
+      },
+      "winwinbet": {
+        "amount": 250.60824084,
+        "fee_rate": 6.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 4
+      },
+      "A99AU": {
+        "amount": 66.96378520000002,
+        "fee_rate": 10.0,
+        "sub_merchants_count": 10,
+        "transactions_count": 10
+      },
+      "Barbet": {
+        "amount": 0.0,
+        "fee_rate": 0.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 2
+      },
+      "AAFUN": {
+        "amount": 1006.1995826999998,
+        "fee_rate": 6.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 8
+      },
+      "PUBCGAME": {
+        "amount": 80.400177,
+        "fee_rate": 2.5,
+        "sub_merchants_count": 1,
+        "transactions_count": 1
+      },
+      "JBgame": {
+        "amount": 260.6457,
+        "fee_rate": 3.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 2
+      },
+      "Jogar": {
+        "amount": 2.2196,
+        "fee_rate": 8.0,
+        "sub_merchants_count": 1,
+        "transactions_count": 1
+      }
+    },
+    "total_count": 21,
+    "total_amount": 24145.180428745003,
+    "period": "2025年07月",
+    "fee_groups": {
+      "0.0": [
+        {
+          "merchant_id": "RD1",
+          "amount": 0.0,
+          "sub_merchants_count": 4
+        },
+        {
+          "merchant_id": "JR",
+          "amount": 0.0,
+          "sub_merchants_count": 1
+        },
+        {
+          "merchant_id": "Barbet",
+          "amount": 0.0,
+          "sub_merchants_count": 1
+        }
+      ],
+      "2.5": [
+        {
+          "merchant_id": "sortebot",
+          "amount": 11357.771900900003,
+          "sub_merchants_count": 1
+        },
+        {
+          "merchant_id": "Game Plus",
+          "amount": 13.852567599999999,
+          "sub_merchants_count": 1
+        },
+        {
+          "merchant_id": "slotsapi",
+          "amount": 178.449886525,
+          "sub_merchants_count": 2
+        },
+        {
+          "merchant_id": "PUBCGAME",
+          "amount": 80.400177,
+          "sub_merchants_count": 1
+        }
+      ],
+      "3.0": [
+        {
+          "merchant_id": "Betfarms",
+          "amount": 8882.08507938,
+          "sub_merchants_count": 1
+        },
+        {
+          "merchant_id": "Nicegame",
+          "amount": 140.22597348,
+          "sub_merchants_count": 1
+        },
+        {
+          "merchant_id": "Togame",
+          "amount": 8.3150691,
+          "sub_merchants_count": 1
+        },
+        {
+          "merchant_id": "JBgame",
+          "amount": 260.6457,
+          "sub_merchants_count": 1
+        }
+      ],
+      "6.0": [
+        {
+          "merchant_id": "Epoch Game",
+          "amount": 16.207290479999998,
+          "sub_merchants_count": 1
+        },
+        {
+          "merchant_id": "Mxlobo",
+          "amount": 1345.6287824400001,
+          "sub_merchants_count": 2
+        },
+        {
+          "merchant_id": "VG",
+          "amount": 9.5763888,
+          "sub_merchants_count": 1
+        },
+        {
+          "merchant_id": "winwinbet",
+          "amount": 250.60824084,
+          "sub_merchants_count": 1
+        },
+        {
+          "merchant_id": "AAFUN",
+          "amount": 1006.1995826999998,
+          "sub_merchants_count": 1
+        }
+      ],
+      "5.0": [
+        {
+          "merchant_id": "Unicorn66",
+          "amount": 426.6720639,
+          "sub_merchants_count": 1
+        }
+      ],
+      "8.0": [
+        {
+          "merchant_id": "RichGroup",
+          "amount": 42.41887056,
+          "sub_merchants_count": 19
+        },
+        {
+          "merchant_id": "MxnGame777",
+          "amount": 56.93946984,
+          "sub_merchants_count": 1
+        },
+        {
+          "merchant_id": "Jogar",
+          "amount": 2.2196,
+          "sub_merchants_count": 1
+        }
+      ],
+      "10.0": [
+        {
+          "merchant_id": "A99AU",
+          "amount": 66.96378520000002,
+          "sub_merchants_count": 10
+        }
+      ]
+    },
+    "is_master_merchant": true,
+    "zip_files": [
+      "账单PDF包_202507_104210.zip",
+      "账单PDF包_202507_包2_10个PDF_104210.zip",
+      "账单PDF包_202507_包3_1个PDF_104210.zip"
+    ]
+  },
+  "zip_files": [
+    "账单PDF包_202507_104210.zip",
+    "账单PDF包_202507_包2_10个PDF_104210.zip",
+    "账单PDF包_202507_包3_1个PDF_104210.zip"
+  ],
+  "confirm_url": "https://simulate.confirm/bill?bid=20250904_104210&action=confirm&code=8319a71bc4b1616b",
+  "reject_url": "https://simulate.confirm/bill?bid=20250904_104210&action=reject&code=f331966cdf3007eb",
+  "confirm_token": "8319a71bc4b1616b",
+  "reject_token": "f331966cdf3007eb",
+  "action": "confirm",
+  "updated_at": "2025-09-04T11:10:59.426489"
+}

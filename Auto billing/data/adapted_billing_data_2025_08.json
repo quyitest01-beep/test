@@ -1,0 +1,1304 @@
+{
+  "test01": {
+    "merchant_name": "test01",
+    "total_transactions": 3,
+    "total_amount": 39978123.82000001,
+    "currencies": {
+      "BRL": {
+        "total_bet": 348702479.4,
+        "total_prize": 343670388.31,
+        "total_win_lose": 5032091.089999974,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "BRL"
+      },
+      "MXN": {
+        "total_bet": 1171217800.8,
+        "total_prize": 1139869347.33,
+        "total_win_lose": 31348453.47000003,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      },
+      "PHP": {
+        "total_bet": 34604418.95,
+        "total_prize": 31006839.69,
+        "total_win_lose": 3597579.2600000016,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      }
+    }
+  },
+  "betfiery_betfiery_net": {
+    "merchant_name": "betfiery@betfiery.net",
+    "total_transactions": 1,
+    "total_amount": 3120727.2700000047,
+    "currencies": {
+      "BRL": {
+        "total_bet": 95263476.49,
+        "total_prize": 92142749.22,
+        "total_win_lose": 3120727.2700000047,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "BRL"
+      }
+    }
+  },
+  "aajogo_aajogo_net": {
+    "merchant_name": "aajogo@aajogo.net",
+    "total_transactions": 1,
+    "total_amount": 2377524.8300000047,
+    "currencies": {
+      "BRL": {
+        "total_bet": 76771911.97,
+        "total_prize": 74394387.13999999,
+        "total_win_lose": 2377524.8300000047,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "BRL"
+      }
+    }
+  },
+  "mexlucky_mexlucky_net": {
+    "merchant_name": "mexlucky@mexlucky.net",
+    "total_transactions": 1,
+    "total_amount": 23943684.85999999,
+    "currencies": {
+      "MXN": {
+        "total_bet": 671413295.41,
+        "total_prize": 647469610.5500001,
+        "total_win_lose": 23943684.85999999,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      }
+    }
+  },
+  "mexswin_mexswin_com": {
+    "merchant_name": "mexswin@mexswin.com",
+    "total_transactions": 1,
+    "total_amount": 22479919.860000037,
+    "currencies": {
+      "MXN": {
+        "total_bet": 655680915.4,
+        "total_prize": 633200995.54,
+        "total_win_lose": 22479919.860000037,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      }
+    }
+  },
+  "ProductionSortebot": {
+    "merchant_name": "ProductionSortebot",
+    "total_transactions": 8,
+    "total_amount": 108549621.94,
+    "currencies": {
+      "AUD": {
+        "total_bet": 2053.1,
+        "total_prize": 1493.4,
+        "total_win_lose": 559.6999999999998,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      },
+      "BRL": {
+        "total_bet": 2127.0,
+        "total_prize": 2647.5,
+        "total_win_lose": -520.5,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "BRL"
+      },
+      "CLP": {
+        "total_bet": 101119267.0,
+        "total_prize": 82950148.4,
+        "total_win_lose": 18169118.599999994,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "CLP"
+      },
+      "COP": {
+        "total_bet": 1752594914.13,
+        "total_prize": 1674100979.59,
+        "total_win_lose": 78493934.54000002,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "COP"
+      },
+      "INR": {
+        "total_bet": 90.0,
+        "total_prize": 58.31,
+        "total_win_lose": 31.689999999999998,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "INR"
+      },
+      "MXN": {
+        "total_bet": 129992069.6,
+        "total_prize": 124838578.8,
+        "total_win_lose": 5153490.799999997,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      },
+      "PEN": {
+        "total_bet": 96168.25,
+        "total_prize": 91338.83,
+        "total_win_lose": 4829.419999999998,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PEN"
+      },
+      "PHP": {
+        "total_bet": 255445560.08999997,
+        "total_prize": 248718423.4,
+        "total_win_lose": 6727136.68999999,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      }
+    }
+  },
+  "ProductionGamePlus": {
+    "merchant_name": "ProductionGamePlus",
+    "total_transactions": 7,
+    "total_amount": 1192316.8800000001,
+    "currencies": {
+      "IDR": {
+        "total_bet": 6003.0,
+        "total_prize": 6004.5,
+        "total_win_lose": -1.5,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "IDR"
+      },
+      "INR": {
+        "total_bet": 60.0,
+        "total_prize": 0,
+        "total_win_lose": 60.0,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "INR"
+      },
+      "MXN": {
+        "total_bet": 146.8,
+        "total_prize": 105.23,
+        "total_win_lose": 41.57000000000001,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      },
+      "MYR": {
+        "total_bet": 12.0,
+        "total_prize": 10.5,
+        "total_win_lose": 1.5,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      },
+      "PHP": {
+        "total_bet": 271006.1,
+        "total_prize": 294370.05,
+        "total_win_lose": -23363.95000000001,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      },
+      "THB": {
+        "total_bet": 8.0,
+        "total_prize": 0,
+        "total_win_lose": 8.0,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "THB"
+      },
+      "VND": {
+        "total_bet": 2500303.0,
+        "total_prize": 1331462.64,
+        "total_win_lose": 1168840.36,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "VND"
+      }
+    }
+  },
+  "ProductionBrabet01": {
+    "merchant_name": "ProductionBrabet01",
+    "total_transactions": 1,
+    "total_amount": 9777.179999999993,
+    "currencies": {
+      "MXN": {
+        "total_bet": 160991.5,
+        "total_prize": 151214.32,
+        "total_win_lose": 9777.179999999993,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      }
+    }
+  },
+  "ProductionJR-F4": {
+    "merchant_name": "ProductionJR-F4",
+    "total_transactions": 1,
+    "total_amount": 550780.3000000007,
+    "currencies": {
+      "PHP": {
+        "total_bet": 14509118.4,
+        "total_prize": 13958338.1,
+        "total_win_lose": 550780.3000000007,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      }
+    }
+  },
+  "Productionslotsapi": {
+    "merchant_name": "Productionslotsapi",
+    "total_transactions": 6,
+    "total_amount": 4526.3,
+    "currencies": {
+      "ARS": {
+        "total_bet": 1349.0,
+        "total_prize": 620.33,
+        "total_win_lose": 728.67,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "ARS"
+      },
+      "AUD": {
+        "total_bet": 16.6,
+        "total_prize": 9.59,
+        "total_win_lose": 7.010000000000002,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      },
+      "MMK": {
+        "total_bet": 8700.0,
+        "total_prize": 6923.0,
+        "total_win_lose": 1777.0,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MMK"
+      },
+      "MYR": {
+        "total_bet": 60.4,
+        "total_prize": 53.58,
+        "total_win_lose": 6.82,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      },
+      "NPR": {
+        "total_bet": 17.4,
+        "total_prize": 12.85,
+        "total_win_lose": 4.549999999999999,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "NPR"
+      },
+      "THB": {
+        "total_bet": 6707.0,
+        "total_prize": 8709.25,
+        "total_win_lose": -2002.25,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "THB"
+      }
+    }
+  },
+  "ProductionBetfarms": {
+    "merchant_name": "ProductionBetfarms",
+    "total_transactions": 13,
+    "total_amount": 111242817.98000002,
+    "currencies": {
+      "BRL": {
+        "total_bet": 2985268.35,
+        "total_prize": 2898632.93,
+        "total_win_lose": 86635.41999999993,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "BRL"
+      },
+      "CLP": {
+        "total_bet": 1944656088.0,
+        "total_prize": 1894825097.53,
+        "total_win_lose": 49830990.47000003,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "CLP"
+      },
+      "COP": {
+        "total_bet": 1936240650.0,
+        "total_prize": 1880080449.74,
+        "total_win_lose": 56160200.25999999,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "COP"
+      },
+      "EGP": {
+        "total_bet": 3784921.4,
+        "total_prize": 3677309.1,
+        "total_win_lose": 107612.29999999981,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "EGP"
+      },
+      "IDR": {
+        "total_bet": 34000.0,
+        "total_prize": 24206.0,
+        "total_win_lose": 9794.0,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "IDR"
+      },
+      "INR": {
+        "total_bet": 18793371.5,
+        "total_prize": 18111653.91,
+        "total_win_lose": 681717.5899999999,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "INR"
+      },
+      "MXN": {
+        "total_bet": 124769698.75,
+        "total_prize": 121023763.16,
+        "total_win_lose": 3745935.5900000036,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      },
+      "MYR": {
+        "total_bet": 86755.75,
+        "total_prize": 80035.51,
+        "total_win_lose": 6720.240000000005,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      },
+      "NGN": {
+        "total_bet": 139375.0,
+        "total_prize": 149560.05,
+        "total_win_lose": -10185.049999999988,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "NGN"
+      },
+      "PEN": {
+        "total_bet": 2317839.85,
+        "total_prize": 2228687.37,
+        "total_win_lose": 89152.47999999998,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PEN"
+      },
+      "PHP": {
+        "total_bet": 19745984.25,
+        "total_prize": 19240098.48,
+        "total_win_lose": 505885.76999999955,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      },
+      "PKR": {
+        "total_bet": 84572.9,
+        "total_prize": 79897.97,
+        "total_win_lose": 4674.929999999993,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PKR"
+      },
+      "USD": {
+        "total_bet": 91106.3,
+        "total_prize": 87792.42,
+        "total_win_lose": 3313.8800000000047,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "USD"
+      }
+    }
+  },
+  "ProductionEpochGame": {
+    "merchant_name": "ProductionEpochGame",
+    "total_transactions": 1,
+    "total_amount": 109477.34000000032,
+    "currencies": {
+      "PHP": {
+        "total_bet": 2624323.45,
+        "total_prize": 2514846.11,
+        "total_win_lose": 109477.34000000032,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      }
+    }
+  },
+  "ProductionMxlobo": {
+    "merchant_name": "ProductionMxlobo",
+    "total_transactions": 1,
+    "total_amount": 813258.1799999997,
+    "currencies": {
+      "MXN": {
+        "total_bet": 22122801.75,
+        "total_prize": 21309543.57,
+        "total_win_lose": 813258.1799999997,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      }
+    }
+  },
+  "ProductionEpicWin": {
+    "merchant_name": "ProductionEpicWin",
+    "total_transactions": 9,
+    "total_amount": 40578.69000000014,
+    "currencies": {
+      "AUD": {
+        "total_bet": 219295.35,
+        "total_prize": 216451.89,
+        "total_win_lose": 2843.459999999992,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      },
+      "IDR": {
+        "total_bet": 29900.0,
+        "total_prize": 20320.09,
+        "total_win_lose": 9579.91,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "IDR"
+      },
+      "KES": {
+        "total_bet": 60.0,
+        "total_prize": 19.8,
+        "total_win_lose": 40.2,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "KES"
+      },
+      "MYR": {
+        "total_bet": 1404113.1,
+        "total_prize": 1379534.95,
+        "total_win_lose": 24578.15000000014,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      },
+      "PGK": {
+        "total_bet": 37371.2,
+        "total_prize": 35094.96,
+        "total_win_lose": 2276.239999999998,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PGK"
+      },
+      "PHP": {
+        "total_bet": 190954.2,
+        "total_prize": 190325.06,
+        "total_win_lose": 629.140000000014,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      },
+      "PKR": {
+        "total_bet": 41720.0,
+        "total_prize": 42315.28,
+        "total_win_lose": -595.2799999999988,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PKR"
+      },
+      "THB": {
+        "total_bet": 16.0,
+        "total_prize": 0,
+        "total_win_lose": 16.0,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "THB"
+      },
+      "USD": {
+        "total_bet": 94.7,
+        "total_prize": 74.39,
+        "total_win_lose": 20.310000000000002,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "USD"
+      }
+    }
+  },
+  "Productionvg777": {
+    "merchant_name": "Productionvg777",
+    "total_transactions": 2,
+    "total_amount": 23091.460000000003,
+    "currencies": {
+      "COP": {
+        "total_bet": 69102.0,
+        "total_prize": 47121.24,
+        "total_win_lose": 21980.760000000002,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "COP"
+      },
+      "MXN": {
+        "total_bet": 22961.2,
+        "total_prize": 21850.5,
+        "total_win_lose": 1110.7000000000007,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      }
+    }
+  },
+  "ProductionMxlobo4": {
+    "merchant_name": "ProductionMxlobo4",
+    "total_transactions": 1,
+    "total_amount": 9315.98999999999,
+    "currencies": {
+      "PKR": {
+        "total_bet": 391617.8,
+        "total_prize": 382301.81,
+        "total_win_lose": 9315.98999999999,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PKR"
+      }
+    }
+  },
+  "ProductionNicegame": {
+    "merchant_name": "ProductionNicegame",
+    "total_transactions": 1,
+    "total_amount": 71896.25,
+    "currencies": {
+      "PHP": {
+        "total_bet": 1363566.1,
+        "total_prize": 1291669.85,
+        "total_win_lose": 71896.25,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      }
+    }
+  },
+  "ProductionTogame": {
+    "merchant_name": "ProductionTogame",
+    "total_transactions": 1,
+    "total_amount": 2821.679999999993,
+    "currencies": {
+      "BRL": {
+        "total_bet": 134849.1,
+        "total_prize": 137670.78,
+        "total_win_lose": -2821.679999999993,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "BRL"
+      }
+    }
+  },
+  "ProductionUnicorn66": {
+    "merchant_name": "ProductionUnicorn66",
+    "total_transactions": 1,
+    "total_amount": 466262.56999999844,
+    "currencies": {
+      "THB": {
+        "total_bet": 13265622.45,
+        "total_prize": 12799359.88,
+        "total_win_lose": 466262.56999999844,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "THB"
+      }
+    }
+  },
+  "ProductionRedSpin": {
+    "merchant_name": "ProductionRedSpin",
+    "total_transactions": 1,
+    "total_amount": 326.09999999999854,
+    "currencies": {
+      "MYR": {
+        "total_bet": 9352.8,
+        "total_prize": 9026.7,
+        "total_win_lose": 326.09999999999854,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionUUSPIN": {
+    "merchant_name": "ProductionUUSPIN",
+    "total_transactions": 1,
+    "total_amount": 321.49,
+    "currencies": {
+      "MYR": {
+        "total_bet": 1093.2,
+        "total_prize": 771.71,
+        "total_win_lose": 321.49,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionYAYAWIN": {
+    "merchant_name": "ProductionYAYAWIN",
+    "total_transactions": 1,
+    "total_amount": 711.6199999999999,
+    "currencies": {
+      "MYR": {
+        "total_bet": 6329.2,
+        "total_prize": 5617.58,
+        "total_win_lose": 711.6199999999999,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionRICHPAPA": {
+    "merchant_name": "ProductionRICHPAPA",
+    "total_transactions": 1,
+    "total_amount": 184.38999999999987,
+    "currencies": {
+      "MYR": {
+        "total_bet": 3071.7,
+        "total_prize": 2887.31,
+        "total_win_lose": 184.38999999999987,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionCASHNET": {
+    "merchant_name": "ProductionCASHNET",
+    "total_transactions": 1,
+    "total_amount": 719.1100000000001,
+    "currencies": {
+      "MYR": {
+        "total_bet": 4073.4,
+        "total_prize": 3354.29,
+        "total_win_lose": 719.1100000000001,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionA9GAMING": {
+    "merchant_name": "ProductionA9GAMING",
+    "total_transactions": 1,
+    "total_amount": 409.75,
+    "currencies": {
+      "MYR": {
+        "total_bet": 5225.0,
+        "total_prize": 4815.25,
+        "total_win_lose": 409.75,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionFAFA": {
+    "merchant_name": "ProductionFAFA",
+    "total_transactions": 1,
+    "total_amount": 313.18000000000006,
+    "currencies": {
+      "MYR": {
+        "total_bet": 1462.2,
+        "total_prize": 1775.38,
+        "total_win_lose": -313.18000000000006,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionBCWIN": {
+    "merchant_name": "ProductionBCWIN",
+    "total_transactions": 1,
+    "total_amount": 543.9500000000003,
+    "currencies": {
+      "MYR": {
+        "total_bet": 2914.05,
+        "total_prize": 2370.1,
+        "total_win_lose": 543.9500000000003,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionGXBET": {
+    "merchant_name": "ProductionGXBET",
+    "total_transactions": 1,
+    "total_amount": 94.37000000000035,
+    "currencies": {
+      "MYR": {
+        "total_bet": 4026.8,
+        "total_prize": 3932.43,
+        "total_win_lose": 94.37000000000035,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionRICHMAMA": {
+    "merchant_name": "ProductionRICHMAMA",
+    "total_transactions": 1,
+    "total_amount": 439.0300000000025,
+    "currencies": {
+      "MYR": {
+        "total_bet": 17046.2,
+        "total_prize": 16607.17,
+        "total_win_lose": 439.0300000000025,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "Production1XPOKIES": {
+    "merchant_name": "Production1XPOKIES",
+    "total_transactions": 1,
+    "total_amount": 131.5,
+    "currencies": {
+      "MYR": {
+        "total_bet": 456.9,
+        "total_prize": 325.4,
+        "total_win_lose": 131.5,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionUPOKIES": {
+    "merchant_name": "ProductionUPOKIES",
+    "total_transactions": 1,
+    "total_amount": 7301.959999999992,
+    "currencies": {
+      "MYR": {
+        "total_bet": 154485.3,
+        "total_prize": 147183.34,
+        "total_win_lose": 7301.959999999992,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionWAWAWIN": {
+    "merchant_name": "ProductionWAWAWIN",
+    "total_transactions": 1,
+    "total_amount": 72.48000000000002,
+    "currencies": {
+      "MYR": {
+        "total_bet": 828.6,
+        "total_prize": 756.12,
+        "total_win_lose": 72.48000000000002,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "Production1UWIN": {
+    "merchant_name": "Production1UWIN",
+    "total_transactions": 1,
+    "total_amount": 8958.04,
+    "currencies": {
+      "MYR": {
+        "total_bet": 61108.3,
+        "total_prize": 52150.26,
+        "total_win_lose": 8958.04,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "Production12POKIES": {
+    "merchant_name": "Production12POKIES",
+    "total_transactions": 1,
+    "total_amount": 300.47,
+    "currencies": {
+      "MYR": {
+        "total_bet": 650.7,
+        "total_prize": 350.23,
+        "total_win_lose": 300.47,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionWON66": {
+    "merchant_name": "ProductionWON66",
+    "total_transactions": 1,
+    "total_amount": 1551.3799999999992,
+    "currencies": {
+      "MYR": {
+        "total_bet": 16565.6,
+        "total_prize": 15014.22,
+        "total_win_lose": 1551.3799999999992,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "Productionwinwinbet": {
+    "merchant_name": "Productionwinwinbet",
+    "total_transactions": 5,
+    "total_amount": 6524421.149999997,
+    "currencies": {
+      "BRL": {
+        "total_bet": 120.5,
+        "total_prize": 101.5,
+        "total_win_lose": 19.0,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "BRL"
+      },
+      "CLP": {
+        "total_bet": 35068486.5,
+        "total_prize": 33661339.59,
+        "total_win_lose": 1407146.9099999964,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "CLP"
+      },
+      "COP": {
+        "total_bet": 112840050.0,
+        "total_prize": 107734514.5,
+        "total_win_lose": 5105535.5,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "COP"
+      },
+      "MXN": {
+        "total_bet": 197932.85,
+        "total_prize": 195721.15,
+        "total_win_lose": 2211.7000000000116,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      },
+      "PEN": {
+        "total_bet": 157443.65,
+        "total_prize": 147935.61,
+        "total_win_lose": 9508.040000000008,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PEN"
+      }
+    }
+  },
+  "ProductionURUSWIN": {
+    "merchant_name": "ProductionURUSWIN",
+    "total_transactions": 1,
+    "total_amount": 1027.8400000000001,
+    "currencies": {
+      "MYR": {
+        "total_bet": 31642.7,
+        "total_prize": 30614.86,
+        "total_win_lose": 1027.8400000000001,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionADVANTPLAY": {
+    "merchant_name": "ProductionADVANTPLAY",
+    "total_transactions": 1,
+    "total_amount": 162.1300000000001,
+    "currencies": {
+      "MYR": {
+        "total_bet": 1479.0,
+        "total_prize": 1316.87,
+        "total_win_lose": 162.1300000000001,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "ProductionA99AU": {
+    "merchant_name": "ProductionA99AU",
+    "total_transactions": 1,
+    "total_amount": 1276.5599999999977,
+    "currencies": {
+      "AUD": {
+        "total_bet": 24855.8,
+        "total_prize": 23579.24,
+        "total_win_lose": 1276.5599999999977,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      }
+    }
+  },
+  "ProductionBrabet06": {
+    "merchant_name": "ProductionBrabet06",
+    "total_transactions": 2,
+    "total_amount": 5173040.6999999955,
+    "currencies": {
+      "INR": {
+        "total_bet": 114839770.85,
+        "total_prize": 110624793.52,
+        "total_win_lose": 4214977.329999998,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "INR"
+      },
+      "PHP": {
+        "total_bet": 47175994.25,
+        "total_prize": 46217930.88,
+        "total_win_lose": 958063.3699999973,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      }
+    }
+  },
+  "ProductionBS22AU": {
+    "merchant_name": "ProductionBS22AU",
+    "total_transactions": 1,
+    "total_amount": 768.6100000000006,
+    "currencies": {
+      "AUD": {
+        "total_bet": 4352.6,
+        "total_prize": 3583.99,
+        "total_win_lose": 768.6100000000006,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      }
+    }
+  },
+  "ProductionE99AU": {
+    "merchant_name": "ProductionE99AU",
+    "total_transactions": 1,
+    "total_amount": 95.93000000000004,
+    "currencies": {
+      "AUD": {
+        "total_bet": 276.1,
+        "total_prize": 180.17,
+        "total_win_lose": 95.93000000000004,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      }
+    }
+  },
+  "ProductionJACKDOM": {
+    "merchant_name": "ProductionJACKDOM",
+    "total_transactions": 1,
+    "total_amount": 328.9200000000001,
+    "currencies": {
+      "AUD": {
+        "total_bet": 10105.9,
+        "total_prize": 9776.98,
+        "total_win_lose": 328.9200000000001,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      }
+    }
+  },
+  "ProductionM99AU": {
+    "merchant_name": "ProductionM99AU",
+    "total_transactions": 1,
+    "total_amount": 992.04,
+    "currencies": {
+      "AUD": {
+        "total_bet": 7133.4,
+        "total_prize": 6141.36,
+        "total_win_lose": 992.04,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      }
+    }
+  },
+  "ProductionSLOTIFY7": {
+    "merchant_name": "ProductionSLOTIFY7",
+    "total_transactions": 1,
+    "total_amount": 283.85000000000036,
+    "currencies": {
+      "AUD": {
+        "total_bet": 8139.0,
+        "total_prize": 7855.15,
+        "total_win_lose": 283.85000000000036,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      }
+    }
+  },
+  "ProductionSOUTHERN9": {
+    "merchant_name": "ProductionSOUTHERN9",
+    "total_transactions": 1,
+    "total_amount": 145.34000000000015,
+    "currencies": {
+      "AUD": {
+        "total_bet": 4366.7,
+        "total_prize": 4221.36,
+        "total_win_lose": 145.34000000000015,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      }
+    }
+  },
+  "ProductionTAB77AU": {
+    "merchant_name": "ProductionTAB77AU",
+    "total_transactions": 1,
+    "total_amount": 39.459999999999994,
+    "currencies": {
+      "AUD": {
+        "total_bet": 129.6,
+        "total_prize": 90.14,
+        "total_win_lose": 39.459999999999994,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      }
+    }
+  },
+  "ProductionW99AU": {
+    "merchant_name": "ProductionW99AU",
+    "total_transactions": 1,
+    "total_amount": 150.94999999999982,
+    "currencies": {
+      "AUD": {
+        "total_bet": 2557.5,
+        "total_prize": 2406.55,
+        "total_win_lose": 150.94999999999982,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      }
+    }
+  },
+  "ProductionYES77AU": {
+    "merchant_name": "ProductionYES77AU",
+    "total_transactions": 1,
+    "total_amount": 36.6099999999999,
+    "currencies": {
+      "AUD": {
+        "total_bet": 1268.5,
+        "total_prize": 1305.11,
+        "total_win_lose": -36.6099999999999,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "AUD"
+      }
+    }
+  },
+  "ProductionAAFUN": {
+    "merchant_name": "ProductionAAFUN",
+    "total_transactions": 9,
+    "total_amount": 6531500.049999999,
+    "currencies": {
+      "BDT": {
+        "total_bet": 2159.8,
+        "total_prize": 1924.44,
+        "total_win_lose": 235.36000000000013,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "BDT"
+      },
+      "CLP": {
+        "total_bet": 8872133.5,
+        "total_prize": 8674859.96,
+        "total_win_lose": 197273.5399999991,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "CLP"
+      },
+      "COP": {
+        "total_bet": 101656076.0,
+        "total_prize": 95446139.14,
+        "total_win_lose": 6209936.859999999,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "COP"
+      },
+      "EGP": {
+        "total_bet": 735.0,
+        "total_prize": 710.71,
+        "total_win_lose": 24.289999999999964,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "EGP"
+      },
+      "INR": {
+        "total_bet": 419247.7,
+        "total_prize": 392877.84,
+        "total_win_lose": 26369.859999999986,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "INR"
+      },
+      "MXN": {
+        "total_bet": 1550910.75,
+        "total_prize": 1474273.7,
+        "total_win_lose": 76637.05000000005,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MXN"
+      },
+      "PEN": {
+        "total_bet": 302.9,
+        "total_prize": 312.69,
+        "total_win_lose": -9.79000000000002,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PEN"
+      },
+      "PHP": {
+        "total_bet": 53187.7,
+        "total_prize": 48030.9,
+        "total_win_lose": 5156.799999999996,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      },
+      "PKR": {
+        "total_bet": 260229.8,
+        "total_prize": 244373.3,
+        "total_win_lose": 15856.5,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PKR"
+      }
+    }
+  },
+  "ProductionPUBCGAME": {
+    "merchant_name": "ProductionPUBCGAME",
+    "total_transactions": 1,
+    "total_amount": 32985.78999999998,
+    "currencies": {
+      "BRL": {
+        "total_bet": 354500.55,
+        "total_prize": 321514.76,
+        "total_win_lose": 32985.78999999998,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "BRL"
+      }
+    }
+  },
+  "ProductionJBgame": {
+    "merchant_name": "ProductionJBgame",
+    "total_transactions": 1,
+    "total_amount": 939.4100000000035,
+    "currencies": {
+      "USD": {
+        "total_bet": 109864.79,
+        "total_prize": 110804.2,
+        "total_win_lose": -939.4100000000035,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "USD"
+      }
+    }
+  },
+  "ProductionJogar": {
+    "merchant_name": "ProductionJogar",
+    "total_transactions": 1,
+    "total_amount": 5904.790000000008,
+    "currencies": {
+      "BRL": {
+        "total_bet": 233424.85,
+        "total_prize": 227520.06,
+        "total_win_lose": 5904.790000000008,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "BRL"
+      }
+    }
+  },
+  "ProductionM6": {
+    "merchant_name": "ProductionM6",
+    "total_transactions": 1,
+    "total_amount": 50.0,
+    "currencies": {
+      "PHP": {
+        "total_bet": 490.0,
+        "total_prize": 440.0,
+        "total_win_lose": 50.0,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      }
+    }
+  },
+  "ProductionJackpotParty02": {
+    "merchant_name": "ProductionJackpotParty02",
+    "total_transactions": 1,
+    "total_amount": 4341.93,
+    "currencies": {
+      "PHP": {
+        "total_bet": 36649.85,
+        "total_prize": 32307.92,
+        "total_win_lose": 4341.93,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "PHP"
+      }
+    }
+  },
+  "ProductionJWgame": {
+    "merchant_name": "ProductionJWgame",
+    "total_transactions": 1,
+    "total_amount": 270.57000000000016,
+    "currencies": {
+      "USDT": {
+        "total_bet": 1629.43,
+        "total_prize": 1358.86,
+        "total_win_lose": 270.57000000000016,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "USDT"
+      }
+    }
+  },
+  "ProductionMetaGaming": {
+    "merchant_name": "ProductionMetaGaming",
+    "total_transactions": 1,
+    "total_amount": 5488.809999999998,
+    "currencies": {
+      "MYR": {
+        "total_bet": 141802.2,
+        "total_prize": 136313.39,
+        "total_win_lose": 5488.809999999998,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "MYR"
+      }
+    }
+  },
+  "Productionjayagaming": {
+    "merchant_name": "Productionjayagaming",
+    "total_transactions": 1,
+    "total_amount": 1716614.8699999973,
+    "currencies": {
+      "COP": {
+        "total_bet": 56249415.0,
+        "total_prize": 54532800.13,
+        "total_win_lose": 1716614.8699999973,
+        "total_transactions": 1,
+        "transaction_count": 1,
+        "currency": "COP"
+      }
+    }
+  }
+}

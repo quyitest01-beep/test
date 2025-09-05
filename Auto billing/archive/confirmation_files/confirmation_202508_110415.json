@@ -1,0 +1,156 @@
+{
+  "batch_id": "20250903_110415",
+  "timestamp": "2025-09-03T11:04:15.626754",
+  "period": "2025年08月",
+  "pdf_package": "output\\账单PDF包_202508_110415.zip",
+  "merchant_count": 24,
+  "total_amount": 1286627.0492000002,
+  "merchants": {
+    "betfiery": {
+      "amount": 18520.4145,
+      "fee_rate": 0.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "aajogo": {
+      "amount": 31023.9386,
+      "fee_rate": 0.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "mexlucky": {
+      "amount": 205992.3181,
+      "fee_rate": 0.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "mexswin": {
+      "amount": 173679.5298,
+      "fee_rate": 0.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "sortebot": {
+      "amount": 359855.1327,
+      "fee_rate": 2.5,
+      "sub_merchants_count": 1,
+      "transactions_count": 8
+    },
+    "Brabet": {
+      "amount": 524.4186,
+      "fee_rate": 6.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "JR": {
+      "amount": 9629.292,
+      "fee_rate": 0.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "Betfarms": {
+      "amount": 331335.68080000003,
+      "fee_rate": 3.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 13
+    },
+    "Epoch Game": {
+      "amount": 1913.9923,
+      "fee_rate": 6.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "Mxlobo": {
+      "amount": 43653.5585,
+      "fee_rate": 6.0,
+      "sub_merchants_count": 2,
+      "transactions_count": 2
+    },
+    "EpicWin": {
+      "amount": 8252.3544,
+      "fee_rate": 2.5,
+      "sub_merchants_count": 1,
+      "transactions_count": 9
+    },
+    "VG": {
+      "amount": 65.0478,
+      "fee_rate": 6.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 2
+    },
+    "Nicegame": {
+      "amount": 1256.9621,
+      "fee_rate": 3.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "Unicorn66": {
+      "amount": 14432.6916,
+      "fee_rate": 5.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "winwinbet": {
+      "amount": 5539.9235,
+      "fee_rate": 6.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 5
+    },
+    "A99AU": {
+      "amount": 836.5132,
+      "fee_rate": 10.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "Brabet06": {
+      "amount": 64572.9547,
+      "fee_rate": 0.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 2
+    },
+    "AAFUN": {
+      "amount": 6305.7284,
+      "fee_rate": 6.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 9
+    },
+    "PUBCGAME": {
+      "amount": 6075.9165,
+      "fee_rate": 2.5,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "Jogar": {
+      "amount": 1087.6505,
+      "fee_rate": 8.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "JackpotParty": {
+      "amount": 75.91,
+      "fee_rate": 6.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "JWgame": {
+      "amount": 270.57,
+      "fee_rate": 3.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "slotsmaker": {
+      "amount": 1299.1135,
+      "fee_rate": 2.5,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    },
+    "jayagaming": {
+      "amount": 427.4371,
+      "fee_rate": 7.0,
+      "sub_merchants_count": 1,
+      "transactions_count": 1
+    }
+  },
+  "message": "[SUMMARY] 主商户维度账单汇总\n\n[ID] 批次ID: 20250903_110415\n[SENT] 已发送: 24 个主商户账单\n[AMOUNT] 應付縂金額: 1286627.05 USDT (主商户汇总)\n[PERIOD] 账期: 2025年08月\n\n主商户维度统计 (按费率分组):\n\n费率 0.0%: 6个主商户, 总金额: 503418.45 USDT\n  • mexlucky: 205992.32 USDT (1个子商户)\n  • mexswin: 173679.53 USDT (1个子商户)\n  • Brabet06: 64572.95 USDT (1个子商户)\n  • aajogo: 31023.94 USDT (1个子商户)\n  • betfiery: 18520.41 USDT (1个子商户)\n  • JR: 9629.29 USDT (1个子商户)\n\n费率 2.5%: 4个主商户, 总金额: 375482.52 USDT\n  • sortebot: 359855.13 USDT (1个子商户)\n  • EpicWin: 8252.35 USDT (1个子商户)\n  • PUBCGAME: 6075.92 USDT (1个子商户)\n  • slotsmaker: 1299.11 USDT (1个子商户)\n\n费率 3.0%: 3个主商户, 总金额: 332863.21 USDT\n  • Betfarms: 331335.68 USDT (1个子商户)\n  • Nicegame: 1256.96 USDT (1个子商户)\n  • JWgame: 270.57 USDT (1个子商户)\n\n费率 5.0%: 1个主商户, 总金额: 14432.69 USDT\n  • Unicorn66: 14432.69 USDT (1个子商户)\n\n费率 6.0%: 7个主商户, 总金额: 58078.58 USDT\n  • Mxlobo: 43653.56 USDT (2个子商户)\n  • AAFUN: 6305.73 USDT (1个子商户)\n  • winwinbet: 5539.92 USDT (1个子商户)\n  • Epoch Game: 1913.99 USDT (1个子商户)\n  • Brabet: 524.42 USDT (1个子商户)\n  • JackpotParty: 75.91 USDT (1个子商户)\n  • VG: 65.05 USDT (1个子商户)\n\n费率 7.0%: 1个主商户, 总金额: 427.44 USDT\n  • jayagaming: 427.44 USDT (1个子商户)\n\n费率 8.0%: 1个主商户, 总金额: 1087.65 USDT\n  • Jogar: 1087.65 USDT (1个子商户)\n\n费率 10.0%: 1个主商户, 总金额: 836.51 USDT\n  • A99AU: 836.51 USDT (1个子商户)\n\n请仔细核对以上主商户维度统计信息:\n/confirm 20250903_110415\n\n或回复 /reject 20250903_110415 拒绝发送",
+  "status": "pending"
+}

@@ -1,0 +1,244 @@
+2025-09-05 11:18:33,742 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 11:21:55,808 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 11:23:43,638 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 11:24:55,459 - INFO - [2025-09-05 11:24:55] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250905_110918&action=confirm&code=44214596b4ffeb86
+2025-09-05 11:24:55,459 - INFO - [2025-09-05 11:24:55] 解析参数 - bid: 20250905_110918, action: confirm, code: 44214596b4ffeb86
+2025-09-05 11:24:55,459 - INFO - [2025-09-05 11:24:55] 开始处理confirm请求 - 批次ID: 20250905_110918
+2025-09-05 11:24:58,905 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\A99AU_202508_Bill.pdf -> -1002665548336
+2025-09-05 11:29:34,741 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 11:29:45,034 - INFO - [2025-09-05 11:29:45] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250905_110918&action=confirm&code=44214596b4ffeb86
+2025-09-05 11:29:45,035 - INFO - [2025-09-05 11:29:45] 解析参数 - bid: 20250905_110918, action: confirm, code: 44214596b4ffeb86
+2025-09-05 11:29:45,035 - INFO - [2025-09-05 11:29:45] 开始处理confirm请求 - 批次ID: 20250905_110918
+2025-09-05 11:29:48,382 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\A99AU_202508_Bill.pdf -> -1002665548336
+2025-09-05 11:29:51,483 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - AAFUN - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 11:29:54,716 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\AAFUN_202508_Bill.pdf -> -1003052721567
+2025-09-05 11:29:57,649 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Betfarms - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 11:30:00,677 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Betfarms_202508_Bill.pdf -> -1002665548336
+2025-09-05 11:30:03,739 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Brabet_202508_Bill.pdf -> -1002888231635
+2025-09-05 11:30:06,811 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Epoch Game_202508_Bill.pdf -> -1003052721567
+2025-09-05 11:30:09,520 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Game Plus_202508_Bill.pdf -> -1002665548336
+2025-09-05 11:30:12,509 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - JackpotParty - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 11:30:15,269 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JackpotParty_202508_Bill.pdf -> -1002995523623
+2025-09-05 11:30:18,463 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\jayagaming_202508_Bill.pdf -> -1002888231635
+2025-09-05 11:30:22,412 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JBgame_202508_Bill.pdf -> -1003052721567
+2025-09-05 11:30:26,214 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Jogar_202508_Bill.pdf -> -1003052721567
+2025-09-05 11:30:28,919 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JWgame_202508_Bill.pdf -> -1003052721567
+2025-09-05 11:30:32,056 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Mxlobo - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 11:30:34,783 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Mxlobo_202508_Bill.pdf -> -1003052721567
+2025-09-05 11:30:37,892 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Nicegame_202508_Bill.pdf -> -1002665548336
+2025-09-05 11:30:41,586 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\PUBCGAME_202508_Bill.pdf -> -1003052721567
+2025-09-05 11:30:44,391 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\RichGroup_202508_Bill.pdf -> -1003052721567
+2025-09-05 11:30:47,737 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\slotsapi_202508_Bill.pdf -> -1003052721567
+2025-09-05 11:30:51,896 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\slotsmaker_202508_Bill.pdf -> -1002995523623
+2025-09-05 11:30:54,974 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 11:30:59,070 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\sortebot_202508_Bill.pdf -> -1002987680134
+2025-09-05 11:31:01,856 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Togame_202508_Bill.pdf -> -1003052721567
+2025-09-05 11:31:04,819 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Unicorn66 - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 11:31:08,032 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Unicorn66_202508_Bill.pdf -> -1002995523623
+2025-09-05 11:31:10,663 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\VG_202508_Bill.pdf -> -1002888231635
+2025-09-05 11:31:13,337 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\winwinbet_202508_Bill.pdf -> -1002888231635
+2025-09-05 11:32:12,916 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 11:44:27,301 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 11:45:46,271 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 11:45:51,545 - INFO - [2025-09-05 11:45:51] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250905_114543&action=reject&code=84be2a1be0225ed9
+2025-09-05 11:45:51,546 - INFO - [2025-09-05 11:45:51] 解析参数 - bid: 20250905_114543, action: reject, code: 84be2a1be0225ed9
+2025-09-05 11:45:51,546 - INFO - [2025-09-05 11:45:51] 开始处理reject请求 - 批次ID: 20250905_114543
+2025-09-05 12:32:38,005 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 12:32:49,472 - INFO - [2025-09-05 12:32:49] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250905_123234&action=confirm&code=1483de3f8536b5b0
+2025-09-05 12:32:49,473 - INFO - [2025-09-05 12:32:49] 解析参数 - bid: 20250905_123234, action: confirm, code: 1483de3f8536b5b0
+2025-09-05 12:32:49,473 - INFO - [2025-09-05 12:32:49] 开始处理confirm请求 - 批次ID: 20250905_123234
+2025-09-05 12:32:52,635 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - AAFUN - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:32:55,657 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Betfarms - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:32:58,599 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - JackpotParty - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:33:01,640 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Mxlobo - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:33:04,644 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:33:07,745 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Unicorn66 - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:33:07,752 - ERROR - [2025-09-05 12:32:49] 服务器异常: [Errno 22] Invalid argument
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_handler.py", line 619, in send_results_to_lark
+    print(f"[DEBUG] 批次记录: {batch_record}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_handler.py", line 179, in handle_confirmation
+    lark_result = self.send_results_to_lark(batch_record, send_results)
+  File "D:\cursor\Auto billing\confirm_handler.py", line 747, in send_results_to_lark
+    traceback.print_exc()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 208, in print_exc
+    print_exception(sys.exception(), limit=limit, file=file, chain=chain)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 130, in print_exception
+    te.print(file=file, chain=chain, colorize=colorize)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 1470, in print
+    print(line, file=file, end="")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_webhook.py", line 63, in do_GET
+    ok = handler.handle_confirmation(full_url, apply=(action == "confirm"))
+  File "D:\cursor\Auto billing\confirm_handler.py", line 226, in handle_confirmation
+    traceback.print_exc()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 208, in print_exc
+    print_exception(sys.exception(), limit=limit, file=file, chain=chain)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 130, in print_exception
+    te.print(file=file, chain=chain, colorize=colorize)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 1470, in print
+    print(line, file=file, end="")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+2025-09-05 12:33:07,759 - INFO - [2025-09-05 12:33:07] HTTP请求: "GET /confirm?bid=20250905_123234&action=confirm&code=1483de3f8536b5b0 HTTP/1.1" 500 -
+2025-09-05 12:33:07,759 - INFO - [2025-09-05 12:33:07] 响应发送 - 状态码: 500, 内容: Server Error: [Errno 22] Invalid argument
+2025-09-05 12:35:36,488 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 12:36:03,823 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 12:36:12,469 - INFO - [2025-09-05 12:36:12] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250905_123600&action=confirm&code=8d4a1e066980fb91
+2025-09-05 12:36:12,470 - INFO - [2025-09-05 12:36:12] 解析参数 - bid: 20250905_123600, action: confirm, code: 8d4a1e066980fb91
+2025-09-05 12:36:12,470 - INFO - [2025-09-05 12:36:12] 开始处理confirm请求 - 批次ID: 20250905_123600
+2025-09-05 12:36:15,504 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - AAFUN - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:36:18,480 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Betfarms - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:36:21,443 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - JackpotParty - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:36:24,360 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Mxlobo - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:36:27,287 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:36:30,368 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Unicorn66 - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 12:39:25,268 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 12:43:50,367 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 12:48:18,351 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 12:56:09,672 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 13:13:09,271 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 13:22:47,831 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 13:36:51,171 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 13:43:44,244 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 13:50:08,437 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 13:56:04,586 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 13:59:50,592 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 14:05:18,468 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 14:08:13,688 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 14:10:09,953 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 14:11:04,975 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 14:13:01,573 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 16:04:06,773 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 16:05:08,950 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 16:05:21,466 - INFO - [2025-09-05 16:05:21] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250905_160403&action=confirm&code=ce42ea162812675a
+2025-09-05 16:05:21,466 - INFO - [2025-09-05 16:05:21] 解析参数 - bid: 20250905_160403, action: confirm, code: ce42ea162812675a
+2025-09-05 16:05:21,466 - INFO - [2025-09-05 16:05:21] 开始处理confirm请求 - 批次ID: 20250905_160403
+2025-09-05 16:05:23,997 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\A99AU_202508_Bill.pdf -> -1002665548336
+2025-09-05 16:05:27,105 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - AAFUN - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:05:29,208 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\AAFUN_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:05:32,106 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Betfarms - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:05:34,166 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Betfarms_202508_Bill.pdf -> -1002665548336
+2025-09-05 16:05:36,114 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Brabet_202508_Bill.pdf -> -1002888231635
+2025-09-05 16:05:38,154 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Epoch Game_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:05:40,187 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Game Plus_202508_Bill.pdf -> -1002665548336
+2025-09-05 16:05:43,195 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - JackpotParty - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:05:44,895 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JackpotParty_202508_Bill.pdf -> -1002995523623
+2025-09-05 16:05:46,672 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\jayagaming_202508_Bill.pdf -> -1002888231635
+2025-09-05 16:05:48,829 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JBgame_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:05:50,976 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Jogar_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:05:52,645 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JWgame_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:05:55,682 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Mxlobo - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:05:57,312 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Mxlobo_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:05:58,989 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Nicegame_202508_Bill.pdf -> -1002665548336
+2025-09-05 16:06:00,576 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\PUBCGAME_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:06:02,277 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\RichGroup_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:06:04,041 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\slotsapi_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:06:05,821 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\slotsmaker_202508_Bill.pdf -> -1002995523623
+2025-09-05 16:06:08,882 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:06:10,724 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\sortebot_202508_Bill.pdf -> -1002987680134
+2025-09-05 16:06:12,367 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Togame_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:06:15,296 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Unicorn66 - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:06:16,959 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\VG_202508_Bill.pdf -> -1002888231635
+2025-09-05 16:06:19,078 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\winwinbet_202508_Bill.pdf -> -1002888231635
+2025-09-05 16:06:19,080 - ERROR - [2025-09-05 16:05:21] 服务器异常: [Errno 22] Invalid argument
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_handler.py", line 707, in send_results_to_lark
+    print(f"[DEBUG] 消息预览: {message[:200]}...")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'gbk' codec can't encode character '\U0001f4ca' in position 14: illegal multibyte sequence
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_handler.py", line 179, in handle_confirmation
+    lark_result = self.send_results_to_lark(batch_record, send_results)
+  File "D:\cursor\Auto billing\confirm_handler.py", line 752, in send_results_to_lark
+    traceback.print_exc()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 208, in print_exc
+    print_exception(sys.exception(), limit=limit, file=file, chain=chain)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 130, in print_exception
+    te.print(file=file, chain=chain, colorize=colorize)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 1470, in print
+    print(line, file=file, end="")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_webhook.py", line 63, in do_GET
+    ok = handler.handle_confirmation(full_url, apply=(action == "confirm"))
+  File "D:\cursor\Auto billing\confirm_handler.py", line 226, in handle_confirmation
+    traceback.print_exc()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 208, in print_exc
+    print_exception(sys.exception(), limit=limit, file=file, chain=chain)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 130, in print_exception
+    te.print(file=file, chain=chain, colorize=colorize)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 1470, in print
+    print(line, file=file, end="")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+2025-09-05 16:06:19,083 - INFO - [2025-09-05 16:06:19] HTTP请求: "GET /confirm?bid=20250905_160403&action=confirm&code=ce42ea162812675a HTTP/1.1" 500 -
+2025-09-05 16:06:19,083 - INFO - [2025-09-05 16:06:19] 响应发送 - 状态码: 500, 内容: Server Error: [Errno 22] Invalid argument
+2025-09-05 16:09:00,282 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 16:09:27,852 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 16:14:22,799 - INFO - [2025-09-05 16:14:22] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250905_160924&action=confirm&code=e0b2d859b4fd8822
+2025-09-05 16:14:22,799 - INFO - [2025-09-05 16:14:22] 解析参数 - bid: 20250905_160924, action: confirm, code: e0b2d859b4fd8822
+2025-09-05 16:14:22,799 - INFO - [2025-09-05 16:14:22] 开始处理confirm请求 - 批次ID: 20250905_160924
+2025-09-05 16:14:25,328 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\A99AU_202508_Bill.pdf -> -1002665548336
+2025-09-05 16:14:28,399 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - AAFUN - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:14:30,527 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\AAFUN_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:14:33,734 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Betfarms - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:14:35,815 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Betfarms_202508_Bill.pdf -> -1002665548336
+2025-09-05 16:14:37,604 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Brabet_202508_Bill.pdf -> -1002888231635
+2025-09-05 16:14:39,521 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Epoch Game_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:14:41,659 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Game Plus_202508_Bill.pdf -> -1002665548336
+2025-09-05 16:14:44,609 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - JackpotParty - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:14:46,409 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JackpotParty_202508_Bill.pdf -> -1002995523623
+2025-09-05 16:14:48,519 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\jayagaming_202508_Bill.pdf -> -1002888231635
+2025-09-05 16:14:50,242 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JBgame_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:14:51,918 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Jogar_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:14:53,591 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JWgame_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:14:56,579 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Mxlobo - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:14:58,231 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Mxlobo_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:15:00,005 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Nicegame_202508_Bill.pdf -> -1002665548336
+2025-09-05 16:15:02,334 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\PUBCGAME_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:15:04,466 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\RichGroup_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:15:07,143 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\slotsapi_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:15:09,061 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\slotsmaker_202508_Bill.pdf -> -1002995523623
+2025-09-05 16:15:12,642 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:15:14,644 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\sortebot_202508_Bill.pdf -> -1002987680134
+2025-09-05 16:15:16,354 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Togame_202508_Bill.pdf -> -1003052721567
+2025-09-05 16:15:19,332 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Unicorn66 - 2025年08月 -> poon@gaming-panda.com
+2025-09-05 16:15:20,947 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Unicorn66_202508_Bill.pdf -> -1002995523623
+2025-09-05 16:15:22,791 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\VG_202508_Bill.pdf -> -1002888231635
+2025-09-05 16:15:24,458 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\winwinbet_202508_Bill.pdf -> -1002888231635
+2025-09-05 16:32:51,792 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 16:45:01,128 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 16:47:31,641 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 16:53:00,446 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-05 16:56:00,282 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm

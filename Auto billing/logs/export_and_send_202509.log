@@ -1,0 +1,518 @@
+2025-09-02 13:47:58,681 - INFO - === 开始执行导出和发送任务 ===
+2025-09-02 13:47:58,683 - INFO - 本次统计月份: 202406，模式: auto，基准时间: 2024-06-30 00:00:00
+2025-09-02 13:47:58,748 - INFO - 正在读取表：stat_202406
+2025-09-02 13:47:58,755 - INFO - 自动适配字段: {'pay_in': 'pay_in', 'pay_out': 'pay_out', 'count': 'count', 'merchant': 'merchant', 'provider': 'provider', 'currency': 'currency', 'game': 'game'}
+2025-09-02 13:47:58,755 - INFO - stat_202406 不做任何时间筛选, SQL: SELECT merchant, provider, currency, pay_in, pay_out, game, count FROM stat_202406
+2025-09-02 13:47:58,788 - INFO - stat_202406 字段: ['merchant', 'provider', 'currency', 'pay_in', 'pay_out', 'game', 'count']
+2025-09-02 13:47:58,821 - INFO - stat_202406 数据样例:
+     merchant         provider currency  ...  pay_out           game  count
+0   169820225  fundist/BGaming      BRL  ...   123.00         178678     27
+1  1698202251          fundist      BRL  ...   312.00         178678      3
+2  1698202251  fundist/BGaming      BRL  ...    34.89         178678     23
+3  1698202251  fundist/BGaming      BRL  ...   231.10         178678      6
+4  1698202251               gp      BRL  ...     2.20  1697709381286      1
+
+[5 rows x 7 columns]
+
+2025-09-02 13:47:58,847 - INFO - stat_202406 聚合后行数: 4
+2025-09-02 13:47:58,876 - INFO - 最终all_data行数: 4
+2025-09-02 13:47:58,905 - INFO - 最终all_data全局groupby后行数: 4
+2025-09-02 13:47:58,906 - INFO - all_data 字段: ['date', 'merchant', 'provider', 'currency', 'game', 'pay_in', 'pay_out', 'count']
+2025-09-02 13:47:58,914 - INFO - all_data 数据样例:
+     date    merchant         provider  ... pay_in pay_out  count
+0  202406   169820225  fundist/BGaming  ...  443.2  123.00     27
+1  202406  1698202251          fundist  ...   12.0  312.00      3
+2  202406  1698202251  fundist/BGaming  ...   49.2  265.99     29
+3  202406  1698202251               gp  ...    2.2    2.20      1
+
+[4 rows x 8 columns]
+2025-09-02 13:47:58,918 - INFO - 最终grouped行数: 4
+2025-09-02 13:47:58,923 - INFO - grouped 数据样例:
+     date    merchant         provider currency  pay_in  pay_out  count
+0  202406   169820225  fundist/BGaming      BRL   443.2   123.00     27
+1  202406  1698202251          fundist      BRL    12.0   312.00      3
+2  202406  1698202251  fundist/BGaming      BRL    49.2   265.99     29
+3  202406  1698202251               gp      BRL     2.2     2.20      1
+2025-09-02 13:47:58,926 - INFO - 正在获取汇率...
+2025-09-02 13:48:00,975 - WARNING - 币安API获取USDTBRL异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001A1236CCC20>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:48:03,029 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001A1236A7890>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:48:07,084 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001A1237282D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:48:11,125 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001A123728550>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:48:13,128 - WARNING - 以下币种获取汇率失败: {'BRL'}
+2025-09-02 13:48:13,164 - WARNING - 未匹配到商户名的商户ID: ['169820225' '1698202251'] 共2个
+2025-09-02 13:48:13,231 - INFO - 导出完成，文件名：D:/cursor/excel\202406_merchant_provider_currency_6.xlsx
+2025-09-02 13:48:13,257 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_currency.xlsx
+2025-09-02 13:48:13,288 - INFO - gmp_game_list 映射表行数: 31
+2025-09-02 13:48:13,292 - INFO - gmp_merchant_game_list表字段: ['id', 'merchant_id', 'source_id', 'enable', 'custom', 'created_at', 'updated_at', 'deleted_at']
+2025-09-02 13:48:13,295 - ERROR - 读取游戏映射表失败: (pymysql.err.OperationalError) (1054, "Unknown column 'game_id' in 'field list'")
+[SQL: SELECT game_id, source_id FROM gmp_merchant_game_list]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-09-02 13:48:13,304 - WARNING - 未匹配到游戏名的 game: ['178678' '1697709381286'] 共2个
+2025-09-02 13:48:13,324 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_game_currency.xlsx
+2025-09-02 13:48:13,327 - INFO - 已导出无汇率币种明细：D:/cursor/excel\202406_无汇率币种明细.xlsx
+2025-09-02 13:48:14,395 - INFO - 成功添加附件: 202406_merchant_provider_currency_6.xlsx
+2025-09-02 13:48:14,401 - INFO - 成功添加附件: 202406_provider_currency.xlsx
+2025-09-02 13:48:14,409 - INFO - 成功添加附件: 202406_provider_game_currency.xlsx
+2025-09-02 13:48:14,409 - INFO - 正在连接SMTP服务器: smtp.larksuite.com:465
+2025-09-02 13:48:14,654 - INFO - SMTP服务器连接成功
+2025-09-02 13:48:15,301 - INFO - SMTP服务器登录成功
+2025-09-02 13:48:17,555 - INFO - 邮件发送成功！
+2025-09-02 13:48:17,668 - INFO - 任务完成！
+2025-09-02 13:48:17,669 - INFO - === 任务执行结束 ===
+2025-09-02 13:49:56,865 - INFO - === 开始执行导出和发送任务 ===
+2025-09-02 13:49:56,866 - INFO - 本次统计月份: 202406，模式: auto，基准时间: 2024-06-30 00:00:00
+2025-09-02 13:49:56,921 - INFO - 正在读取表：stat_202406
+2025-09-02 13:49:56,925 - INFO - 自动适配字段: {'pay_in': 'pay_in', 'pay_out': 'pay_out', 'count': 'count', 'merchant': 'merchant', 'provider': 'provider', 'currency': 'currency', 'game': 'game'}
+2025-09-02 13:49:56,925 - INFO - stat_202406 不做任何时间筛选, SQL: SELECT merchant, provider, currency, pay_in, pay_out, game, count FROM stat_202406
+2025-09-02 13:49:56,932 - INFO - stat_202406 字段: ['merchant', 'provider', 'currency', 'pay_in', 'pay_out', 'game', 'count']
+2025-09-02 13:49:56,939 - INFO - stat_202406 数据样例:
+     merchant         provider currency  ...  pay_out           game  count
+0   169820225  fundist/BGaming      BRL  ...   123.00         178678     27
+1  1698202251          fundist      BRL  ...   312.00         178678      3
+2  1698202251  fundist/BGaming      BRL  ...    34.89         178678     23
+3  1698202251  fundist/BGaming      BRL  ...   231.10         178678      6
+4  1698202251               gp      BRL  ...     2.20  1697709381286      1
+
+[5 rows x 7 columns]
+
+2025-09-02 13:49:56,946 - INFO - stat_202406 聚合后行数: 4
+2025-09-02 13:49:56,975 - INFO - 最终all_data行数: 4
+2025-09-02 13:49:57,004 - INFO - 最终all_data全局groupby后行数: 4
+2025-09-02 13:49:57,004 - INFO - all_data 字段: ['date', 'merchant', 'provider', 'currency', 'game', 'pay_in', 'pay_out', 'count']
+2025-09-02 13:49:57,010 - INFO - all_data 数据样例:
+     date    merchant         provider  ... pay_in pay_out  count
+0  202406   169820225  fundist/BGaming  ...  443.2  123.00     27
+1  202406  1698202251          fundist  ...   12.0  312.00      3
+2  202406  1698202251  fundist/BGaming  ...   49.2  265.99     29
+3  202406  1698202251               gp  ...    2.2    2.20      1
+
+[4 rows x 8 columns]
+2025-09-02 13:49:57,014 - INFO - 最终grouped行数: 4
+2025-09-02 13:49:57,018 - INFO - grouped 数据样例:
+     date    merchant         provider currency  pay_in  pay_out  count
+0  202406   169820225  fundist/BGaming      BRL   443.2   123.00     27
+1  202406  1698202251          fundist      BRL    12.0   312.00      3
+2  202406  1698202251  fundist/BGaming      BRL    49.2   265.99     29
+3  202406  1698202251               gp      BRL     2.2     2.20      1
+2025-09-02 13:49:57,019 - INFO - 正在获取汇率...
+2025-09-02 13:49:59,085 - WARNING - 币安API获取USDTBRL异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x00000226719CCC20>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:50:01,153 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x00000226719A7890>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:50:05,193 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000022671C282D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:50:09,239 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000022671C28550>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:50:11,240 - WARNING - 以下币种获取汇率失败: {'BRL'}
+2025-09-02 13:50:11,271 - WARNING - 未匹配到商户名的商户ID: ['169820225' '1698202251'] 共2个
+2025-09-02 13:50:11,320 - INFO - 导出完成，文件名：D:/cursor/excel\202406_merchant_provider_currency_7.xlsx
+2025-09-02 13:50:11,345 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_currency.xlsx
+2025-09-02 13:50:11,358 - INFO - gmp_game_list 映射表行数: 31
+2025-09-02 13:50:11,362 - INFO - gmp_merchant_game_list表字段: ['id', 'merchant_id', 'source_id', 'enable', 'custom', 'created_at', 'updated_at', 'deleted_at']
+2025-09-02 13:50:11,368 - INFO - gmp_merchant_game_list 映射表行数: 286
+2025-09-02 13:50:11,368 - INFO - gp厂商游戏映射数量: 286
+2025-09-02 13:50:11,377 - WARNING - 未匹配到游戏名的 game: ['178678' '1697709381286'] 共2个
+2025-09-02 13:50:11,395 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_game_currency.xlsx
+2025-09-02 13:50:11,398 - INFO - 已导出无汇率币种明细：D:/cursor/excel\202406_无汇率币种明细_1.xlsx
+2025-09-02 13:50:12,434 - INFO - 成功添加附件: 202406_merchant_provider_currency_7.xlsx
+2025-09-02 13:50:12,441 - INFO - 成功添加附件: 202406_provider_currency.xlsx
+2025-09-02 13:50:12,448 - INFO - 成功添加附件: 202406_provider_game_currency.xlsx
+2025-09-02 13:50:12,448 - INFO - 正在连接SMTP服务器: smtp.larksuite.com:465
+2025-09-02 13:50:12,688 - INFO - SMTP服务器连接成功
+2025-09-02 13:50:13,324 - INFO - SMTP服务器登录成功
+2025-09-02 13:50:15,502 - INFO - 邮件发送成功！
+2025-09-02 13:50:15,610 - INFO - 任务完成！
+2025-09-02 13:50:15,610 - INFO - === 任务执行结束 ===
+2025-09-02 13:54:25,213 - INFO - === 开始执行导出和发送任务 ===
+2025-09-02 13:54:25,215 - INFO - 本次统计月份: 202406，模式: auto，基准时间: 2024-06-30 00:00:00
+2025-09-02 13:54:25,252 - INFO - 正在读取表：stat_202406
+2025-09-02 13:54:25,255 - INFO - 自动适配字段: {'pay_in': 'pay_in', 'pay_out': 'pay_out', 'count': 'count', 'merchant': 'merchant', 'provider': 'provider', 'currency': 'currency', 'game': 'game'}
+2025-09-02 13:54:25,255 - INFO - stat_202406 不做任何时间筛选, SQL: SELECT merchant, provider, currency, pay_in, pay_out, game, count FROM stat_202406
+2025-09-02 13:54:25,263 - INFO - stat_202406 字段: ['merchant', 'provider', 'currency', 'pay_in', 'pay_out', 'game', 'count']
+2025-09-02 13:54:25,271 - INFO - stat_202406 数据样例:
+     merchant         provider currency  ...  pay_out           game  count
+0   169820225  fundist/BGaming      BRL  ...   123.00         178678     27
+1  1698202251          fundist      BRL  ...   312.00         178678      3
+2  1698202251  fundist/BGaming      BRL  ...    34.89         178678     23
+3  1698202251  fundist/BGaming      BRL  ...   231.10         178678      6
+4  1698202251               gp      BRL  ...     2.20  1697709381286      1
+
+[5 rows x 7 columns]
+
+2025-09-02 13:54:25,279 - INFO - stat_202406 聚合后行数: 4
+2025-09-02 13:54:25,306 - INFO - 最终all_data行数: 4
+2025-09-02 13:54:25,341 - INFO - 最终all_data全局groupby后行数: 4
+2025-09-02 13:54:25,341 - INFO - all_data 字段: ['date', 'merchant', 'provider', 'currency', 'game', 'pay_in', 'pay_out', 'count']
+2025-09-02 13:54:25,347 - INFO - all_data 数据样例:
+     date    merchant         provider  ... pay_in pay_out  count
+0  202406   169820225  fundist/BGaming  ...  443.2  123.00     27
+1  202406  1698202251          fundist  ...   12.0  312.00      3
+2  202406  1698202251  fundist/BGaming  ...   49.2  265.99     29
+3  202406  1698202251               gp  ...    2.2    2.20      1
+
+[4 rows x 8 columns]
+2025-09-02 13:54:25,351 - INFO - 最终grouped行数: 4
+2025-09-02 13:54:25,356 - INFO - grouped 数据样例:
+     date    merchant         provider currency  pay_in  pay_out  count
+0  202406   169820225  fundist/BGaming      BRL   443.2   123.00     27
+1  202406  1698202251          fundist      BRL    12.0   312.00      3
+2  202406  1698202251  fundist/BGaming      BRL    49.2   265.99     29
+3  202406  1698202251               gp      BRL     2.2     2.20      1
+2025-09-02 13:54:25,356 - INFO - 正在获取汇率...
+2025-09-02 13:54:27,404 - WARNING - 币安API获取USDTBRL异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000002366D4DCC20>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:54:29,449 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000002366D4BB890>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:54:33,496 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000002366D82C2D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:54:37,535 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000002366D82C550>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:54:39,536 - WARNING - 以下币种获取汇率失败: {'BRL'}
+2025-09-02 13:54:39,564 - WARNING - 未匹配到商户名的商户ID: ['169820225' '1698202251'] 共2个
+2025-09-02 13:54:39,614 - INFO - 导出完成，文件名：D:/cursor/excel\202406_merchant_provider_currency_8.xlsx
+2025-09-02 13:54:39,639 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_currency.xlsx
+2025-09-02 13:54:39,654 - INFO - gmp_game_list 映射表行数: 31
+2025-09-02 13:54:39,660 - INFO - gmp_merchant_game_list表字段: ['id', 'merchant_id', 'source_id', 'enable', 'custom', 'created_at', 'updated_at', 'deleted_at']
+2025-09-02 13:54:39,666 - INFO - gmp_merchant_game_list 映射表行数: 286
+2025-09-02 13:54:39,667 - INFO - gp厂商游戏映射数量: 286
+2025-09-02 13:54:39,667 - INFO - 调试：检查game_id=1697709381286的映射
+2025-09-02 13:54:39,667 - INFO - game_id=1697709381286 -> source_id=14
+2025-09-02 13:54:39,667 - WARNING - source_id=14 在game_id_to_name中未找到
+2025-09-02 13:54:39,667 - INFO - 调试：检查game_id=178678的映射
+2025-09-02 13:54:39,667 - WARNING - game_id=178678 在game_id_to_name中未找到
+2025-09-02 13:54:39,677 - WARNING - 未匹配到游戏名的 game: ['178678' '1697709381286'] 共2个
+2025-09-02 13:54:39,697 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_game_currency.xlsx
+2025-09-02 13:54:39,699 - INFO - 已导出无汇率币种明细：D:/cursor/excel\202406_无汇率币种明细_2.xlsx
+2025-09-02 13:54:40,805 - INFO - 成功添加附件: 202406_merchant_provider_currency_8.xlsx
+2025-09-02 13:54:40,812 - INFO - 成功添加附件: 202406_provider_currency.xlsx
+2025-09-02 13:54:40,819 - INFO - 成功添加附件: 202406_provider_game_currency.xlsx
+2025-09-02 13:54:40,819 - INFO - 正在连接SMTP服务器: smtp.larksuite.com:465
+2025-09-02 13:54:41,056 - INFO - SMTP服务器连接成功
+2025-09-02 13:54:41,702 - INFO - SMTP服务器登录成功
+2025-09-02 13:54:43,793 - INFO - 邮件发送成功！
+2025-09-02 13:54:43,903 - INFO - 任务完成！
+2025-09-02 13:54:43,904 - INFO - === 任务执行结束 ===
+2025-09-02 13:55:45,867 - INFO - === 开始执行导出和发送任务 ===
+2025-09-02 13:55:45,869 - INFO - 本次统计月份: 202406，模式: auto，基准时间: 2024-06-30 00:00:00
+2025-09-02 13:55:45,939 - INFO - 正在读取表：stat_202406
+2025-09-02 13:55:45,942 - INFO - 自动适配字段: {'pay_in': 'pay_in', 'pay_out': 'pay_out', 'count': 'count', 'merchant': 'merchant', 'provider': 'provider', 'currency': 'currency', 'game': 'game'}
+2025-09-02 13:55:45,942 - INFO - stat_202406 不做任何时间筛选, SQL: SELECT merchant, provider, currency, pay_in, pay_out, game, count FROM stat_202406
+2025-09-02 13:55:45,949 - INFO - stat_202406 字段: ['merchant', 'provider', 'currency', 'pay_in', 'pay_out', 'game', 'count']
+2025-09-02 13:55:45,956 - INFO - stat_202406 数据样例:
+     merchant         provider currency  ...  pay_out           game  count
+0   169820225  fundist/BGaming      BRL  ...   123.00         178678     27
+1  1698202251          fundist      BRL  ...   312.00         178678      3
+2  1698202251  fundist/BGaming      BRL  ...    34.89         178678     23
+3  1698202251  fundist/BGaming      BRL  ...   231.10         178678      6
+4  1698202251               gp      BRL  ...     2.20  1697709381286      1
+
+[5 rows x 7 columns]
+
+2025-09-02 13:55:45,963 - INFO - stat_202406 聚合后行数: 4
+2025-09-02 13:55:45,992 - INFO - 最终all_data行数: 4
+2025-09-02 13:55:46,024 - INFO - 最终all_data全局groupby后行数: 4
+2025-09-02 13:55:46,024 - INFO - all_data 字段: ['date', 'merchant', 'provider', 'currency', 'game', 'pay_in', 'pay_out', 'count']
+2025-09-02 13:55:46,030 - INFO - all_data 数据样例:
+     date    merchant         provider  ... pay_in pay_out  count
+0  202406   169820225  fundist/BGaming  ...  443.2  123.00     27
+1  202406  1698202251          fundist  ...   12.0  312.00      3
+2  202406  1698202251  fundist/BGaming  ...   49.2  265.99     29
+3  202406  1698202251               gp  ...    2.2    2.20      1
+
+[4 rows x 8 columns]
+2025-09-02 13:55:46,034 - INFO - 最终grouped行数: 4
+2025-09-02 13:55:46,038 - INFO - grouped 数据样例:
+     date    merchant         provider currency  pay_in  pay_out  count
+0  202406   169820225  fundist/BGaming      BRL   443.2   123.00     27
+1  202406  1698202251          fundist      BRL    12.0   312.00      3
+2  202406  1698202251  fundist/BGaming      BRL    49.2   265.99     29
+3  202406  1698202251               gp      BRL     2.2     2.20      1
+2025-09-02 13:55:46,039 - INFO - 正在获取汇率...
+2025-09-02 13:55:48,101 - WARNING - 币安API获取USDTBRL异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x00000210B93CCC20>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:55:50,170 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x00000210B93AB890>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:55:54,213 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x00000210B962C2D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:55:58,257 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x00000210B962C550>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:56:00,258 - WARNING - 以下币种获取汇率失败: {'BRL'}
+2025-09-02 13:56:00,296 - WARNING - 未匹配到商户名的商户ID: ['169820225' '1698202251'] 共2个
+2025-09-02 13:56:00,345 - INFO - 导出完成，文件名：D:/cursor/excel\202406_merchant_provider_currency_9.xlsx
+2025-09-02 13:56:00,370 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_currency.xlsx
+2025-09-02 13:56:00,383 - INFO - gmp_game_list 映射表行数: 31
+2025-09-02 13:56:00,388 - INFO - gmp_merchant_game_list表字段: ['id', 'merchant_id', 'source_id', 'enable', 'custom', 'created_at', 'updated_at', 'deleted_at']
+2025-09-02 13:56:00,394 - INFO - gmp_merchant_game_list 映射表行数: 286
+2025-09-02 13:56:00,394 - INFO - gp厂商游戏映射数量: 286
+2025-09-02 13:56:00,394 - INFO - 调试：检查game_id=1697709381286的映射
+2025-09-02 13:56:00,395 - INFO - game_id=1697709381286 -> source_id=14
+2025-09-02 13:56:00,395 - WARNING - source_id=14 在game_id_to_name中未找到
+2025-09-02 13:56:00,395 - INFO - 调试：检查game_id=178678的映射
+2025-09-02 13:56:00,395 - WARNING - game_id=178678 在game_id_to_name中未找到
+2025-09-02 13:56:00,404 - WARNING - 未匹配到游戏名的 game: ['178678' '1697709381286'] 共2个
+2025-09-02 13:56:00,422 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_game_currency.xlsx
+2025-09-02 13:56:00,425 - INFO - 已导出无汇率币种明细：D:/cursor/excel\202406_无汇率币种明细_3.xlsx
+2025-09-02 13:56:01,485 - INFO - 成功添加附件: 202406_merchant_provider_currency_9.xlsx
+2025-09-02 13:56:01,493 - INFO - 成功添加附件: 202406_provider_currency.xlsx
+2025-09-02 13:56:01,500 - INFO - 成功添加附件: 202406_provider_game_currency.xlsx
+2025-09-02 13:56:01,500 - INFO - 正在连接SMTP服务器: smtp.larksuite.com:465
+2025-09-02 13:56:01,763 - INFO - SMTP服务器连接成功
+2025-09-02 13:56:02,448 - INFO - SMTP服务器登录成功
+2025-09-02 13:56:04,927 - INFO - 邮件发送成功！
+2025-09-02 13:56:05,045 - INFO - 任务完成！
+2025-09-02 13:56:05,045 - INFO - === 任务执行结束 ===
+2025-09-02 13:57:03,139 - INFO - === 开始执行导出和发送任务 ===
+2025-09-02 13:57:03,140 - INFO - 本次统计月份: 202406，模式: auto，基准时间: 2024-06-30 00:00:00
+2025-09-02 13:57:03,215 - INFO - 正在读取表：stat_202406
+2025-09-02 13:57:03,219 - INFO - 自动适配字段: {'pay_in': 'pay_in', 'pay_out': 'pay_out', 'count': 'count', 'merchant': 'merchant', 'provider': 'provider', 'currency': 'currency', 'game': 'game'}
+2025-09-02 13:57:03,219 - INFO - stat_202406 不做任何时间筛选, SQL: SELECT merchant, provider, currency, pay_in, pay_out, game, count FROM stat_202406
+2025-09-02 13:57:03,227 - INFO - stat_202406 字段: ['merchant', 'provider', 'currency', 'pay_in', 'pay_out', 'game', 'count']
+2025-09-02 13:57:03,233 - INFO - stat_202406 数据样例:
+     merchant         provider currency  ...  pay_out           game  count
+0   169820225  fundist/BGaming      BRL  ...   123.00         178678     27
+1  1698202251          fundist      BRL  ...   312.00         178678      3
+2  1698202251  fundist/BGaming      BRL  ...    34.89         178678     23
+3  1698202251  fundist/BGaming      BRL  ...   231.10         178678      6
+4  1698202251               gp      BRL  ...     2.20  1697709381286      1
+
+[5 rows x 7 columns]
+
+2025-09-02 13:57:03,240 - INFO - stat_202406 聚合后行数: 4
+2025-09-02 13:57:03,270 - INFO - 最终all_data行数: 4
+2025-09-02 13:57:03,304 - INFO - 最终all_data全局groupby后行数: 4
+2025-09-02 13:57:03,304 - INFO - all_data 字段: ['date', 'merchant', 'provider', 'currency', 'game', 'pay_in', 'pay_out', 'count']
+2025-09-02 13:57:03,310 - INFO - all_data 数据样例:
+     date    merchant         provider  ... pay_in pay_out  count
+0  202406   169820225  fundist/BGaming  ...  443.2  123.00     27
+1  202406  1698202251          fundist  ...   12.0  312.00      3
+2  202406  1698202251  fundist/BGaming  ...   49.2  265.99     29
+3  202406  1698202251               gp  ...    2.2    2.20      1
+
+[4 rows x 8 columns]
+2025-09-02 13:57:03,314 - INFO - 最终grouped行数: 4
+2025-09-02 13:57:03,318 - INFO - grouped 数据样例:
+     date    merchant         provider currency  pay_in  pay_out  count
+0  202406   169820225  fundist/BGaming      BRL   443.2   123.00     27
+1  202406  1698202251          fundist      BRL    12.0   312.00      3
+2  202406  1698202251  fundist/BGaming      BRL    49.2   265.99     29
+3  202406  1698202251               gp      BRL     2.2     2.20      1
+2025-09-02 13:57:03,319 - INFO - 正在获取汇率...
+2025-09-02 13:57:05,368 - WARNING - 币安API获取USDTBRL异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000011BF80CCC20>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:57:07,408 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000011BF80AB890>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:57:11,452 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000011BF812C2D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:57:15,499 - WARNING - 获取汇率异常: BRL, HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000011BF812C550>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 13:57:17,500 - WARNING - 以下币种获取汇率失败: {'BRL'}
+2025-09-02 13:57:17,518 - WARNING - 未匹配到商户名的商户ID: ['169820225' '1698202251'] 共2个
+2025-09-02 13:57:17,565 - INFO - 导出完成，文件名：D:/cursor/excel\202406_merchant_provider_currency_10.xlsx
+2025-09-02 13:57:17,591 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_currency.xlsx
+2025-09-02 13:57:17,620 - INFO - gmp_game_list 映射表行数: 31
+2025-09-02 13:57:17,620 - INFO - 调试：game_id_to_name字典的前5个键值对: [('6.0', 'luckytanks'), ('7.0', 'needforx'), ('8.0', 'fortunetiger'), ('14.0', 'classic_limbo'), ('15.0', 'classic_dice')]
+2025-09-02 13:57:17,620 - INFO - 调试：检查字典中是否有id=14: False
+2025-09-02 13:57:17,620 - INFO - 调试：检查字典中是否有id=178678: False
+2025-09-02 13:57:17,626 - INFO - gmp_merchant_game_list表字段: ['id', 'merchant_id', 'source_id', 'enable', 'custom', 'created_at', 'updated_at', 'deleted_at']
+2025-09-02 13:57:17,632 - INFO - gmp_merchant_game_list 映射表行数: 286
+2025-09-02 13:57:17,632 - INFO - gp厂商游戏映射数量: 286
+2025-09-02 13:57:17,632 - INFO - 调试：检查game_id=1697709381286的映射
+2025-09-02 13:57:17,633 - INFO - game_id=1697709381286 -> source_id=14
+2025-09-02 13:57:17,633 - WARNING - source_id=14 在game_id_to_name中未找到
+2025-09-02 13:57:17,633 - INFO - 调试：检查game_id=178678的映射
+2025-09-02 13:57:17,633 - WARNING - game_id=178678 在game_id_to_name中未找到
+2025-09-02 13:57:17,642 - WARNING - 未匹配到游戏名的 game: ['178678' '1697709381286'] 共2个
+2025-09-02 13:57:17,661 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_game_currency.xlsx
+2025-09-02 13:57:17,663 - INFO - 已导出无汇率币种明细：D:/cursor/excel\202406_无汇率币种明细_4.xlsx
+2025-09-02 13:57:18,729 - INFO - 成功添加附件: 202406_merchant_provider_currency_10.xlsx
+2025-09-02 13:57:18,736 - INFO - 成功添加附件: 202406_provider_currency.xlsx
+2025-09-02 13:57:18,744 - INFO - 成功添加附件: 202406_provider_game_currency.xlsx
+2025-09-02 13:57:18,744 - INFO - 正在连接SMTP服务器: smtp.larksuite.com:465
+2025-09-02 13:57:19,006 - INFO - SMTP服务器连接成功
+2025-09-02 13:57:19,727 - INFO - SMTP服务器登录成功
+2025-09-02 13:57:21,921 - INFO - 邮件发送成功！
+2025-09-02 13:57:22,044 - INFO - 任务完成！
+2025-09-02 13:57:22,045 - INFO - === 任务执行结束 ===
+2025-09-02 14:00:05,916 - INFO - === 开始执行导出和发送任务 ===
+2025-09-02 14:00:05,917 - INFO - 本次统计月份: 202509，模式: auto，基准时间: 2025-09-02 14:00:05.917527
+2025-09-02 14:00:05,971 - ERROR - 没有找到202509月的stat_表！
+NoneType: None
+2025-09-02 14:00:05,972 - ERROR - 数据导出失败：没有找到202509月的stat_表！
+2025-09-02 14:00:05,972 - INFO - === 任务执行结束 ===
+2025-09-02 14:01:45,554 - INFO - === 开始执行导出和发送任务 ===
+2025-09-02 14:01:45,556 - INFO - === 任务执行结束 ===
+2025-09-02 14:02:20,637 - INFO - === 开始执行导出和发送任务 ===
+2025-09-02 14:02:20,638 - INFO - === 任务执行结束 ===
+2025-09-02 14:03:43,812 - INFO - === 开始执行导出和发送任务 ===
+2025-09-02 14:03:43,813 - INFO - 本次统计月份: 202406，模式: auto，基准时间: 2024-06-30 00:00:00
+2025-09-02 14:03:43,852 - INFO - 正在读取表：stat_202406
+2025-09-02 14:03:43,855 - INFO - 自动适配字段: {'pay_in': 'pay_in', 'pay_out': 'pay_out', 'count': 'count', 'merchant': 'merchant', 'provider': 'provider', 'currency': 'currency', 'game': 'game'}
+2025-09-02 14:03:43,856 - INFO - stat_202406 不做任何时间筛选, SQL: SELECT merchant, provider, currency, pay_in, pay_out, game, count FROM stat_202406
+2025-09-02 14:03:43,864 - INFO - stat_202406 字段: ['merchant', 'provider', 'currency', 'pay_in', 'pay_out', 'game', 'count']
+2025-09-02 14:03:43,871 - INFO - stat_202406 数据样例:
+     merchant         provider currency  ...  pay_out           game  count
+0   169820225  fundist/BGaming      BRL  ...   123.00         178678     27
+1  1698202251          fundist      BRL  ...   312.00         178678      3
+2  1698202251  fundist/BGaming      BRL  ...    34.89         178678     23
+3  1698202251  fundist/BGaming      BRL  ...   231.10         178678      6
+4  1698202251               gp      BRL  ...     2.20  1697709381286      1
+
+[5 rows x 7 columns]
+
+2025-09-02 14:03:43,878 - INFO - stat_202406 聚合后行数: 4
+2025-09-02 14:03:43,906 - INFO - 最终all_data行数: 4
+2025-09-02 14:03:43,938 - INFO - 最终all_data全局groupby后行数: 4
+2025-09-02 14:03:43,939 - INFO - all_data 字段: ['date', 'merchant', 'provider', 'currency', 'game', 'pay_in', 'pay_out', 'count']
+2025-09-02 14:03:43,944 - INFO - all_data 数据样例:
+     date    merchant         provider  ... pay_in pay_out  count
+0  202406   169820225  fundist/BGaming  ...  443.2  123.00     27
+1  202406  1698202251          fundist  ...   12.0  312.00      3
+2  202406  1698202251  fundist/BGaming  ...   49.2  265.99     29
+3  202406  1698202251               gp  ...    2.2    2.20      1
+
+[4 rows x 8 columns]
+2025-09-02 14:03:43,948 - INFO - 最终grouped行数: 4
+2025-09-02 14:03:43,953 - INFO - grouped 数据样例:
+     date    merchant         provider currency  pay_in  pay_out  count
+0  202406   169820225  fundist/BGaming      BRL   443.2   123.00     27
+1  202406  1698202251          fundist      BRL    12.0   312.00      3
+2  202406  1698202251  fundist/BGaming      BRL    49.2   265.99     29
+3  202406  1698202251               gp      BRL     2.2     2.20      1
+2025-09-02 14:03:43,955 - INFO - 正在获取汇率...
+2025-09-02 14:03:43,961 - INFO - 尝试获取USDTBRL价格，第1次尝试
+2025-09-02 14:03:46,005 - WARNING - 币安API获取USDTBRL第1次尝试异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACDDD4C20>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:03:48,006 - INFO - 尝试获取USDTBRL价格，第2次尝试
+2025-09-02 14:03:50,044 - WARNING - 币安API获取USDTBRL第2次尝试异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACDDAF890>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:03:52,045 - INFO - 尝试获取USDTBRL价格，第3次尝试
+2025-09-02 14:03:54,086 - WARNING - 币安API获取USDTBRL第3次尝试异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE0302D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:03:54,087 - ERROR - 币安API获取USDTBRL所有尝试都失败
+2025-09-02 14:03:54,087 - INFO - 尝试获取BRL汇率，API: https://open.er-api.com/v6/latest/BRL，第1次尝试
+2025-09-02 14:03:56,124 - WARNING - API https://open.er-api.com/v6/latest/BRL 第1次尝试失败: HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE030550>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:03:59,125 - INFO - 尝试获取BRL汇率，API: https://open.er-api.com/v6/latest/BRL，第2次尝试
+2025-09-02 14:04:01,146 - WARNING - API https://open.er-api.com/v6/latest/BRL 第2次尝试失败: HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE0307D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:04,147 - INFO - 尝试获取BRL汇率，API: https://open.er-api.com/v6/latest/BRL，第3次尝试
+2025-09-02 14:04:06,177 - WARNING - API https://open.er-api.com/v6/latest/BRL 第3次尝试失败: HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE030A50>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:09,178 - INFO - 尝试获取BRL汇率，API: https://open.er-api.com/v6/latest/BRL，第4次尝试
+2025-09-02 14:04:11,214 - WARNING - API https://open.er-api.com/v6/latest/BRL 第4次尝试失败: HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE030CD0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:14,215 - INFO - 尝试获取BRL汇率，API: https://open.er-api.com/v6/latest/BRL，第5次尝试
+2025-09-02 14:04:16,261 - WARNING - API https://open.er-api.com/v6/latest/BRL 第5次尝试失败: HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE030F50>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:16,261 - INFO - 尝试获取BRL汇率，API: https://api.exchangerate-api.com/v4/latest/BRL，第1次尝试
+2025-09-02 14:04:18,301 - WARNING - API https://api.exchangerate-api.com/v4/latest/BRL 第1次尝试失败: HTTPSConnectionPool(host='api.exchangerate-api.com', port=443): Max retries exceeded with url: /v4/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE0311D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:21,302 - INFO - 尝试获取BRL汇率，API: https://api.exchangerate-api.com/v4/latest/BRL，第2次尝试
+2025-09-02 14:04:23,349 - WARNING - API https://api.exchangerate-api.com/v4/latest/BRL 第2次尝试失败: HTTPSConnectionPool(host='api.exchangerate-api.com', port=443): Max retries exceeded with url: /v4/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE031450>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:26,350 - INFO - 尝试获取BRL汇率，API: https://api.exchangerate-api.com/v4/latest/BRL，第3次尝试
+2025-09-02 14:04:28,392 - WARNING - API https://api.exchangerate-api.com/v4/latest/BRL 第3次尝试失败: HTTPSConnectionPool(host='api.exchangerate-api.com', port=443): Max retries exceeded with url: /v4/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE0316D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:31,393 - INFO - 尝试获取BRL汇率，API: https://api.exchangerate-api.com/v4/latest/BRL，第4次尝试
+2025-09-02 14:04:33,428 - WARNING - API https://api.exchangerate-api.com/v4/latest/BRL 第4次尝试失败: HTTPSConnectionPool(host='api.exchangerate-api.com', port=443): Max retries exceeded with url: /v4/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE031950>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:36,429 - INFO - 尝试获取BRL汇率，API: https://api.exchangerate-api.com/v4/latest/BRL，第5次尝试
+2025-09-02 14:04:38,467 - WARNING - API https://api.exchangerate-api.com/v4/latest/BRL 第5次尝试失败: HTTPSConnectionPool(host='api.exchangerate-api.com', port=443): Max retries exceeded with url: /v4/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE031BD0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:38,467 - INFO - 尝试获取BRL汇率，API: https://api.fixer.io/latest?base=BRL，第1次尝试
+2025-09-02 14:04:40,504 - WARNING - API https://api.fixer.io/latest?base=BRL 第1次尝试失败: HTTPSConnectionPool(host='api.fixer.io', port=443): Max retries exceeded with url: /latest?base=BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE031E50>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:43,505 - INFO - 尝试获取BRL汇率，API: https://api.fixer.io/latest?base=BRL，第2次尝试
+2025-09-02 14:04:45,543 - WARNING - API https://api.fixer.io/latest?base=BRL 第2次尝试失败: HTTPSConnectionPool(host='api.fixer.io', port=443): Max retries exceeded with url: /latest?base=BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACE0320D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:48,544 - INFO - 尝试获取BRL汇率，API: https://api.fixer.io/latest?base=BRL，第3次尝试
+2025-09-02 14:04:50,575 - WARNING - API https://api.fixer.io/latest?base=BRL 第3次尝试失败: HTTPSConnectionPool(host='api.fixer.io', port=443): Max retries exceeded with url: /latest?base=BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACDDAFB10>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:53,576 - INFO - 尝试获取BRL汇率，API: https://api.fixer.io/latest?base=BRL，第4次尝试
+2025-09-02 14:04:55,625 - WARNING - API https://api.fixer.io/latest?base=BRL 第4次尝试失败: HTTPSConnectionPool(host='api.fixer.io', port=443): Max retries exceeded with url: /latest?base=BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACDDAFC50>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:04:58,626 - INFO - 尝试获取BRL汇率，API: https://api.fixer.io/latest?base=BRL，第5次尝试
+2025-09-02 14:05:00,656 - WARNING - API https://api.fixer.io/latest?base=BRL 第5次尝试失败: HTTPSConnectionPool(host='api.fixer.io', port=443): Max retries exceeded with url: /latest?base=BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000023ACDDAF9D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:05:00,657 - WARNING - 网络获取BRL汇率失败，使用本地缓存汇率: 0.21
+2025-09-02 14:05:00,689 - WARNING - 未匹配到商户名的商户ID: ['169820225' '1698202251'] 共2个
+2025-09-02 14:05:00,736 - INFO - 导出完成，文件名：D:/cursor/excel\202406_merchant_provider_currency_11.xlsx
+2025-09-02 14:05:00,761 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_currency.xlsx
+2025-09-02 14:05:00,791 - INFO - gmp_game_list 映射表行数: 31
+2025-09-02 14:05:00,792 - INFO - 调试：game_id_to_name字典的前5个键值对: [('6.0', 'luckytanks'), ('7.0', 'needforx'), ('8.0', 'fortunetiger'), ('14.0', 'classic_limbo'), ('15.0', 'classic_dice')]
+2025-09-02 14:05:00,792 - INFO - 调试：检查字典中是否有id=14: False
+2025-09-02 14:05:00,792 - INFO - 调试：检查字典中是否有id=178678: False
+2025-09-02 14:05:00,797 - INFO - gmp_merchant_game_list表字段: ['id', 'merchant_id', 'source_id', 'enable', 'custom', 'created_at', 'updated_at', 'deleted_at']
+2025-09-02 14:05:00,804 - INFO - gmp_merchant_game_list 映射表行数: 286
+2025-09-02 14:05:00,804 - INFO - gp厂商游戏映射数量: 286
+2025-09-02 14:05:00,804 - INFO - 调试：检查game_id=1697709381286的映射
+2025-09-02 14:05:00,804 - INFO - game_id=1697709381286 -> source_id=14
+2025-09-02 14:05:00,805 - WARNING - source_id=14 在game_id_to_name中未找到
+2025-09-02 14:05:00,805 - INFO - 调试：检查game_id=178678的映射
+2025-09-02 14:05:00,805 - WARNING - game_id=178678 在game_id_to_name中未找到
+2025-09-02 14:05:00,814 - WARNING - 未匹配到游戏名的 game: ['178678' '1697709381286'] 共2个
+2025-09-02 14:05:00,832 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_game_currency.xlsx
+2025-09-02 14:05:01,932 - INFO - 成功添加附件: 202406_merchant_provider_currency_11.xlsx
+2025-09-02 14:05:01,940 - INFO - 成功添加附件: 202406_provider_currency.xlsx
+2025-09-02 14:05:01,948 - INFO - 成功添加附件: 202406_provider_game_currency.xlsx
+2025-09-02 14:05:01,948 - INFO - 正在连接SMTP服务器: smtp.larksuite.com:465
+2025-09-02 14:05:02,198 - INFO - SMTP服务器连接成功
+2025-09-02 14:05:02,860 - INFO - SMTP服务器登录成功
+2025-09-02 14:05:05,034 - INFO - 邮件发送成功！
+2025-09-02 14:05:05,141 - INFO - 任务完成！
+2025-09-02 14:05:05,142 - INFO - === 任务执行结束 ===
+2025-09-02 14:07:28,293 - INFO - === 开始执行导出和发送任务 ===
+2025-09-02 14:07:28,294 - INFO - 本次统计月份: 202406，模式: auto，基准时间: 2024-06-30 00:00:00
+2025-09-02 14:07:28,335 - INFO - 正在读取表：stat_202406
+2025-09-02 14:07:28,339 - INFO - 自动适配字段: {'pay_in': 'pay_in', 'pay_out': 'pay_out', 'count': 'count', 'merchant': 'merchant', 'provider': 'provider', 'currency': 'currency', 'game': 'game'}
+2025-09-02 14:07:28,339 - INFO - stat_202406 不做任何时间筛选, SQL: SELECT merchant, provider, currency, pay_in, pay_out, game, count FROM stat_202406
+2025-09-02 14:07:28,346 - INFO - stat_202406 字段: ['merchant', 'provider', 'currency', 'pay_in', 'pay_out', 'game', 'count']
+2025-09-02 14:07:28,354 - INFO - stat_202406 数据样例:
+     merchant         provider currency  ...  pay_out           game  count
+0   169820225  fundist/BGaming      BRL  ...   123.00         178678     27
+1  1698202251          fundist      BRL  ...   312.00         178678      3
+2  1698202251  fundist/BGaming      BRL  ...    34.89         178678     23
+3  1698202251  fundist/BGaming      BRL  ...   231.10         178678      6
+4  1698202251               gp      BRL  ...     2.20  1697709381286      1
+
+[5 rows x 7 columns]
+
+2025-09-02 14:07:28,361 - INFO - stat_202406 聚合后行数: 4
+2025-09-02 14:07:28,394 - INFO - 最终all_data行数: 4
+2025-09-02 14:07:28,429 - INFO - 最终all_data全局groupby后行数: 4
+2025-09-02 14:07:28,429 - INFO - all_data 字段: ['date', 'merchant', 'provider', 'currency', 'game', 'pay_in', 'pay_out', 'count']
+2025-09-02 14:07:28,435 - INFO - all_data 数据样例:
+     date    merchant         provider  ... pay_in pay_out  count
+0  202406   169820225  fundist/BGaming  ...  443.2  123.00     27
+1  202406  1698202251          fundist  ...   12.0  312.00      3
+2  202406  1698202251  fundist/BGaming  ...   49.2  265.99     29
+3  202406  1698202251               gp  ...    2.2    2.20      1
+
+[4 rows x 8 columns]
+2025-09-02 14:07:28,439 - INFO - 最终grouped行数: 4
+2025-09-02 14:07:28,443 - INFO - grouped 数据样例:
+     date    merchant         provider currency  pay_in  pay_out  count
+0  202406   169820225  fundist/BGaming      BRL   443.2   123.00     27
+1  202406  1698202251          fundist      BRL    12.0   312.00      3
+2  202406  1698202251  fundist/BGaming      BRL    49.2   265.99     29
+3  202406  1698202251               gp      BRL     2.2     2.20      1
+2025-09-02 14:07:28,444 - INFO - 正在获取汇率...
+2025-09-02 14:07:28,451 - INFO - 尝试获取USDTBRL价格，第1次尝试
+2025-09-02 14:07:30,489 - WARNING - 币安API获取USDTBRL第1次尝试异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802CD4C20>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:07:32,490 - INFO - 尝试获取USDTBRL价格，第2次尝试
+2025-09-02 14:07:34,537 - WARNING - 币安API获取USDTBRL第2次尝试异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802CAF890>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:07:36,538 - INFO - 尝试获取USDTBRL价格，第3次尝试
+2025-09-02 14:07:38,580 - WARNING - 币安API获取USDTBRL第3次尝试异常: HTTPSConnectionPool(host='api.binance.com', port=443): Max retries exceeded with url: /api/v3/ticker/price?symbol=USDTBRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802D542D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:07:38,581 - ERROR - 币安API获取USDTBRL所有尝试都失败
+2025-09-02 14:07:38,581 - INFO - 尝试获取BRL汇率，API: https://open.er-api.com/v6/latest/BRL，第1次尝试
+2025-09-02 14:07:40,609 - WARNING - API https://open.er-api.com/v6/latest/BRL 第1次尝试失败: HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802D54550>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:07:43,610 - INFO - 尝试获取BRL汇率，API: https://open.er-api.com/v6/latest/BRL，第2次尝试
+2025-09-02 14:07:45,645 - WARNING - API https://open.er-api.com/v6/latest/BRL 第2次尝试失败: HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802D547D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:07:48,645 - INFO - 尝试获取BRL汇率，API: https://open.er-api.com/v6/latest/BRL，第3次尝试
+2025-09-02 14:07:50,688 - WARNING - API https://open.er-api.com/v6/latest/BRL 第3次尝试失败: HTTPSConnectionPool(host='open.er-api.com', port=443): Max retries exceeded with url: /v6/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802D54A50>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:07:50,688 - INFO - 尝试获取BRL汇率，API: https://api.exchangerate-api.com/v4/latest/BRL，第1次尝试
+2025-09-02 14:07:52,738 - WARNING - API https://api.exchangerate-api.com/v4/latest/BRL 第1次尝试失败: HTTPSConnectionPool(host='api.exchangerate-api.com', port=443): Max retries exceeded with url: /v4/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802D54CD0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:07:55,738 - INFO - 尝试获取BRL汇率，API: https://api.exchangerate-api.com/v4/latest/BRL，第2次尝试
+2025-09-02 14:07:57,760 - WARNING - API https://api.exchangerate-api.com/v4/latest/BRL 第2次尝试失败: HTTPSConnectionPool(host='api.exchangerate-api.com', port=443): Max retries exceeded with url: /v4/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802D54F50>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:08:00,760 - INFO - 尝试获取BRL汇率，API: https://api.exchangerate-api.com/v4/latest/BRL，第3次尝试
+2025-09-02 14:08:02,795 - WARNING - API https://api.exchangerate-api.com/v4/latest/BRL 第3次尝试失败: HTTPSConnectionPool(host='api.exchangerate-api.com', port=443): Max retries exceeded with url: /v4/latest/BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802D551D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:08:02,796 - INFO - 尝试获取BRL汇率，API: https://api.fixer.io/latest?base=BRL，第1次尝试
+2025-09-02 14:08:04,843 - WARNING - API https://api.fixer.io/latest?base=BRL 第1次尝试失败: HTTPSConnectionPool(host='api.fixer.io', port=443): Max retries exceeded with url: /latest?base=BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802D55450>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:08:07,843 - INFO - 尝试获取BRL汇率，API: https://api.fixer.io/latest?base=BRL，第2次尝试
+2025-09-02 14:08:09,895 - WARNING - API https://api.fixer.io/latest?base=BRL 第2次尝试失败: HTTPSConnectionPool(host='api.fixer.io', port=443): Max retries exceeded with url: /latest?base=BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802D556D0>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:08:12,896 - INFO - 尝试获取BRL汇率，API: https://api.fixer.io/latest?base=BRL，第3次尝试
+2025-09-02 14:08:14,933 - WARNING - API https://api.fixer.io/latest?base=BRL 第3次尝试失败: HTTPSConnectionPool(host='api.fixer.io', port=443): Max retries exceeded with url: /latest?base=BRL (Caused by ProxyError('Unable to connect to proxy', NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x000001B802D55950>: Failed to establish a new connection: [WinError 10061] 由于目标计算机积极拒绝，无法连接。')))
+2025-09-02 14:08:14,933 - WARNING - 网络获取BRL汇率失败，使用本地缓存汇率: 0.21
+2025-09-02 14:08:14,952 - WARNING - 未匹配到商户名的商户ID: ['169820225' '1698202251'] 共2个
+2025-09-02 14:08:15,002 - INFO - 导出完成，文件名：D:/cursor/excel\202406_merchant_provider_currency_12.xlsx
+2025-09-02 14:08:15,029 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_currency.xlsx
+2025-09-02 14:08:15,068 - INFO - gmp_game_list 映射表行数: 31
+2025-09-02 14:08:15,068 - INFO - 调试：game_id_to_name字典的前5个键值对: [('6', 'luckytanks'), ('7', 'needforx'), ('8', 'fortunetiger'), ('14', 'classic_limbo'), ('15', 'classic_dice')]
+2025-09-02 14:08:15,068 - INFO - 调试：检查字典中是否有id=14: True
+2025-09-02 14:08:15,068 - INFO - 调试：检查字典中是否有id=178678: False
+2025-09-02 14:08:15,068 - INFO - 调试：id=14对应的游戏名: classic_limbo
+2025-09-02 14:08:15,073 - INFO - gmp_merchant_game_list表字段: ['id', 'merchant_id', 'source_id', 'enable', 'custom', 'created_at', 'updated_at', 'deleted_at']
+2025-09-02 14:08:15,080 - INFO - gmp_merchant_game_list 映射表行数: 286
+2025-09-02 14:08:15,080 - INFO - gp厂商游戏映射数量: 286
+2025-09-02 14:08:15,080 - INFO - 调试：检查game_id=1697709381286的映射
+2025-09-02 14:08:15,080 - INFO - game_id=1697709381286 -> source_id=14
+2025-09-02 14:08:15,080 - INFO - source_id=14 -> game_name=classic_limbo
+2025-09-02 14:08:15,081 - INFO - 调试：检查game_id=178678的映射
+2025-09-02 14:08:15,081 - WARNING - game_id=178678 在game_id_to_name中未找到
+2025-09-02 14:08:15,090 - WARNING - 未匹配到游戏名的 game: ['178678'] 共1个
+2025-09-02 14:08:15,107 - INFO - 导出完成，文件名：D:/cursor/excel\202406_provider_game_currency.xlsx
+2025-09-02 14:08:16,233 - INFO - 成功添加附件: 202406_merchant_provider_currency_12.xlsx
+2025-09-02 14:08:16,240 - INFO - 成功添加附件: 202406_provider_currency.xlsx
+2025-09-02 14:08:16,249 - INFO - 成功添加附件: 202406_provider_game_currency.xlsx
+2025-09-02 14:08:16,249 - INFO - 正在连接SMTP服务器: smtp.larksuite.com:465
+2025-09-02 14:08:16,478 - INFO - SMTP服务器连接成功
+2025-09-02 14:08:17,155 - INFO - SMTP服务器登录成功
+2025-09-02 14:08:19,294 - INFO - 邮件发送成功！
+2025-09-02 14:08:19,401 - INFO - 任务完成！
+2025-09-02 14:08:19,401 - INFO - === 任务执行结束 ===

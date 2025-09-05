@@ -1,0 +1,6 @@
+{
+  "bot_token": "",
+  "finance_chat_id": "",
+  "reconciliation_chat_id": "",
+  "api_base_url": "https://api.telegram.org/bot"
+}

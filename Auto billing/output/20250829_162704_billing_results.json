@@ -1,0 +1,264 @@
+{
+  "A99AU": {
+    "summary": {
+      "total_charge_usdt": 9043.91,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285247"
+    },
+    "sub_merchants": [
+      "A99AU_sub_1",
+      "A99AU_sub_2",
+      "A99AU_sub_3"
+    ],
+    "pdf_file": "A99AU_2025年07月_modified_invoice.pdf"
+  },
+  "AAFUN": {
+    "summary": {
+      "total_charge_usdt": 4426.64,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285276"
+    },
+    "sub_merchants": [
+      "AAFUN_sub_1"
+    ],
+    "pdf_file": "AAFUN_2025年07月_modified_invoice.pdf"
+  },
+  "Betfarms": {
+    "summary": {
+      "total_charge_usdt": 3008.79,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285284"
+    },
+    "sub_merchants": [
+      "Betfarms_sub_1",
+      "Betfarms_sub_2",
+      "Betfarms_sub_3",
+      "Betfarms_sub_4",
+      "Betfarms_sub_5"
+    ],
+    "pdf_file": "Betfarms_2025年07月_modified_invoice.pdf"
+  },
+  "Epoch Game": {
+    "summary": {
+      "total_charge_usdt": 3886.58,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285290"
+    },
+    "sub_merchants": [
+      "Epoch Game_sub_1",
+      "Epoch Game_sub_2",
+      "Epoch Game_sub_3",
+      "Epoch Game_sub_4"
+    ],
+    "pdf_file": "Epoch Game_2025年07月_modified_invoice.pdf"
+  },
+  "Game Plus": {
+    "summary": {
+      "total_charge_usdt": 15746.47,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285295"
+    },
+    "sub_merchants": [
+      "Game Plus_sub_1",
+      "Game Plus_sub_2",
+      "Game Plus_sub_3",
+      "Game Plus_sub_4"
+    ],
+    "pdf_file": "Game Plus_2025年07月_modified_invoice.pdf"
+  },
+  "JBgame": {
+    "summary": {
+      "total_charge_usdt": 1170.65,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285300"
+    },
+    "sub_merchants": [
+      "JBgame_sub_1",
+      "JBgame_sub_2"
+    ],
+    "pdf_file": "JBgame_2025年07月_modified_invoice.pdf"
+  },
+  "Jogar": {
+    "summary": {
+      "total_charge_usdt": 1707.15,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285305"
+    },
+    "sub_merchants": [
+      "Jogar_sub_1"
+    ],
+    "pdf_file": "Jogar_2025年07月_modified_invoice.pdf"
+  },
+  "JR": {
+    "summary": {
+      "total_charge_usdt": 4048.06,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285309"
+    },
+    "sub_merchants": [
+      "JR_sub_1",
+      "JR_sub_2",
+      "JR_sub_3",
+      "JR_sub_4",
+      "JR_sub_5"
+    ],
+    "pdf_file": "JR_2025年07月_modified_invoice.pdf"
+  },
+  "Mxlobo": {
+    "summary": {
+      "total_charge_usdt": 9908.46,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285317"
+    },
+    "sub_merchants": [
+      "Mxlobo_sub_1",
+      "Mxlobo_sub_2",
+      "Mxlobo_sub_3",
+      "Mxlobo_sub_4"
+    ],
+    "pdf_file": "Mxlobo_2025年07月_modified_invoice.pdf"
+  },
+  "MxnGame777": {
+    "summary": {
+      "total_charge_usdt": 8047.13,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285321"
+    },
+    "sub_merchants": [
+      "MxnGame777_sub_1",
+      "MxnGame777_sub_2"
+    ],
+    "pdf_file": "MxnGame777_2025年07月_modified_invoice.pdf"
+  },
+  "Nicegame": {
+    "summary": {
+      "total_charge_usdt": 1670.17,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285325"
+    },
+    "sub_merchants": [
+      "Nicegame_sub_1"
+    ],
+    "pdf_file": "Nicegame_2025年07月_modified_invoice.pdf"
+  },
+  "PUBCGAME": {
+    "summary": {
+      "total_charge_usdt": 8016.37,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285331"
+    },
+    "sub_merchants": [
+      "PUBCGAME_sub_1",
+      "PUBCGAME_sub_2",
+      "PUBCGAME_sub_3",
+      "PUBCGAME_sub_4"
+    ],
+    "pdf_file": "PUBCGAME_2025年07月_modified_invoice.pdf"
+  },
+  "RD1": {
+    "summary": {
+      "total_charge_usdt": 6725.87,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285335"
+    },
+    "sub_merchants": [
+      "RD1_sub_1",
+      "RD1_sub_2",
+      "RD1_sub_3"
+    ],
+    "pdf_file": "RD1_2025年07月_modified_invoice.pdf"
+  },
+  "RichGroup": {
+    "summary": {
+      "total_charge_usdt": 19297.86,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285339"
+    },
+    "sub_merchants": [
+      "RichGroup_sub_1",
+      "RichGroup_sub_2",
+      "RichGroup_sub_3",
+      "RichGroup_sub_4",
+      "RichGroup_sub_5"
+    ],
+    "pdf_file": "RichGroup_2025年07月_modified_invoice.pdf"
+  },
+  "slotsapi": {
+    "summary": {
+      "total_charge_usdt": 3203.71,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285343"
+    },
+    "sub_merchants": [
+      "slotsapi_sub_1",
+      "slotsapi_sub_2",
+      "slotsapi_sub_3"
+    ],
+    "pdf_file": "slotsapi_2025年07月_modified_invoice.pdf"
+  },
+  "sortebot": {
+    "summary": {
+      "total_charge_usdt": 722.6,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285347"
+    },
+    "sub_merchants": [
+      "sortebot_sub_1"
+    ],
+    "pdf_file": "sortebot_2025年07月_modified_invoice.pdf"
+  },
+  "Togame": {
+    "summary": {
+      "total_charge_usdt": 13693.81,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285351"
+    },
+    "sub_merchants": [
+      "Togame_sub_1",
+      "Togame_sub_2",
+      "Togame_sub_3",
+      "Togame_sub_4",
+      "Togame_sub_5"
+    ],
+    "pdf_file": "Togame_2025年07月_modified_invoice.pdf"
+  },
+  "Unicorn66": {
+    "summary": {
+      "total_charge_usdt": 6075.01,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285355"
+    },
+    "sub_merchants": [
+      "Unicorn66_sub_1",
+      "Unicorn66_sub_2"
+    ],
+    "pdf_file": "Unicorn66_2025年07月_modified_invoice.pdf"
+  },
+  "VG": {
+    "summary": {
+      "total_charge_usdt": 3185.19,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285358"
+    },
+    "sub_merchants": [
+      "VG_sub_1",
+      "VG_sub_2",
+      "VG_sub_3"
+    ],
+    "pdf_file": "VG_2025年07月_modified_invoice.pdf"
+  },
+  "winwinbet": {
+    "summary": {
+      "total_charge_usdt": 2400.03,
+      "billing_month": "2025年07月",
+      "generated_at": "2025-08-29T16:27:04.285363"
+    },
+    "sub_merchants": [
+      "winwinbet_sub_1",
+      "winwinbet_sub_2",
+      "winwinbet_sub_3",
+      "winwinbet_sub_4"
+    ],
+    "pdf_file": "winwinbet_2025年07月_modified_invoice.pdf"
+  }
+}

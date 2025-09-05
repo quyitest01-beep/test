@@ -1,0 +1,8 @@
+{
+  "smtp_server": "smtp.gmail.com",
+  "smtp_port": 587,
+  "username": "",
+  "password": "",
+  "from_email": "",
+  "from_name": "Gaming Panda Finance"
+}

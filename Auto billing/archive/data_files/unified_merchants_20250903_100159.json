@@ -1,0 +1,314 @@
+{
+  "timestamp": "20250903_100159",
+  "total_merchants": 44,
+  "merchants": {
+    "merchant": {
+      "merchant_id": "merchant",
+      "merchant_name": "merchant_name",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 0.0
+    },
+    "RD1": {
+      "merchant_id": "RD1",
+      "merchant_name": "777bar",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 0.0
+    },
+    "JR": {
+      "merchant_id": "JR",
+      "merchant_name": "JR-Y3",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 0.0
+    },
+    "马赛克": {
+      "merchant_id": "马赛克",
+      "merchant_name": "mosaic02",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 6.0
+    },
+    "winwinbet": {
+      "merchant_id": "winwinbet",
+      "merchant_name": "winwinbet",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 6.0
+    },
+    "Barbet": {
+      "merchant_id": "Barbet",
+      "merchant_name": "Isnbet",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 0.0
+    },
+    "sortebot": {
+      "merchant_id": "sortebot",
+      "merchant_name": "sortebot",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 2.5
+    },
+    "Game Plus": {
+      "merchant_id": "Game Plus",
+      "merchant_name": "GamePlus1",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 2.5
+    },
+    "GSCPLUS": {
+      "merchant_id": "GSCPLUS",
+      "merchant_name": "Gaming Godfather ",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 3.0
+    },
+    "K36": {
+      "merchant_id": "K36",
+      "merchant_name": "K36",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 0.0
+    },
+    "Brabet": {
+      "merchant_id": "Brabet",
+      "merchant_name": "brabet06",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 6.0
+    },
+    "Clubs7": {
+      "merchant_id": "Clubs7",
+      "merchant_name": "Clubs7",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 0.0
+    },
+    "Epoch Game": {
+      "merchant_id": "Epoch Game",
+      "merchant_name": "Epoch Game",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 6.0
+    },
+    "Betfarms": {
+      "merchant_id": "Betfarms",
+      "merchant_name": "Betfarms",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 3.0
+    },
+    "slotsapi": {
+      "merchant_id": "slotsapi",
+      "merchant_name": "EpicWin",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 2.5
+    },
+    "Togame": {
+      "merchant_id": "Togame",
+      "merchant_name": "To game",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 3.0
+    },
+    "Nicegame": {
+      "merchant_id": "Nicegame",
+      "merchant_name": "Nicegame",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 3.0
+    },
+    "JWgame": {
+      "merchant_id": "JWgame",
+      "merchant_name": "JWgame",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 3.0
+    },
+    "JBgame": {
+      "merchant_id": "JBgame",
+      "merchant_name": "JB game",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 3.0
+    },
+    "KKGJ game": {
+      "merchant_id": "KKGJ game",
+      "merchant_name": "KKGJ game",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 3.0
+    },
+    "Mxlobo": {
+      "merchant_id": "Mxlobo",
+      "merchant_name": "Mxlobo",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 6.0
+    },
+    "VG": {
+      "merchant_id": "VG",
+      "merchant_name": "vg778",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 6.0
+    },
+    "Unicorn66": {
+      "merchant_id": "Unicorn66",
+      "merchant_name": "Unicorn66",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 5.0
+    },
+    "RichGroup": {
+      "merchant_id": "RichGroup",
+      "merchant_name": "RICHPGK",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 8.0
+    },
+    "MxnGame777": {
+      "merchant_id": "MxnGame777",
+      "merchant_name": "MxnGame778",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 8.0
+    },
+    "BossCuci": {
+      "merchant_id": "BossCuci",
+      "merchant_name": "BossCuci",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 8.0
+    },
+    "OLE777": {
+      "merchant_id": "OLE777",
+      "merchant_name": "OLE778",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 8.0
+    },
+    "A99AU": {
+      "merchant_id": "A99AU",
+      "merchant_name": "SLOTIFY",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 10.0
+    },
+    "Win777": {
+      "merchant_id": "Win777",
+      "merchant_name": "Win778",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 6.0
+    },
+    "CasinoXen": {
+      "merchant_id": "CasinoXen",
+      "merchant_name": "CasinoXen",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 8.0
+    },
+    "PUBCGAME": {
+      "merchant_id": "PUBCGAME",
+      "merchant_name": "PUBCGAME",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 2.5
+    },
+    "Jogar": {
+      "merchant_id": "Jogar",
+      "merchant_name": "Jogar",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 8.0
+    },
+    "Richpanda": {
+      "merchant_id": "Richpanda",
+      "merchant_name": "Richpanda",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 5.0
+    },
+    "BSGame": {
+      "merchant_id": "BSGame",
+      "merchant_name": "BSGame",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 8.0
+    },
+    "AAFUN": {
+      "merchant_id": "AAFUN",
+      "merchant_name": "AAFUN",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 6.0
+    },
+    "ZF": {
+      "merchant_id": "ZF",
+      "merchant_name": "ZF886Pxxwin",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 5.5
+    },
+    "MARSBINGO": {
+      "merchant_id": "MARSBINGO",
+      "merchant_name": "MARSBINGO_CL1",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 2.5
+    },
+    "JuwaX": {
+      "merchant_id": "JuwaX",
+      "merchant_name": "Juwa X",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 8.0
+    },
+    "SonaGame": {
+      "merchant_id": "SonaGame",
+      "merchant_name": "SonaGame",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 6.0
+    },
+    "JackpotParty": {
+      "merchant_id": "JackpotParty",
+      "merchant_name": "JackpotParty02",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 6.0
+    },
+    "slotsmaker": {
+      "merchant_id": "slotsmaker",
+      "merchant_name": "MetaGaming",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 2.5
+    },
+    "BOTO": {
+      "merchant_id": "BOTO",
+      "merchant_name": "BOTO",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 8.0
+    },
+    "jayagaming": {
+      "merchant_id": "jayagaming",
+      "merchant_name": "jayagaming",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 7.0
+    },
+    "None": {
+      "merchant_id": "None",
+      "merchant_name": "None",
+      "email": "",
+      "tg_group": "",
+      "fee_rate": 0.0
+    }
+  }
+}

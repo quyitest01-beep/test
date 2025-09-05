@@ -1,0 +1,499 @@
+{
+  "RD1": {
+    "merchant_name": "RD1",
+    "merchant": "RD1",
+    "fee_rate": 0,
+    "period": "2025年07月",
+    "total_volume": 280003372.82,
+    "total_amount": 0.0,
+    "total_win_lose": 8856257.42999999,
+    "details": [
+      {
+        "account": "betfiery@betfiery.net",
+        "currency": "BRL",
+        "total_prize": 4817459.19,
+        "total_bet": 5021844.6,
+        "total_win_lose": 204385.40999999922,
+        "fee_rate": 0,
+        "fee_amount": 0.0,
+        "exchange_rate": 0.18,
+        "payable_usd": 0.0
+      },
+      {
+        "account": "aajogo@aajogo.net",
+        "currency": "BRL",
+        "total_prize": 4379112.89,
+        "total_bet": 4520794.9,
+        "total_win_lose": 141682.0100000007,
+        "fee_rate": 0,
+        "fee_amount": 0.0,
+        "exchange_rate": 0.18,
+        "payable_usd": 0.0
+      },
+      {
+        "account": "mexlucky@mexlucky.net",
+        "currency": "MXN",
+        "total_prize": 127325961.78,
+        "total_bet": 131725071.62,
+        "total_win_lose": 4399109.840000004,
+        "fee_rate": 0,
+        "fee_amount": 0.0,
+        "exchange_rate": 0.058,
+        "payable_usd": 0.0
+      },
+      {
+        "account": "mexswin@mexswin.com",
+        "currency": "MXN",
+        "total_prize": 134624581.53,
+        "total_bet": 138735661.7,
+        "total_win_lose": 4111080.169999987,
+        "fee_rate": 0,
+        "fee_amount": 0.0,
+        "exchange_rate": 0.058,
+        "payable_usd": 0.0
+      }
+    ],
+    "currencies": [
+      "MXN",
+      "BRL"
+    ],
+    "sub_accounts": [
+      "betfiery@betfiery.net",
+      "mexlucky@mexlucky.net",
+      "mexswin@mexswin.com",
+      "aajogo@aajogo.net"
+    ]
+  },
+  "Game Plus": {
+    "merchant_name": "Game Plus",
+    "merchant": "Game Plus",
+    "fee_rate": 2.5,
+    "period": "2025年07月",
+    "total_volume": 195024.2,
+    "total_amount": 13.852599450000003,
+    "total_win_lose": 32028.520000000008,
+    "details": [
+      {
+        "account": "ProductionGamePlus",
+        "currency": "MXN",
+        "total_prize": 7.74,
+        "total_bet": 8.0,
+        "total_win_lose": 0.2599999999999998,
+        "fee_rate": 2.5,
+        "fee_amount": 0.006499999999999995,
+        "exchange_rate": 0.058,
+        "payable_usd": 0.00037699999999999973
+      },
+      {
+        "account": "ProductionGamePlus",
+        "currency": "PHP",
+        "total_prize": 162987.94,
+        "total_bet": 195016.2,
+        "total_win_lose": 32028.26000000001,
+        "fee_rate": 2.5,
+        "fee_amount": 800.7065000000002,
+        "exchange_rate": 0.0173,
+        "payable_usd": 13.852222450000003
+      }
+    ],
+    "currencies": [
+      "MXN",
+      "PHP"
+    ],
+    "sub_accounts": [
+      "ProductionGamePlus"
+    ]
+  },
+  "JR": {
+    "merchant_name": "JR",
+    "merchant": "JR",
+    "fee_rate": 0,
+    "period": "2025年07月",
+    "total_volume": 17805684.9,
+    "total_amount": 0.0,
+    "total_win_lose": 590081.9699999988,
+    "details": [
+      {
+        "account": "ProductionJR-F4",
+        "currency": "PHP",
+        "total_prize": 17215602.93,
+        "total_bet": 17805684.9,
+        "total_win_lose": 590081.9699999988,
+        "fee_rate": 0,
+        "fee_amount": 0.0,
+        "exchange_rate": 0.0173,
+        "payable_usd": 0.0
+      }
+    ],
+    "currencies": [
+      "PHP"
+    ],
+    "sub_accounts": [
+      "ProductionJR-F4"
+    ]
+  },
+  "Mxlobo": {
+    "merchant_name": "Mxlobo",
+    "merchant": "Mxlobo",
+    "fee_rate": 6.0,
+    "period": "2025年07月",
+    "total_volume": 13933405.9,
+    "total_amount": 1454.871907200002,
+    "total_win_lose": 418066.6400000006,
+    "details": [
+      {
+        "account": "ProductionMxlobo",
+        "currency": "MXN",
+        "total_prize": 13515339.26,
+        "total_bet": 13933405.9,
+        "total_win_lose": 418066.6400000006,
+        "fee_rate": 6.0,
+        "fee_amount": 25083.998400000033,
+        "exchange_rate": 0.058,
+        "payable_usd": 1454.871907200002
+      }
+    ],
+    "currencies": [
+      "MXN"
+    ],
+    "sub_accounts": [
+      "ProductionMxlobo"
+    ]
+  },
+  "VG": {
+    "merchant_name": "VG",
+    "merchant": "VG",
+    "fee_rate": 6.0,
+    "period": "2025年07月",
+    "total_volume": 23768.2,
+    "total_amount": 10.46082528,
+    "total_win_lose": 3426.5600000000004,
+    "details": [
+      {
+        "account": "Productionvg777",
+        "currency": "COP",
+        "total_prize": 7330.36,
+        "total_bet": 7789.0,
+        "total_win_lose": 458.6400000000003,
+        "fee_rate": 6.0,
+        "fee_amount": 27.518400000000018,
+        "exchange_rate": 0.0002,
+        "payable_usd": 0.005503680000000004
+      },
+      {
+        "account": "Productionvg777",
+        "currency": "INR",
+        "total_prize": 96.0,
+        "total_bet": 50.0,
+        "total_win_lose": -46.0,
+        "fee_rate": 6.0,
+        "fee_amount": -2.76,
+        "exchange_rate": 0.012,
+        "payable_usd": -0.03312
+      },
+      {
+        "account": "Productionvg777",
+        "currency": "MXN",
+        "total_prize": 12915.28,
+        "total_bet": 15929.2,
+        "total_win_lose": 3013.92,
+        "fee_rate": 6.0,
+        "fee_amount": 180.8352,
+        "exchange_rate": 0.058,
+        "payable_usd": 10.4884416
+      }
+    ],
+    "currencies": [
+      "MXN",
+      "COP",
+      "INR"
+    ],
+    "sub_accounts": [
+      "Productionvg777"
+    ]
+  },
+  "Unicorn66": {
+    "merchant_name": "Unicorn66",
+    "merchant": "Unicorn66",
+    "fee_rate": 5.0,
+    "period": "2025年07月",
+    "total_volume": 9625745.8,
+    "total_amount": 389.02452885000116,
+    "total_win_lose": 278870.6300000008,
+    "details": [
+      {
+        "account": "ProductionUnicorn66",
+        "currency": "THB",
+        "total_prize": 9346875.17,
+        "total_bet": 9625745.8,
+        "total_win_lose": 278870.6300000008,
+        "fee_rate": 5.0,
+        "fee_amount": 13943.531500000041,
+        "exchange_rate": 0.0279,
+        "payable_usd": 389.02452885000116
+      }
+    ],
+    "currencies": [
+      "THB"
+    ],
+    "sub_accounts": [
+      "ProductionUnicorn66"
+    ]
+  },
+  "MxnGame777": {
+    "merchant_name": "MxnGame777",
+    "merchant": "MxnGame777",
+    "fee_rate": 8.0,
+    "period": "2025年07月",
+    "total_volume": 421552.9,
+    "total_amount": 62.19377120000008,
+    "total_win_lose": 13403.830000000016,
+    "details": [
+      {
+        "account": "ProductionMxnGame777",
+        "currency": "MXN",
+        "total_prize": 408149.07,
+        "total_bet": 421552.9,
+        "total_win_lose": 13403.830000000016,
+        "fee_rate": 8.0,
+        "fee_amount": 1072.3064000000013,
+        "exchange_rate": 0.058,
+        "payable_usd": 62.19377120000008
+      }
+    ],
+    "currencies": [
+      "MXN"
+    ],
+    "sub_accounts": [
+      "ProductionMxnGame777"
+    ]
+  },
+  "RichGroup": {
+    "merchant_name": "RichGroup",
+    "merchant": "RichGroup",
+    "fee_rate": 8.0,
+    "period": "2025年07月",
+    "total_volume": 0,
+    "total_amount": 0,
+    "total_win_lose": 0,
+    "details": [],
+    "currencies": [],
+    "sub_accounts": []
+  },
+  "winwinbet": {
+    "merchant_name": "winwinbet",
+    "merchant": "winwinbet",
+    "fee_rate": 6.0,
+    "period": "2025年07月",
+    "total_volume": 115657920.1,
+    "total_amount": 98.29119755999993,
+    "total_win_lose": 6290642.529999996,
+    "details": [
+      {
+        "account": "Productionwinwinbet",
+        "currency": "COP",
+        "total_prize": 109234232.87,
+        "total_bet": 115518300.0,
+        "total_win_lose": 6284067.129999995,
+        "fee_rate": 6.0,
+        "fee_amount": 377044.0277999997,
+        "exchange_rate": 0.0002,
+        "payable_usd": 75.40880555999995
+      },
+      {
+        "account": "Productionwinwinbet",
+        "currency": "MXN",
+        "total_prize": 133044.7,
+        "total_bet": 139620.1,
+        "total_win_lose": 6575.399999999994,
+        "fee_rate": 6.0,
+        "fee_amount": 394.52399999999966,
+        "exchange_rate": 0.058,
+        "payable_usd": 22.88239199999998
+      }
+    ],
+    "currencies": [
+      "MXN",
+      "COP"
+    ],
+    "sub_accounts": [
+      "Productionwinwinbet"
+    ]
+  },
+  "A99AU": {
+    "merchant_name": "A99AU",
+    "merchant": "A99AU",
+    "fee_rate": 10.0,
+    "period": "2025年07月",
+    "total_volume": 38806.899999999994,
+    "total_amount": 66.96378519999999,
+    "total_win_lose": 1040.7799999999997,
+    "details": [
+      {
+        "account": "ProductionA99AU",
+        "currency": "AUD",
+        "total_prize": 14347.73,
+        "total_bet": 15034.9,
+        "total_win_lose": 687.1700000000001,
+        "fee_rate": 10.0,
+        "fee_amount": 68.71700000000001,
+        "exchange_rate": 0.6434,
+        "payable_usd": 44.21251780000001
+      },
+      {
+        "account": "ProductionBS22AU",
+        "currency": "AUD",
+        "total_prize": 2111.53,
+        "total_bet": 1713.7,
+        "total_win_lose": -397.83000000000015,
+        "fee_rate": 10.0,
+        "fee_amount": -39.783000000000015,
+        "exchange_rate": 0.6434,
+        "payable_usd": -25.596382200000008
+      },
+      {
+        "account": "ProductionE99AU",
+        "currency": "AUD",
+        "total_prize": 167.79,
+        "total_bet": 189.1,
+        "total_win_lose": 21.310000000000002,
+        "fee_rate": 10.0,
+        "fee_amount": 2.1310000000000002,
+        "exchange_rate": 0.6434,
+        "payable_usd": 1.3710854000000001
+      },
+      {
+        "account": "ProductionM99AU",
+        "currency": "AUD",
+        "total_prize": 6508.52,
+        "total_bet": 6311.3,
+        "total_win_lose": -197.22000000000025,
+        "fee_rate": 10.0,
+        "fee_amount": -19.722000000000026,
+        "exchange_rate": 0.6434,
+        "payable_usd": -12.689134800000016
+      },
+      {
+        "account": "ProductionPP99AU",
+        "currency": "AUD",
+        "total_prize": 8053.39,
+        "total_bet": 8452.7,
+        "total_win_lose": 399.3100000000004,
+        "fee_rate": 10.0,
+        "fee_amount": 39.93100000000004,
+        "exchange_rate": 0.6434,
+        "payable_usd": 25.691605400000025
+      },
+      {
+        "account": "ProductionSLOTIFY7",
+        "currency": "AUD",
+        "total_prize": 2856.82,
+        "total_bet": 2719.1,
+        "total_win_lose": -137.72000000000025,
+        "fee_rate": 10.0,
+        "fee_amount": -13.772000000000027,
+        "exchange_rate": 0.6434,
+        "payable_usd": -8.860904800000016
+      },
+      {
+        "account": "ProductionSOUTHERN9",
+        "currency": "AUD",
+        "total_prize": 434.65,
+        "total_bet": 486.0,
+        "total_win_lose": 51.35000000000002,
+        "fee_rate": 10.0,
+        "fee_amount": 5.1350000000000025,
+        "exchange_rate": 0.6434,
+        "payable_usd": 3.3038590000000014
+      },
+      {
+        "account": "ProductionTAB77AU",
+        "currency": "AUD",
+        "total_prize": 218.15,
+        "total_bet": 247.0,
+        "total_win_lose": 28.849999999999994,
+        "fee_rate": 10.0,
+        "fee_amount": 2.885,
+        "exchange_rate": 0.6434,
+        "payable_usd": 1.8562089999999998
+      },
+      {
+        "account": "ProductionW99AU",
+        "currency": "AUD",
+        "total_prize": 1875.8,
+        "total_bet": 2358.1,
+        "total_win_lose": 482.29999999999995,
+        "fee_rate": 10.0,
+        "fee_amount": 48.23,
+        "exchange_rate": 0.6434,
+        "payable_usd": 31.031181999999998
+      },
+      {
+        "account": "ProductionYES77AU",
+        "currency": "AUD",
+        "total_prize": 1191.74,
+        "total_bet": 1295.0,
+        "total_win_lose": 103.25999999999999,
+        "fee_rate": 10.0,
+        "fee_amount": 10.326,
+        "exchange_rate": 0.6434,
+        "payable_usd": 6.6437484
+      }
+    ],
+    "currencies": [
+      "AUD"
+    ],
+    "sub_accounts": [
+      "ProductionSLOTIFY7",
+      "ProductionPP99AU",
+      "ProductionSOUTHERN9",
+      "ProductionYES77AU",
+      "ProductionTAB77AU",
+      "ProductionW99AU",
+      "ProductionE99AU",
+      "ProductionA99AU",
+      "ProductionM99AU",
+      "ProductionBS22AU"
+    ]
+  },
+  "Barbet": {
+    "merchant_name": "Barbet",
+    "merchant": "Barbet",
+    "fee_rate": 0,
+    "period": "2025年07月",
+    "total_volume": 59789633.8,
+    "total_amount": 0.0,
+    "total_win_lose": 1958091.1499999985,
+    "details": [
+      {
+        "account": "ProductionBarbet02",
+        "currency": "INR",
+        "total_prize": 17471737.27,
+        "total_bet": 18004671.3,
+        "total_win_lose": 532934.0300000012,
+        "fee_rate": 0,
+        "fee_amount": 0.0,
+        "exchange_rate": 0.012,
+        "payable_usd": 0.0
+      },
+      {
+        "account": "ProductionBarbet02",
+        "currency": "PHP",
+        "total_prize": 40359805.38,
+        "total_bet": 41784962.5,
+        "total_win_lose": 1425157.1199999973,
+        "fee_rate": 0,
+        "fee_amount": 0.0,
+        "exchange_rate": 0.0173,
+        "payable_usd": 0.0
+      }
+    ],
+    "currencies": [
+      "PHP",
+      "INR"
+    ],
+    "sub_accounts": [
+      "ProductionBarbet02"
+    ]
+  }
+}

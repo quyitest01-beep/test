@@ -1,0 +1,244 @@
+{
+  "batch_id": "20250901_181751",
+  "timestamp": "2025-09-01T18:17:51.233484",
+  "period": "2025年08月",
+  "pdf_package": "output\\账单PDF包_202508_181751.zip",
+  "merchant_count": 58,
+  "total_amount": 16423723.79999999,
+  "merchants": {
+    "aajogo@aajogo.net": {
+      "amount": 80058.25999999978,
+      "pdf_file": "aajogo@aajogo.net_2025年08月_賬單.pdf"
+    },
+    "betfiery@betfiery.net": {
+      "amount": 188455.81999999937,
+      "pdf_file": "betfiery@betfiery.net_2025年08月_賬單.pdf"
+    },
+    "mexlucky@mexlucky.net": {
+      "amount": 1611628.7199999988,
+      "pdf_file": "mexlucky@mexlucky.net_2025年08月_賬單.pdf"
+    },
+    "mexswin@mexswin.com": {
+      "amount": 775427.3100000024,
+      "pdf_file": "mexswin@mexswin.com_2025年08月_賬單.pdf"
+    },
+    "Production12POKIES": {
+      "amount": 300.47,
+      "pdf_file": "Production12POKIES_2025年08月_賬單.pdf"
+    },
+    "Production1UWIN": {
+      "amount": 8958.04,
+      "pdf_file": "Production1UWIN_2025年08月_賬單.pdf"
+    },
+    "Production1XPOKIES": {
+      "amount": 131.5,
+      "pdf_file": "Production1XPOKIES_2025年08月_賬單.pdf"
+    },
+    "ProductionA99AU": {
+      "amount": 1276.5599999999977,
+      "pdf_file": "ProductionA99AU_2025年08月_賬單.pdf"
+    },
+    "ProductionA9GAMING": {
+      "amount": 409.75,
+      "pdf_file": "ProductionA9GAMING_2025年08月_賬單.pdf"
+    },
+    "ProductionAAFUN": {
+      "amount": 15856.5,
+      "pdf_file": "ProductionAAFUN_2025年08月_賬單.pdf"
+    },
+    "ProductionADVANTPLAY": {
+      "amount": 162.1300000000001,
+      "pdf_file": "ProductionADVANTPLAY_2025年08月_賬單.pdf"
+    },
+    "ProductionBCWIN": {
+      "amount": 543.9500000000003,
+      "pdf_file": "ProductionBCWIN_2025年08月_賬單.pdf"
+    },
+    "ProductionBetfarms": {
+      "amount": 3313.8800000000047,
+      "pdf_file": "ProductionBetfarms_2025年08月_賬單.pdf"
+    },
+    "ProductionBrabet01": {
+      "amount": 9777.179999999993,
+      "pdf_file": "ProductionBrabet01_2025年08月_賬單.pdf"
+    },
+    "ProductionBrabet06": {
+      "amount": 958063.3699999973,
+      "pdf_file": "ProductionBrabet06_2025年08月_賬單.pdf"
+    },
+    "ProductionBS22AU": {
+      "amount": 768.6100000000006,
+      "pdf_file": "ProductionBS22AU_2025年08月_賬單.pdf"
+    },
+    "ProductionCASHNET": {
+      "amount": 719.1100000000001,
+      "pdf_file": "ProductionCASHNET_2025年08月_賬單.pdf"
+    },
+    "ProductionE99AU": {
+      "amount": 95.93000000000004,
+      "pdf_file": "ProductionE99AU_2025年08月_賬單.pdf"
+    },
+    "ProductionEpicWin": {
+      "amount": 20.310000000000002,
+      "pdf_file": "ProductionEpicWin_2025年08月_賬單.pdf"
+    },
+    "ProductionEpochGame": {
+      "amount": 109477.34000000032,
+      "pdf_file": "ProductionEpochGame_2025年08月_賬單.pdf"
+    },
+    "ProductionFAFA": {
+      "amount": 0,
+      "pdf_file": "ProductionFAFA_2025年08月_賬單.pdf"
+    },
+    "ProductionGamePlus": {
+      "amount": 1168840.36,
+      "pdf_file": "ProductionGamePlus_2025年08月_賬單.pdf"
+    },
+    "ProductionGXBET": {
+      "amount": 94.37000000000035,
+      "pdf_file": "ProductionGXBET_2025年08月_賬單.pdf"
+    },
+    "ProductionJACKDOM": {
+      "amount": 328.9200000000001,
+      "pdf_file": "ProductionJACKDOM_2025年08月_賬單.pdf"
+    },
+    "ProductionJackpotParty02": {
+      "amount": 4341.93,
+      "pdf_file": "ProductionJackpotParty02_2025年08月_賬單.pdf"
+    },
+    "Productionjayagaming": {
+      "amount": 1716614.8699999973,
+      "pdf_file": "Productionjayagaming_2025年08月_賬單.pdf"
+    },
+    "ProductionJBgame": {
+      "amount": 0,
+      "pdf_file": "ProductionJBgame_2025年08月_賬單.pdf"
+    },
+    "ProductionJogar": {
+      "amount": 5904.790000000008,
+      "pdf_file": "ProductionJogar_2025年08月_賬單.pdf"
+    },
+    "ProductionJR-F4": {
+      "amount": 550780.3000000007,
+      "pdf_file": "ProductionJR-F4_2025年08月_賬單.pdf"
+    },
+    "ProductionJWgame": {
+      "amount": 270.57000000000016,
+      "pdf_file": "ProductionJWgame_2025年08月_賬單.pdf"
+    },
+    "ProductionM6": {
+      "amount": 50.0,
+      "pdf_file": "ProductionM6_2025年08月_賬單.pdf"
+    },
+    "ProductionM99AU": {
+      "amount": 992.04,
+      "pdf_file": "ProductionM99AU_2025年08月_賬單.pdf"
+    },
+    "ProductionMetaGaming": {
+      "amount": 5488.809999999998,
+      "pdf_file": "ProductionMetaGaming_2025年08月_賬單.pdf"
+    },
+    "ProductionMxlobo4": {
+      "amount": 9315.98999999999,
+      "pdf_file": "ProductionMxlobo4_2025年08月_賬單.pdf"
+    },
+    "ProductionMxlobo": {
+      "amount": 813258.1799999997,
+      "pdf_file": "ProductionMxlobo_2025年08月_賬單.pdf"
+    },
+    "ProductionNicegame": {
+      "amount": 71896.25,
+      "pdf_file": "ProductionNicegame_2025年08月_賬單.pdf"
+    },
+    "ProductionPUBCGAME": {
+      "amount": 32985.78999999998,
+      "pdf_file": "ProductionPUBCGAME_2025年08月_賬單.pdf"
+    },
+    "ProductionRedSpin": {
+      "amount": 326.09999999999854,
+      "pdf_file": "ProductionRedSpin_2025年08月_賬單.pdf"
+    },
+    "ProductionRICHMAMA": {
+      "amount": 439.0300000000025,
+      "pdf_file": "ProductionRICHMAMA_2025年08月_賬單.pdf"
+    },
+    "ProductionRICHPAPA": {
+      "amount": 184.38999999999987,
+      "pdf_file": "ProductionRICHPAPA_2025年08月_賬單.pdf"
+    },
+    "ProductionSLOTIFY7": {
+      "amount": 283.85000000000036,
+      "pdf_file": "ProductionSLOTIFY7_2025年08月_賬單.pdf"
+    },
+    "Productionslotsapi": {
+      "amount": 4.549999999999999,
+      "pdf_file": "Productionslotsapi_2025年08月_賬單.pdf"
+    },
+    "ProductionSortebot": {
+      "amount": 4190094.879999995,
+      "pdf_file": "ProductionSortebot_2025年08月_賬單.pdf"
+    },
+    "ProductionSOUTHERN9": {
+      "amount": 145.34000000000015,
+      "pdf_file": "ProductionSOUTHERN9_2025年08月_賬單.pdf"
+    },
+    "ProductionTAB77AU": {
+      "amount": 39.459999999999994,
+      "pdf_file": "ProductionTAB77AU_2025年08月_賬單.pdf"
+    },
+    "ProductionTogame": {
+      "amount": 0,
+      "pdf_file": "ProductionTogame_2025年08月_賬單.pdf"
+    },
+    "ProductionUnicorn66": {
+      "amount": 466262.56999999844,
+      "pdf_file": "ProductionUnicorn66_2025年08月_賬單.pdf"
+    },
+    "ProductionUPOKIES": {
+      "amount": 7301.959999999992,
+      "pdf_file": "ProductionUPOKIES_2025年08月_賬單.pdf"
+    },
+    "ProductionURUSWIN": {
+      "amount": 1027.8400000000001,
+      "pdf_file": "ProductionURUSWIN_2025年08月_賬單.pdf"
+    },
+    "ProductionUUSPIN": {
+      "amount": 321.49,
+      "pdf_file": "ProductionUUSPIN_2025年08月_賬單.pdf"
+    },
+    "Productionvg777": {
+      "amount": 1110.7000000000007,
+      "pdf_file": "Productionvg777_2025年08月_賬單.pdf"
+    },
+    "ProductionW99AU": {
+      "amount": 150.94999999999982,
+      "pdf_file": "ProductionW99AU_2025年08月_賬單.pdf"
+    },
+    "ProductionWAWAWIN": {
+      "amount": 72.48000000000002,
+      "pdf_file": "ProductionWAWAWIN_2025年08月_賬單.pdf"
+    },
+    "Productionwinwinbet": {
+      "amount": 9508.040000000008,
+      "pdf_file": "Productionwinwinbet_2025年08月_賬單.pdf"
+    },
+    "ProductionWON66": {
+      "amount": 1551.3799999999992,
+      "pdf_file": "ProductionWON66_2025年08月_賬單.pdf"
+    },
+    "ProductionYAYAWIN": {
+      "amount": 711.6199999999999,
+      "pdf_file": "ProductionYAYAWIN_2025年08月_賬單.pdf"
+    },
+    "ProductionYES77AU": {
+      "amount": 0,
+      "pdf_file": "ProductionYES77AU_2025年08月_賬單.pdf"
+    },
+    "test01": {
+      "amount": 3597579.2600000016,
+      "pdf_file": "test01_2025年08月_賬單.pdf"
+    }
+  },
+  "message": "[SUMMARY] 聚单发送总览\n\n[ID] 批次ID: 20250901_181751\n[SENT] 已发送: 58 个账单\n[AMOUNT] 总金额: 16423723.80 USDT\n[PERIOD] 账期: 2025年08月\n\n商户列表 (共58个):\n- aajogo@aajogo.net: 80058.26 USDT\n- betfiery@betfiery.net: 188455.82 USDT\n- mexlucky@mexlucky.net: 1611628.72 USDT\n- mexswin@mexswin.com: 775427.31 USDT\n- Production12POKIES: 300.47 USDT\n- Production1UWIN: 8958.04 USDT\n- Production1XPOKIES: 131.50 USDT\n- ProductionA99AU: 1276.56 USDT\n- ProductionA9GAMING: 409.75 USDT\n- ProductionAAFUN: 15856.50 USDT\n- ProductionADVANTPLAY: 162.13 USDT\n- ProductionBCWIN: 543.95 USDT\n- ProductionBetfarms: 3313.88 USDT\n- ProductionBrabet01: 9777.18 USDT\n- ProductionBrabet06: 958063.37 USDT\n- ProductionBS22AU: 768.61 USDT\n- ProductionCASHNET: 719.11 USDT\n- ProductionE99AU: 95.93 USDT\n- ProductionEpicWin: 20.31 USDT\n- ProductionEpochGame: 109477.34 USDT\n- ProductionFAFA: 0.00 USDT\n- ProductionGamePlus: 1168840.36 USDT\n- ProductionGXBET: 94.37 USDT\n- ProductionJACKDOM: 328.92 USDT\n- ProductionJackpotParty02: 4341.93 USDT\n- Productionjayagaming: 1716614.87 USDT\n- ProductionJBgame: 0.00 USDT\n- ProductionJogar: 5904.79 USDT\n- ProductionJR-F4: 550780.30 USDT\n- ProductionJWgame: 270.57 USDT\n- ProductionM6: 50.00 USDT\n- ProductionM99AU: 992.04 USDT\n- ProductionMetaGaming: 5488.81 USDT\n- ProductionMxlobo4: 9315.99 USDT\n- ProductionMxlobo: 813258.18 USDT\n- ProductionNicegame: 71896.25 USDT\n- ProductionPUBCGAME: 32985.79 USDT\n- ProductionRedSpin: 326.10 USDT\n- ProductionRICHMAMA: 439.03 USDT\n- ProductionRICHPAPA: 184.39 USDT\n- ProductionSLOTIFY7: 283.85 USDT\n- Productionslotsapi: 4.55 USDT\n- ProductionSortebot: 4190094.88 USDT\n- ProductionSOUTHERN9: 145.34 USDT\n- ProductionTAB77AU: 39.46 USDT\n- ProductionTogame: 0.00 USDT\n- ProductionUnicorn66: 466262.57 USDT\n- ProductionUPOKIES: 7301.96 USDT\n- ProductionURUSWIN: 1027.84 USDT\n- ProductionUUSPIN: 321.49 USDT\n- Productionvg777: 1110.70 USDT\n- ProductionW99AU: 150.95 USDT\n- ProductionWAWAWIN: 72.48 USDT\n- Productionwinwinbet: 9508.04 USDT\n- ProductionWON66: 1551.38 USDT\n- ProductionYAYAWIN: 711.62 USDT\n- ProductionYES77AU: 0.00 USDT\n- test01: 3597579.26 USDT\n\n请仔细核对以下合规信息发送给客户:\n/confirm 20250901_181751\n\n或回复 /reject 20250901_181751 拒绝发送",
+  "status": "pending"
+}

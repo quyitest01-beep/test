@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-09-01T14:03:23.989102",
+  "year": "2025",
+  "month": "08",
+  "merchants": [
+    "A99AU",
+    "AAFUN",
+    "Betfarms",
+    "Brabet",
+    "Epoch Game",
+    "Game Plus",
+    "JBgame",
+    "JR",
+    "Jogar",
+    "Mxlobo",
+    "Nicegame",
+    "PUBCGAME",
+    "RD1",
+    "RichGroup",
+    "Togame",
+    "Unicorn66",
+    "VG",
+    "sortebot",
+    "winwinbet"
+  ],
+  "zip_file": "output\\202508_Bills_Package_20250901_140323.zip",
+  "message": "\n📋 2025年08月账单确认请求\n\n📊 基本信息:\n• 账单ID: 202508_140323\n• 创建时间: 2025-09-01 14:03:23\n• 商户数量: 19\n• 总金额: 待计算 USDT\n\n📋 商户列表 (共19个):\n• A99AU: 待确认 USDT\n• AAFUN: 待确认 USDT\n• Betfarms: 待确认 USDT\n• Brabet: 待确认 USDT\n• Epoch Game: 待确认 USDT\n• Game Plus: 待确认 USDT\n• JBgame: 待确认 USDT\n• JR: 待确认 USDT\n• Jogar: 待确认 USDT\n• Mxlobo: 待确认 USDT\n• Nicegame: 待确认 USDT\n• PUBCGAME: 待确认 USDT\n• RD1: 待确认 USDT\n• RichGroup: 待确认 USDT\n• Togame: 待确认 USDT\n• Unicorn66: 待确认 USDT\n• VG: 待确认 USDT\n• sortebot: 待确认 USDT\n• winwinbet: 待确认 USDT\n\n📦 账单文件包:\n• 文件名: 202508_Bills_Package_20250901_140323.zip\n• 大小: 0.73 MB\n\n⚠️ 请仔细核对以上信息\n\n回复以下命令进行操作:\n• /confirm 202508 - 确认并发送账单\n• /reject 202508 - 拒绝并重新生成\n",
+  "status": "pending"
+}

@@ -1,0 +1,780 @@
+{
+  "batch_id": "20250901_144938",
+  "timestamp": "2025-09-01T14:49:38.394452",
+  "period": "2025年08月",
+  "pdf_package": "output\\账单PDF包_202508_144938.zip",
+  "merchant_count": 192,
+  "total_amount": 0,
+  "merchants": {
+    "12POKIES_主商户账单": {
+      "amount": 0,
+      "pdf_file": "12POKIES_2025年08月_主商户账单.pdf"
+    },
+    "1UWIN_主商户账单": {
+      "amount": 0,
+      "pdf_file": "1UWIN_2025年08月_主商户账单.pdf"
+    },
+    "1XPOKIES_主商户账单": {
+      "amount": 0,
+      "pdf_file": "1XPOKIES_2025年08月_主商户账单.pdf"
+    },
+    "A99AU_主商户账单": {
+      "amount": 0,
+      "pdf_file": "A99AU_2025年08月_主商户账单.pdf"
+    },
+    "A99AU": {
+      "amount": 0,
+      "pdf_file": "A99AU_2025年08月_賬單.pdf"
+    },
+    "A9GAMING_主商户账单": {
+      "amount": 0,
+      "pdf_file": "A9GAMING_2025年08月_主商户账单.pdf"
+    },
+    "AAFUN_主商户账单": {
+      "amount": 0,
+      "pdf_file": "AAFUN_2025年08月_主商户账单.pdf"
+    },
+    "AAFUN": {
+      "amount": 0,
+      "pdf_file": "AAFUN_2025年08月_賬單.pdf"
+    },
+    "aajogo@aajogo.net_Fixed": {
+      "amount": 0,
+      "pdf_file": "aajogo@aajogo.net_2025年08月_Fixed_賬單.pdf"
+    },
+    "aajogo@aajogo.net_主商户账单": {
+      "amount": 0,
+      "pdf_file": "aajogo@aajogo.net_2025年08月_主商户账单.pdf"
+    },
+    "aajogo@aajogo.net": {
+      "amount": 0,
+      "pdf_file": "aajogo@aajogo.net_2025年08月_賬單.pdf"
+    },
+    "ADVANTPLAY_主商户账单": {
+      "amount": 0,
+      "pdf_file": "ADVANTPLAY_2025年08月_主商户账单.pdf"
+    },
+    "Barbet": {
+      "amount": 0,
+      "pdf_file": "Barbet_2025年08月_賬單.pdf"
+    },
+    "BCWIN_主商户账单": {
+      "amount": 0,
+      "pdf_file": "BCWIN_2025年08月_主商户账单.pdf"
+    },
+    "Betfarms_主商户账单": {
+      "amount": 0,
+      "pdf_file": "Betfarms_2025年08月_主商户账单.pdf"
+    },
+    "Betfarms": {
+      "amount": 0,
+      "pdf_file": "Betfarms_2025年08月_賬單.pdf"
+    },
+    "betfiery@betfiery.net_Fixed": {
+      "amount": 0,
+      "pdf_file": "betfiery@betfiery.net_2025年08月_Fixed_賬單.pdf"
+    },
+    "betfiery@betfiery.net_主商户账单": {
+      "amount": 0,
+      "pdf_file": "betfiery@betfiery.net_2025年08月_主商户账单.pdf"
+    },
+    "betfiery@betfiery.net": {
+      "amount": 0,
+      "pdf_file": "betfiery@betfiery.net_2025年08月_賬單.pdf"
+    },
+    "BossCuci": {
+      "amount": 0,
+      "pdf_file": "BossCuci_2025年08月_賬單.pdf"
+    },
+    "BOTO": {
+      "amount": 0,
+      "pdf_file": "BOTO_2025年08月_賬單.pdf"
+    },
+    "Brabet_主商户账单": {
+      "amount": 0,
+      "pdf_file": "Brabet_2025年08月_主商户账单.pdf"
+    },
+    "Brabet": {
+      "amount": 0,
+      "pdf_file": "Brabet_2025年08月_賬單.pdf"
+    },
+    "BSGame": {
+      "amount": 0,
+      "pdf_file": "BSGame_2025年08月_賬單.pdf"
+    },
+    "CASHNET_主商户账单": {
+      "amount": 0,
+      "pdf_file": "CASHNET_2025年08月_主商户账单.pdf"
+    },
+    "CasinoXen": {
+      "amount": 0,
+      "pdf_file": "CasinoXen_2025年08月_賬單.pdf"
+    },
+    "Clubs7": {
+      "amount": 0,
+      "pdf_file": "Clubs7_2025年08月_賬單.pdf"
+    },
+    "EpicWin_主商户账单": {
+      "amount": 0,
+      "pdf_file": "EpicWin_2025年08月_主商户账单.pdf"
+    },
+    "Epoch Game": {
+      "amount": 0,
+      "pdf_file": "Epoch Game_2025年08月_賬單.pdf"
+    },
+    "EpochGame_主商户账单": {
+      "amount": 0,
+      "pdf_file": "EpochGame_2025年08月_主商户账单.pdf"
+    },
+    "Game Plus": {
+      "amount": 0,
+      "pdf_file": "Game Plus_2025年08月_賬單.pdf"
+    },
+    "GSCPLUS": {
+      "amount": 0,
+      "pdf_file": "GSCPLUS_2025年08月_賬單.pdf"
+    },
+    "GXBET_主商户账单": {
+      "amount": 0,
+      "pdf_file": "GXBET_2025年08月_主商户账单.pdf"
+    },
+    "JACKDOM_主商户账单": {
+      "amount": 0,
+      "pdf_file": "JACKDOM_2025年08月_主商户账单.pdf"
+    },
+    "JackpotParty_主商户账单": {
+      "amount": 0,
+      "pdf_file": "JackpotParty_2025年08月_主商户账单.pdf"
+    },
+    "JackpotParty": {
+      "amount": 0,
+      "pdf_file": "JackpotParty_2025年08月_賬單.pdf"
+    },
+    "jayagaming_主商户账单": {
+      "amount": 0,
+      "pdf_file": "jayagaming_2025年08月_主商户账单.pdf"
+    },
+    "jayagaming": {
+      "amount": 0,
+      "pdf_file": "jayagaming_2025年08月_賬單.pdf"
+    },
+    "JBgame": {
+      "amount": 0,
+      "pdf_file": "JBgame_2025年08月_賬單.pdf"
+    },
+    "Jogar_主商户账单": {
+      "amount": 0,
+      "pdf_file": "Jogar_2025年08月_主商户账单.pdf"
+    },
+    "Jogar": {
+      "amount": 0,
+      "pdf_file": "Jogar_2025年08月_賬單.pdf"
+    },
+    "JR_主商户账单": {
+      "amount": 0,
+      "pdf_file": "JR_2025年08月_主商户账单.pdf"
+    },
+    "JR": {
+      "amount": 0,
+      "pdf_file": "JR_2025年08月_賬單.pdf"
+    },
+    "JuwaX": {
+      "amount": 0,
+      "pdf_file": "JuwaX_2025年08月_賬單.pdf"
+    },
+    "JWgame_主商户账单": {
+      "amount": 0,
+      "pdf_file": "JWgame_2025年08月_主商户账单.pdf"
+    },
+    "JWgame": {
+      "amount": 0,
+      "pdf_file": "JWgame_2025年08月_賬單.pdf"
+    },
+    "K36": {
+      "amount": 0,
+      "pdf_file": "K36_2025年08月_賬單.pdf"
+    },
+    "KKGJ game": {
+      "amount": 0,
+      "pdf_file": "KKGJ game_2025年08月_賬單.pdf"
+    },
+    "M6_主商户账单": {
+      "amount": 0,
+      "pdf_file": "M6_2025年08月_主商户账单.pdf"
+    },
+    "MARSBINGO": {
+      "amount": 0,
+      "pdf_file": "MARSBINGO_2025年08月_賬單.pdf"
+    },
+    "MetaGaming_主商户账单": {
+      "amount": 0,
+      "pdf_file": "MetaGaming_2025年08月_主商户账单.pdf"
+    },
+    "mexlucky@mexlucky.net_Fixed": {
+      "amount": 0,
+      "pdf_file": "mexlucky@mexlucky.net_2025年08月_Fixed_賬單.pdf"
+    },
+    "mexlucky@mexlucky.net_主商户账单": {
+      "amount": 0,
+      "pdf_file": "mexlucky@mexlucky.net_2025年08月_主商户账单.pdf"
+    },
+    "mexlucky@mexlucky.net": {
+      "amount": 0,
+      "pdf_file": "mexlucky@mexlucky.net_2025年08月_賬單.pdf"
+    },
+    "mexswin@mexswin.com_Fixed": {
+      "amount": 0,
+      "pdf_file": "mexswin@mexswin.com_2025年08月_Fixed_賬單.pdf"
+    },
+    "mexswin@mexswin.com_主商户账单": {
+      "amount": 0,
+      "pdf_file": "mexswin@mexswin.com_2025年08月_主商户账单.pdf"
+    },
+    "mexswin@mexswin.com": {
+      "amount": 0,
+      "pdf_file": "mexswin@mexswin.com_2025年08月_賬單.pdf"
+    },
+    "Mxlobo_主商户账单": {
+      "amount": 0,
+      "pdf_file": "Mxlobo_2025年08月_主商户账单.pdf"
+    },
+    "Mxlobo": {
+      "amount": 0,
+      "pdf_file": "Mxlobo_2025年08月_賬單.pdf"
+    },
+    "MxnGame777": {
+      "amount": 0,
+      "pdf_file": "MxnGame777_2025年08月_賬單.pdf"
+    },
+    "Nicegame_主商户账单": {
+      "amount": 0,
+      "pdf_file": "Nicegame_2025年08月_主商户账单.pdf"
+    },
+    "Nicegame": {
+      "amount": 0,
+      "pdf_file": "Nicegame_2025年08月_賬單.pdf"
+    },
+    "OLE777": {
+      "amount": 0,
+      "pdf_file": "OLE777_2025年08月_賬單.pdf"
+    },
+    "Production12POKIES_Fixed": {
+      "amount": 0,
+      "pdf_file": "Production12POKIES_2025年08月_Fixed_賬單.pdf"
+    },
+    "Production12POKIES": {
+      "amount": 0,
+      "pdf_file": "Production12POKIES_2025年08月_賬單.pdf"
+    },
+    "Production1UWIN_Fixed": {
+      "amount": 0,
+      "pdf_file": "Production1UWIN_2025年08月_Fixed_賬單.pdf"
+    },
+    "Production1UWIN": {
+      "amount": 0,
+      "pdf_file": "Production1UWIN_2025年08月_賬單.pdf"
+    },
+    "Production1XPOKIES_Fixed": {
+      "amount": 0,
+      "pdf_file": "Production1XPOKIES_2025年08月_Fixed_賬單.pdf"
+    },
+    "Production1XPOKIES": {
+      "amount": 0,
+      "pdf_file": "Production1XPOKIES_2025年08月_賬單.pdf"
+    },
+    "ProductionA99AU_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionA99AU_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionA99AU": {
+      "amount": 0,
+      "pdf_file": "ProductionA99AU_2025年08月_賬單.pdf"
+    },
+    "ProductionA9GAMING_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionA9GAMING_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionA9GAMING": {
+      "amount": 0,
+      "pdf_file": "ProductionA9GAMING_2025年08月_賬單.pdf"
+    },
+    "ProductionAAFUN_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionAAFUN_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionAAFUN": {
+      "amount": 0,
+      "pdf_file": "ProductionAAFUN_2025年08月_賬單.pdf"
+    },
+    "ProductionADVANTPLAY_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionADVANTPLAY_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionADVANTPLAY": {
+      "amount": 0,
+      "pdf_file": "ProductionADVANTPLAY_2025年08月_賬單.pdf"
+    },
+    "ProductionBCWIN_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionBCWIN_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionBCWIN": {
+      "amount": 0,
+      "pdf_file": "ProductionBCWIN_2025年08月_賬單.pdf"
+    },
+    "ProductionBetfarms_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionBetfarms_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionBetfarms": {
+      "amount": 0,
+      "pdf_file": "ProductionBetfarms_2025年08月_賬單.pdf"
+    },
+    "ProductionBrabet01_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionBrabet01_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionBrabet01": {
+      "amount": 0,
+      "pdf_file": "ProductionBrabet01_2025年08月_賬單.pdf"
+    },
+    "ProductionBrabet06_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionBrabet06_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionBrabet06": {
+      "amount": 0,
+      "pdf_file": "ProductionBrabet06_2025年08月_賬單.pdf"
+    },
+    "ProductionBS22AU_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionBS22AU_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionBS22AU": {
+      "amount": 0,
+      "pdf_file": "ProductionBS22AU_2025年08月_賬單.pdf"
+    },
+    "ProductionCASHNET_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionCASHNET_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionCASHNET": {
+      "amount": 0,
+      "pdf_file": "ProductionCASHNET_2025年08月_賬單.pdf"
+    },
+    "ProductionE99AU_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionE99AU_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionE99AU": {
+      "amount": 0,
+      "pdf_file": "ProductionE99AU_2025年08月_賬單.pdf"
+    },
+    "ProductionEpicWin_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionEpicWin_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionEpicWin": {
+      "amount": 0,
+      "pdf_file": "ProductionEpicWin_2025年08月_賬單.pdf"
+    },
+    "ProductionEpochGame_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionEpochGame_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionEpochGame": {
+      "amount": 0,
+      "pdf_file": "ProductionEpochGame_2025年08月_賬單.pdf"
+    },
+    "ProductionGXBET_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionGXBET_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionGXBET": {
+      "amount": 0,
+      "pdf_file": "ProductionGXBET_2025年08月_賬單.pdf"
+    },
+    "ProductionJACKDOM_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionJACKDOM_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionJACKDOM": {
+      "amount": 0,
+      "pdf_file": "ProductionJACKDOM_2025年08月_賬單.pdf"
+    },
+    "ProductionJackpotParty02_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionJackpotParty02_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionJackpotParty02": {
+      "amount": 0,
+      "pdf_file": "ProductionJackpotParty02_2025年08月_賬單.pdf"
+    },
+    "Productionjayagaming_Fixed": {
+      "amount": 0,
+      "pdf_file": "Productionjayagaming_2025年08月_Fixed_賬單.pdf"
+    },
+    "Productionjayagaming": {
+      "amount": 0,
+      "pdf_file": "Productionjayagaming_2025年08月_賬單.pdf"
+    },
+    "ProductionJogar_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionJogar_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionJogar": {
+      "amount": 0,
+      "pdf_file": "ProductionJogar_2025年08月_賬單.pdf"
+    },
+    "ProductionJR-F4_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionJR-F4_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionJR-F4": {
+      "amount": 0,
+      "pdf_file": "ProductionJR-F4_2025年08月_賬單.pdf"
+    },
+    "ProductionJWgame_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionJWgame_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionJWgame": {
+      "amount": 0,
+      "pdf_file": "ProductionJWgame_2025年08月_賬單.pdf"
+    },
+    "ProductionM6_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionM6_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionM6": {
+      "amount": 0,
+      "pdf_file": "ProductionM6_2025年08月_賬單.pdf"
+    },
+    "ProductionM99AU_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionM99AU_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionM99AU": {
+      "amount": 0,
+      "pdf_file": "ProductionM99AU_2025年08月_賬單.pdf"
+    },
+    "ProductionMetaGaming_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionMetaGaming_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionMetaGaming": {
+      "amount": 0,
+      "pdf_file": "ProductionMetaGaming_2025年08月_賬單.pdf"
+    },
+    "ProductionMxlobo4_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionMxlobo4_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionMxlobo4": {
+      "amount": 0,
+      "pdf_file": "ProductionMxlobo4_2025年08月_賬單.pdf"
+    },
+    "ProductionMxlobo_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionMxlobo_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionMxlobo": {
+      "amount": 0,
+      "pdf_file": "ProductionMxlobo_2025年08月_賬單.pdf"
+    },
+    "ProductionNicegame_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionNicegame_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionNicegame": {
+      "amount": 0,
+      "pdf_file": "ProductionNicegame_2025年08月_賬單.pdf"
+    },
+    "ProductionPUBCGAME_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionPUBCGAME_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionPUBCGAME": {
+      "amount": 0,
+      "pdf_file": "ProductionPUBCGAME_2025年08月_賬單.pdf"
+    },
+    "ProductionRedSpin_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionRedSpin_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionRedSpin": {
+      "amount": 0,
+      "pdf_file": "ProductionRedSpin_2025年08月_賬單.pdf"
+    },
+    "ProductionRICHMAMA_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionRICHMAMA_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionRICHMAMA": {
+      "amount": 0,
+      "pdf_file": "ProductionRICHMAMA_2025年08月_賬單.pdf"
+    },
+    "ProductionRICHPAPA_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionRICHPAPA_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionRICHPAPA": {
+      "amount": 0,
+      "pdf_file": "ProductionRICHPAPA_2025年08月_賬單.pdf"
+    },
+    "ProductionSLOTIFY7_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionSLOTIFY7_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionSLOTIFY7": {
+      "amount": 0,
+      "pdf_file": "ProductionSLOTIFY7_2025年08月_賬單.pdf"
+    },
+    "ProductionSortebot_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionSortebot_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionSortebot": {
+      "amount": 0,
+      "pdf_file": "ProductionSortebot_2025年08月_賬單.pdf"
+    },
+    "ProductionSOUTHERN9_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionSOUTHERN9_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionSOUTHERN9": {
+      "amount": 0,
+      "pdf_file": "ProductionSOUTHERN9_2025年08月_賬單.pdf"
+    },
+    "ProductionTAB77AU_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionTAB77AU_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionTAB77AU": {
+      "amount": 0,
+      "pdf_file": "ProductionTAB77AU_2025年08月_賬單.pdf"
+    },
+    "ProductionUnicorn66_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionUnicorn66_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionUnicorn66": {
+      "amount": 0,
+      "pdf_file": "ProductionUnicorn66_2025年08月_賬單.pdf"
+    },
+    "ProductionUPOKIES_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionUPOKIES_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionUPOKIES": {
+      "amount": 0,
+      "pdf_file": "ProductionUPOKIES_2025年08月_賬單.pdf"
+    },
+    "ProductionURUSWIN_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionURUSWIN_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionURUSWIN": {
+      "amount": 0,
+      "pdf_file": "ProductionURUSWIN_2025年08月_賬單.pdf"
+    },
+    "ProductionUUSPIN_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionUUSPIN_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionUUSPIN": {
+      "amount": 0,
+      "pdf_file": "ProductionUUSPIN_2025年08月_賬單.pdf"
+    },
+    "Productionvg777_Fixed": {
+      "amount": 0,
+      "pdf_file": "Productionvg777_2025年08月_Fixed_賬單.pdf"
+    },
+    "Productionvg777": {
+      "amount": 0,
+      "pdf_file": "Productionvg777_2025年08月_賬單.pdf"
+    },
+    "ProductionW99AU_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionW99AU_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionW99AU": {
+      "amount": 0,
+      "pdf_file": "ProductionW99AU_2025年08月_賬單.pdf"
+    },
+    "ProductionWAWAWIN_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionWAWAWIN_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionWAWAWIN": {
+      "amount": 0,
+      "pdf_file": "ProductionWAWAWIN_2025年08月_賬單.pdf"
+    },
+    "Productionwinwinbet_Fixed": {
+      "amount": 0,
+      "pdf_file": "Productionwinwinbet_2025年08月_Fixed_賬單.pdf"
+    },
+    "Productionwinwinbet": {
+      "amount": 0,
+      "pdf_file": "Productionwinwinbet_2025年08月_賬單.pdf"
+    },
+    "ProductionWON66_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionWON66_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionWON66": {
+      "amount": 0,
+      "pdf_file": "ProductionWON66_2025年08月_賬單.pdf"
+    },
+    "ProductionYAYAWIN_Fixed": {
+      "amount": 0,
+      "pdf_file": "ProductionYAYAWIN_2025年08月_Fixed_賬單.pdf"
+    },
+    "ProductionYAYAWIN": {
+      "amount": 0,
+      "pdf_file": "ProductionYAYAWIN_2025年08月_賬單.pdf"
+    },
+    "PUBCGAME_主商户账单": {
+      "amount": 0,
+      "pdf_file": "PUBCGAME_2025年08月_主商户账单.pdf"
+    },
+    "PUBCGAME": {
+      "amount": 0,
+      "pdf_file": "PUBCGAME_2025年08月_賬單.pdf"
+    },
+    "RD1": {
+      "amount": 0,
+      "pdf_file": "RD1_2025年08月_賬單.pdf"
+    },
+    "RedSpin_主商户账单": {
+      "amount": 0,
+      "pdf_file": "RedSpin_2025年08月_主商户账单.pdf"
+    },
+    "RichGroup": {
+      "amount": 0,
+      "pdf_file": "RichGroup_2025年08月_賬單.pdf"
+    },
+    "RICHMAMA_主商户账单": {
+      "amount": 0,
+      "pdf_file": "RICHMAMA_2025年08月_主商户账单.pdf"
+    },
+    "Richpanda": {
+      "amount": 0,
+      "pdf_file": "Richpanda_2025年08月_賬單.pdf"
+    },
+    "RICHPAPA_主商户账单": {
+      "amount": 0,
+      "pdf_file": "RICHPAPA_2025年08月_主商户账单.pdf"
+    },
+    "SLOTIFY7_主商户账单": {
+      "amount": 0,
+      "pdf_file": "SLOTIFY7_2025年08月_主商户账单.pdf"
+    },
+    "slotsapi": {
+      "amount": 0,
+      "pdf_file": "slotsapi_2025年08月_賬單.pdf"
+    },
+    "slotsmaker": {
+      "amount": 0,
+      "pdf_file": "slotsmaker_2025年08月_賬單.pdf"
+    },
+    "SonaGame": {
+      "amount": 0,
+      "pdf_file": "SonaGame_2025年08月_賬單.pdf"
+    },
+    "Sortebot_主商户账单": {
+      "amount": 0,
+      "pdf_file": "Sortebot_2025年08月_主商户账单.pdf"
+    },
+    "sortebot": {
+      "amount": 0,
+      "pdf_file": "sortebot_2025年08月_賬單.pdf"
+    },
+    "SOUTHERN9_主商户账单": {
+      "amount": 0,
+      "pdf_file": "SOUTHERN9_2025年08月_主商户账单.pdf"
+    },
+    "test01_Fixed": {
+      "amount": 0,
+      "pdf_file": "test01_2025年08月_Fixed_賬單.pdf"
+    },
+    "test01_主商户账单": {
+      "amount": 0,
+      "pdf_file": "test01_2025年08月_主商户账单.pdf"
+    },
+    "test01": {
+      "amount": 0,
+      "pdf_file": "test01_2025年08月_賬單.pdf"
+    },
+    "Togame": {
+      "amount": 0,
+      "pdf_file": "Togame_2025年08月_賬單.pdf"
+    },
+    "Unicorn66_主商户账单": {
+      "amount": 0,
+      "pdf_file": "Unicorn66_2025年08月_主商户账单.pdf"
+    },
+    "Unicorn66": {
+      "amount": 0,
+      "pdf_file": "Unicorn66_2025年08月_賬單.pdf"
+    },
+    "Unicorn67": {
+      "amount": 0,
+      "pdf_file": "Unicorn67_2025年08月_賬單.pdf"
+    },
+    "UPOKIES_主商户账单": {
+      "amount": 0,
+      "pdf_file": "UPOKIES_2025年08月_主商户账单.pdf"
+    },
+    "URUSWIN_主商户账单": {
+      "amount": 0,
+      "pdf_file": "URUSWIN_2025年08月_主商户账单.pdf"
+    },
+    "UUSPIN_主商户账单": {
+      "amount": 0,
+      "pdf_file": "UUSPIN_2025年08月_主商户账单.pdf"
+    },
+    "VG_主商户账单": {
+      "amount": 0,
+      "pdf_file": "VG_2025年08月_主商户账单.pdf"
+    },
+    "VG": {
+      "amount": 0,
+      "pdf_file": "VG_2025年08月_賬單.pdf"
+    },
+    "WAWAWIN_主商户账单": {
+      "amount": 0,
+      "pdf_file": "WAWAWIN_2025年08月_主商户账单.pdf"
+    },
+    "Win777": {
+      "amount": 0,
+      "pdf_file": "Win777_2025年08月_賬單.pdf"
+    },
+    "winwinbet_主商户账单": {
+      "amount": 0,
+      "pdf_file": "winwinbet_2025年08月_主商户账单.pdf"
+    },
+    "winwinbet": {
+      "amount": 0,
+      "pdf_file": "winwinbet_2025年08月_賬單.pdf"
+    },
+    "WON66_主商户账单": {
+      "amount": 0,
+      "pdf_file": "WON66_2025年08月_主商户账单.pdf"
+    },
+    "YAYAWIN_主商户账单": {
+      "amount": 0,
+      "pdf_file": "YAYAWIN_2025年08月_主商户账单.pdf"
+    },
+    "ZF": {
+      "amount": 0,
+      "pdf_file": "ZF_2025年08月_賬單.pdf"
+    },
+    "马赛克": {
+      "amount": 0,
+      "pdf_file": "马赛克_2025年08月_賬單.pdf"
+    }
+  },
+  "message": "📊 聚单发送总览\n\n📋 批次ID: 20250901_144938\n📤 已发送: 192 个账单\n💰 总金额: 0.00 USDT\n📅 账期: 2025年08月\n\n商户列表 (共192个):\n• 12POKIES_主商户账单: 0.00 USDT\n• 1UWIN_主商户账单: 0.00 USDT\n• 1XPOKIES_主商户账单: 0.00 USDT\n• A99AU_主商户账单: 0.00 USDT\n• A99AU: 0.00 USDT\n• A9GAMING_主商户账单: 0.00 USDT\n• AAFUN_主商户账单: 0.00 USDT\n• AAFUN: 0.00 USDT\n• aajogo@aajogo.net_Fixed: 0.00 USDT\n• aajogo@aajogo.net_主商户账单: 0.00 USDT\n• aajogo@aajogo.net: 0.00 USDT\n• ADVANTPLAY_主商户账单: 0.00 USDT\n• Barbet: 0.00 USDT\n• BCWIN_主商户账单: 0.00 USDT\n• Betfarms_主商户账单: 0.00 USDT\n• Betfarms: 0.00 USDT\n• betfiery@betfiery.net_Fixed: 0.00 USDT\n• betfiery@betfiery.net_主商户账单: 0.00 USDT\n• betfiery@betfiery.net: 0.00 USDT\n• BossCuci: 0.00 USDT\n• BOTO: 0.00 USDT\n• Brabet_主商户账单: 0.00 USDT\n• Brabet: 0.00 USDT\n• BSGame: 0.00 USDT\n• CASHNET_主商户账单: 0.00 USDT\n• CasinoXen: 0.00 USDT\n• Clubs7: 0.00 USDT\n• EpicWin_主商户账单: 0.00 USDT\n• Epoch Game: 0.00 USDT\n• EpochGame_主商户账单: 0.00 USDT\n• Game Plus: 0.00 USDT\n• GSCPLUS: 0.00 USDT\n• GXBET_主商户账单: 0.00 USDT\n• JACKDOM_主商户账单: 0.00 USDT\n• JackpotParty_主商户账单: 0.00 USDT\n• JackpotParty: 0.00 USDT\n• jayagaming_主商户账单: 0.00 USDT\n• jayagaming: 0.00 USDT\n• JBgame: 0.00 USDT\n• Jogar_主商户账单: 0.00 USDT\n• Jogar: 0.00 USDT\n• JR_主商户账单: 0.00 USDT\n• JR: 0.00 USDT\n• JuwaX: 0.00 USDT\n• JWgame_主商户账单: 0.00 USDT\n• JWgame: 0.00 USDT\n• K36: 0.00 USDT\n• KKGJ game: 0.00 USDT\n• M6_主商户账单: 0.00 USDT\n• MARSBINGO: 0.00 USDT\n• MetaGaming_主商户账单: 0.00 USDT\n• mexlucky@mexlucky.net_Fixed: 0.00 USDT\n• mexlucky@mexlucky.net_主商户账单: 0.00 USDT\n• mexlucky@mexlucky.net: 0.00 USDT\n• mexswin@mexswin.com_Fixed: 0.00 USDT\n• mexswin@mexswin.com_主商户账单: 0.00 USDT\n• mexswin@mexswin.com: 0.00 USDT\n• Mxlobo_主商户账单: 0.00 USDT\n• Mxlobo: 0.00 USDT\n• MxnGame777: 0.00 USDT\n• Nicegame_主商户账单: 0.00 USDT\n• Nicegame: 0.00 USDT\n• OLE777: 0.00 USDT\n• Production12POKIES_Fixed: 0.00 USDT\n• Production12POKIES: 0.00 USDT\n• Production1UWIN_Fixed: 0.00 USDT\n• Production1UWIN: 0.00 USDT\n• Production1XPOKIES_Fixed: 0.00 USDT\n• Production1XPOKIES: 0.00 USDT\n• ProductionA99AU_Fixed: 0.00 USDT\n• ProductionA99AU: 0.00 USDT\n• ProductionA9GAMING_Fixed: 0.00 USDT\n• ProductionA9GAMING: 0.00 USDT\n• ProductionAAFUN_Fixed: 0.00 USDT\n• ProductionAAFUN: 0.00 USDT\n• ProductionADVANTPLAY_Fixed: 0.00 USDT\n• ProductionADVANTPLAY: 0.00 USDT\n• ProductionBCWIN_Fixed: 0.00 USDT\n• ProductionBCWIN: 0.00 USDT\n• ProductionBetfarms_Fixed: 0.00 USDT\n• ProductionBetfarms: 0.00 USDT\n• ProductionBrabet01_Fixed: 0.00 USDT\n• ProductionBrabet01: 0.00 USDT\n• ProductionBrabet06_Fixed: 0.00 USDT\n• ProductionBrabet06: 0.00 USDT\n• ProductionBS22AU_Fixed: 0.00 USDT\n• ProductionBS22AU: 0.00 USDT\n• ProductionCASHNET_Fixed: 0.00 USDT\n• ProductionCASHNET: 0.00 USDT\n• ProductionE99AU_Fixed: 0.00 USDT\n• ProductionE99AU: 0.00 USDT\n• ProductionEpicWin_Fixed: 0.00 USDT\n• ProductionEpicWin: 0.00 USDT\n• ProductionEpochGame_Fixed: 0.00 USDT\n• ProductionEpochGame: 0.00 USDT\n• ProductionGXBET_Fixed: 0.00 USDT\n• ProductionGXBET: 0.00 USDT\n• ProductionJACKDOM_Fixed: 0.00 USDT\n• ProductionJACKDOM: 0.00 USDT\n• ProductionJackpotParty02_Fixed: 0.00 USDT\n• ProductionJackpotParty02: 0.00 USDT\n• Productionjayagaming_Fixed: 0.00 USDT\n• Productionjayagaming: 0.00 USDT\n• ProductionJogar_Fixed: 0.00 USDT\n• ProductionJogar: 0.00 USDT\n• ProductionJR-F4_Fixed: 0.00 USDT\n• ProductionJR-F4: 0.00 USDT\n• ProductionJWgame_Fixed: 0.00 USDT\n• ProductionJWgame: 0.00 USDT\n• ProductionM6_Fixed: 0.00 USDT\n• ProductionM6: 0.00 USDT\n• ProductionM99AU_Fixed: 0.00 USDT\n• ProductionM99AU: 0.00 USDT\n• ProductionMetaGaming_Fixed: 0.00 USDT\n• ProductionMetaGaming: 0.00 USDT\n• ProductionMxlobo4_Fixed: 0.00 USDT\n• ProductionMxlobo4: 0.00 USDT\n• ProductionMxlobo_Fixed: 0.00 USDT\n• ProductionMxlobo: 0.00 USDT\n• ProductionNicegame_Fixed: 0.00 USDT\n• ProductionNicegame: 0.00 USDT\n• ProductionPUBCGAME_Fixed: 0.00 USDT\n• ProductionPUBCGAME: 0.00 USDT\n• ProductionRedSpin_Fixed: 0.00 USDT\n• ProductionRedSpin: 0.00 USDT\n• ProductionRICHMAMA_Fixed: 0.00 USDT\n• ProductionRICHMAMA: 0.00 USDT\n• ProductionRICHPAPA_Fixed: 0.00 USDT\n• ProductionRICHPAPA: 0.00 USDT\n• ProductionSLOTIFY7_Fixed: 0.00 USDT\n• ProductionSLOTIFY7: 0.00 USDT\n• ProductionSortebot_Fixed: 0.00 USDT\n• ProductionSortebot: 0.00 USDT\n• ProductionSOUTHERN9_Fixed: 0.00 USDT\n• ProductionSOUTHERN9: 0.00 USDT\n• ProductionTAB77AU_Fixed: 0.00 USDT\n• ProductionTAB77AU: 0.00 USDT\n• ProductionUnicorn66_Fixed: 0.00 USDT\n• ProductionUnicorn66: 0.00 USDT\n• ProductionUPOKIES_Fixed: 0.00 USDT\n• ProductionUPOKIES: 0.00 USDT\n• ProductionURUSWIN_Fixed: 0.00 USDT\n• ProductionURUSWIN: 0.00 USDT\n• ProductionUUSPIN_Fixed: 0.00 USDT\n• ProductionUUSPIN: 0.00 USDT\n• Productionvg777_Fixed: 0.00 USDT\n• Productionvg777: 0.00 USDT\n• ProductionW99AU_Fixed: 0.00 USDT\n• ProductionW99AU: 0.00 USDT\n• ProductionWAWAWIN_Fixed: 0.00 USDT\n• ProductionWAWAWIN: 0.00 USDT\n• Productionwinwinbet_Fixed: 0.00 USDT\n• Productionwinwinbet: 0.00 USDT\n• ProductionWON66_Fixed: 0.00 USDT\n• ProductionWON66: 0.00 USDT\n• ProductionYAYAWIN_Fixed: 0.00 USDT\n• ProductionYAYAWIN: 0.00 USDT\n• PUBCGAME_主商户账单: 0.00 USDT\n• PUBCGAME: 0.00 USDT\n• RD1: 0.00 USDT\n• RedSpin_主商户账单: 0.00 USDT\n• RichGroup: 0.00 USDT\n• RICHMAMA_主商户账单: 0.00 USDT\n• Richpanda: 0.00 USDT\n• RICHPAPA_主商户账单: 0.00 USDT\n• SLOTIFY7_主商户账单: 0.00 USDT\n• slotsapi: 0.00 USDT\n• slotsmaker: 0.00 USDT\n• SonaGame: 0.00 USDT\n• Sortebot_主商户账单: 0.00 USDT\n• sortebot: 0.00 USDT\n• SOUTHERN9_主商户账单: 0.00 USDT\n• test01_Fixed: 0.00 USDT\n• test01_主商户账单: 0.00 USDT\n• test01: 0.00 USDT\n• Togame: 0.00 USDT\n• Unicorn66_主商户账单: 0.00 USDT\n• Unicorn66: 0.00 USDT\n• Unicorn67: 0.00 USDT\n• UPOKIES_主商户账单: 0.00 USDT\n• URUSWIN_主商户账单: 0.00 USDT\n• UUSPIN_主商户账单: 0.00 USDT\n• VG_主商户账单: 0.00 USDT\n• VG: 0.00 USDT\n• WAWAWIN_主商户账单: 0.00 USDT\n• Win777: 0.00 USDT\n• winwinbet_主商户账单: 0.00 USDT\n• winwinbet: 0.00 USDT\n• WON66_主商户账单: 0.00 USDT\n• YAYAWIN_主商户账单: 0.00 USDT\n• ZF: 0.00 USDT\n• 马赛克: 0.00 USDT\n\n请仔细核对以下合规信息发送给客户:\n/confirm 20250901_144938\n\n或回复 /reject 20250901_144938 拒绝发送",
+  "status": "pending"
+}

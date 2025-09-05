@@ -1,0 +1,24 @@
+{
+  "batch_id": "20250901_172934",
+  "timestamp": "2025-09-01T17:29:34.925895",
+  "period": "2025年07月",
+  "pdf_package": "output\\账单PDF包_202507_172934.zip",
+  "merchant_count": 3,
+  "total_amount": 10424.307304619997,
+  "merchants": {
+    "A99AU": {
+      "amount": 264.54627,
+      "pdf_file": "A99AU_2025年07月_賬單.pdf"
+    },
+    "AAFUN": {
+      "amount": 359.42349792,
+      "pdf_file": "AAFUN_2025年07月_賬單.pdf"
+    },
+    "Betfarms": {
+      "amount": 9800.337536699997,
+      "pdf_file": "Betfarms_2025年07月_賬單.pdf"
+    }
+  },
+  "message": "[SUMMARY] 聚单发送总览\n\n[ID] 批次ID: 20250901_172934\n[SENT] 已发送: 3 个账单\n[AMOUNT] 总金额: 10424.31 USDT\n[PERIOD] 账期: 2025年07月\n\n商户列表 (共3个):\n- A99AU: 264.55 USDT\n- AAFUN: 359.42 USDT\n- Betfarms: 9800.34 USDT\n\n请仔细核对以下合规信息发送给客户:\n/confirm 20250901_172934\n\n或回复 /reject 20250901_172934 拒绝发送",
+  "status": "pending"
+}

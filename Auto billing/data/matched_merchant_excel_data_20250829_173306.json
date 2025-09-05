@@ -1,0 +1,1816 @@
+{
+  "RD1": {
+    "merchant": "RD1",
+    "fee": 0.0,
+    "fee_source": "默认",
+    "language": "zh",
+    "method_email": "",
+    "method_TG": "",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "betfiery",
+        "D_account": "betfiery@betfiery.net",
+        "currencies": [
+          {
+            "currency": "BRL",
+            "total_bet": 5021844.6,
+            "total_prize": 4817459.19,
+            "net_win": 204385.41,
+            "usd_rate": 0.179,
+            "charge": 0.0,
+            "charge_usdt": 0.0
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 36584.98839,
+        "total_charge_usdt": 0.0
+      },
+      {
+        "C_merchant_name": "aajogo",
+        "D_account": "aajogo@aajogo.net",
+        "currencies": [
+          {
+            "currency": "BRL",
+            "total_bet": 4520794.9,
+            "total_prize": 4379112.89,
+            "net_win": 141682.01,
+            "usd_rate": 0.179,
+            "charge": 0.0,
+            "charge_usdt": 0.0
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 25361.07979,
+        "total_charge_usdt": 0.0
+      },
+      {
+        "C_merchant_name": "mexlucky",
+        "D_account": "mexlucky@mexlucky.net",
+        "currencies": [
+          {
+            "currency": "MXN",
+            "total_bet": 131725071.62,
+            "total_prize": 127325961.78,
+            "net_win": 4399109.84,
+            "usd_rate": 0.0531,
+            "charge": 0.0,
+            "charge_usdt": 0.0
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 233592.73250399999,
+        "total_charge_usdt": 0.0
+      },
+      {
+        "C_merchant_name": "mexswin",
+        "D_account": "mexswin@mexswin.com",
+        "currencies": [
+          {
+            "currency": "MXN",
+            "total_bet": 138735661.7,
+            "total_prize": 134624581.53,
+            "net_win": 4111080.17,
+            "usd_rate": 0.0531,
+            "charge": 0.0,
+            "charge_usdt": 0.0
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 218298.357027,
+        "total_charge_usdt": 0.0
+      }
+    ],
+    "total_transactions": 4,
+    "total_usdt": 513837.157711,
+    "total_charge_usdt": 0.0
+  },
+  "JR": {
+    "merchant": "JR",
+    "fee": 0.0,
+    "fee_source": "默认",
+    "language": "zh",
+    "method_email": "",
+    "method_TG": "",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "JR-F4",
+        "D_account": "ProductionJR-F4",
+        "currencies": [
+          {
+            "currency": "PHP",
+            "total_bet": 17805684.9,
+            "total_prize": 17215602.93,
+            "net_win": 590081.97,
+            "usd_rate": 0.0173,
+            "charge": 0.0,
+            "charge_usdt": 0.0
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 10208.418081,
+        "total_charge_usdt": 0.0
+      }
+    ],
+    "total_transactions": 1,
+    "total_usdt": 10208.418081,
+    "total_charge_usdt": 0.0
+  },
+  "马赛克": {
+    "merchant": "马赛克",
+    "fee": 6.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "GamingPanda X Mosaic财务群",
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "winwinbet": {
+    "merchant": "winwinbet",
+    "fee": 6.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [
+      {
+        "C_merchant_name": "Productionwinwinbet",
+        "D_account": "Productionwinwinbet",
+        "currencies": [
+          {
+            "currency": "CLP",
+            "total_bet": 68553163.5,
+            "total_prize": 67402884.78,
+            "net_win": 1150278.72,
+            "usd_rate": 0.001,
+            "charge": 69016.7232,
+            "charge_usdt": 69.0167232
+          },
+          {
+            "currency": "COP",
+            "total_bet": 115518300.0,
+            "total_prize": 109234232.87,
+            "net_win": 6284067.13,
+            "usd_rate": 0.0002,
+            "charge": 377044.0278,
+            "charge_usdt": 75.40880556
+          },
+          {
+            "currency": "MXN",
+            "total_bet": 139620.1,
+            "total_prize": 133044.7,
+            "net_win": 6575.4,
+            "usd_rate": 0.0531,
+            "charge": 394.52399999999994,
+            "charge_usdt": 20.9492244
+          },
+          {
+            "currency": "PEN",
+            "total_bet": 64215.5,
+            "total_prize": 59134.82,
+            "net_win": 5080.68,
+            "usd_rate": 0.2796,
+            "charge": 304.8408,
+            "charge_usdt": 85.23348768000001
+          }
+        ],
+        "total_transactions": 4,
+        "total_usdt": 4176.804013999999,
+        "total_charge_usdt": 250.60824084
+      }
+    ],
+    "total_transactions": 4,
+    "total_usdt": 4176.804013999999,
+    "total_charge_usdt": 250.60824084
+  },
+  "Barbet": {
+    "merchant": "Barbet",
+    "fee": 0.0,
+    "fee_source": "默认",
+    "language": "zh",
+    "method_email": "",
+    "method_TG": "",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionBarbet02",
+        "D_account": "ProductionBarbet02",
+        "currencies": [
+          {
+            "currency": "INR",
+            "total_bet": 18004671.3,
+            "total_prize": 17471737.27,
+            "net_win": 532934.03,
+            "usd_rate": 0.0114,
+            "charge": 0.0,
+            "charge_usdt": 0.0
+          },
+          {
+            "currency": "PHP",
+            "total_bet": 41784962.5,
+            "total_prize": 40359805.38,
+            "net_win": 1425157.12,
+            "usd_rate": 0.0173,
+            "charge": 0.0,
+            "charge_usdt": 0.0
+          }
+        ],
+        "total_transactions": 2,
+        "total_usdt": 30730.666118,
+        "total_charge_usdt": 0.0
+      }
+    ],
+    "total_transactions": 2,
+    "total_usdt": 30730.666118,
+    "total_charge_usdt": 0.0
+  },
+  "sortebot": {
+    "merchant": "sortebot",
+    "fee": 2.5,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": [
+      {
+        "cellPosition": null,
+        "link": "mailto:lujingqiu01@gmail.com",
+        "text": "lujingqiu01@gmail.com",
+        "type": "url"
+      }
+    ],
+    "method_TG": null,
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionSortebot",
+        "D_account": "ProductionSortebot",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 50.3,
+            "total_prize": 0.47,
+            "net_win": 49.83,
+            "usd_rate": 0.6434,
+            "charge": 1.2457500000000001,
+            "charge_usdt": 0.8015155500000001
+          },
+          {
+            "currency": "CLP",
+            "total_bet": 12770500.0,
+            "total_prize": 12151863.44,
+            "net_win": 618636.56,
+            "usd_rate": 0.001,
+            "charge": 15465.914000000002,
+            "charge_usdt": 15.465914000000003
+          },
+          {
+            "currency": "COP",
+            "total_bet": 2185176500.0,
+            "total_prize": 2090821525.45,
+            "net_win": 94354974.55,
+            "usd_rate": 0.0002,
+            "charge": 2358874.36375,
+            "charge_usdt": 471.77487275000004
+          },
+          {
+            "currency": "INR",
+            "total_bet": 55.0,
+            "total_prize": 26.3,
+            "net_win": 28.7,
+            "usd_rate": 0.0114,
+            "charge": 0.7175,
+            "charge_usdt": 0.008179500000000001
+          },
+          {
+            "currency": "MXN",
+            "total_bet": 224641589.8,
+            "total_prize": 218046283.06,
+            "net_win": 6595306.74,
+            "usd_rate": 0.0531,
+            "charge": 164882.66850000003,
+            "charge_usdt": 8755.269697350002
+          },
+          {
+            "currency": "PEN",
+            "total_bet": 160486.25,
+            "total_prize": 154816.7,
+            "net_win": 5669.55,
+            "usd_rate": 0.2796,
+            "charge": 141.73875,
+            "charge_usdt": 39.6301545
+          },
+          {
+            "currency": "PHP",
+            "total_bet": 136804938.1,
+            "total_prize": 132007662.8,
+            "net_win": 4797275.3,
+            "usd_rate": 0.0173,
+            "charge": 119931.8825,
+            "charge_usdt": 2074.82156725
+          }
+        ],
+        "total_transactions": 7,
+        "total_usdt": 454310.876036,
+        "total_charge_usdt": 11357.771900900003
+      }
+    ],
+    "total_transactions": 7,
+    "total_usdt": 454310.876036,
+    "total_charge_usdt": 11357.771900900003
+  },
+  "Game Plus": {
+    "merchant": "Game Plus",
+    "fee": 2.5,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": [
+      {
+        "cellPosition": null,
+        "link": "mailto:galaxyxx599@gmail.com",
+        "text": "galaxyxx599@gmail.com",
+        "type": "url"
+      }
+    ],
+    "method_TG": null,
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionGamePlus",
+        "D_account": "ProductionGamePlus",
+        "currencies": [
+          {
+            "currency": "MXN",
+            "total_bet": 8.0,
+            "total_prize": 7.74,
+            "net_win": 0.26,
+            "usd_rate": 0.0531,
+            "charge": 0.006500000000000001,
+            "charge_usdt": 0.00034515
+          },
+          {
+            "currency": "PHP",
+            "total_bet": 195016.2,
+            "total_prize": 162987.94,
+            "net_win": 32028.26,
+            "usd_rate": 0.0173,
+            "charge": 800.7065,
+            "charge_usdt": 13.85222245
+          }
+        ],
+        "total_transactions": 2,
+        "total_usdt": 554.102704,
+        "total_charge_usdt": 13.852567599999999
+      }
+    ],
+    "total_transactions": 2,
+    "total_usdt": 554.102704,
+    "total_charge_usdt": 13.852567599999999
+  },
+  "GSCPLUS": {
+    "merchant": "GSCPLUS",
+    "fee": 3.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "K36": {
+    "merchant": "K36",
+    "fee": 0.0,
+    "fee_source": "默认",
+    "language": "zh",
+    "method_email": "",
+    "method_TG": "",
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "Brabet": {
+    "merchant": "Brabet",
+    "fee": 6.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "GamingPanda X Brabet财务群",
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "Clubs7": {
+    "merchant": "Clubs7",
+    "fee": 0.0,
+    "fee_source": "默认",
+    "language": "zh",
+    "method_email": "",
+    "method_TG": "",
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "Epoch Game": {
+    "merchant": "Epoch Game",
+    "fee": 6.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": [
+      {
+        "cellPosition": null,
+        "link": "mailto:josieb549@gmail.com",
+        "text": "josieb549@gmail.com",
+        "type": "url"
+      }
+    ],
+    "method_TG": null,
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionEpochGame",
+        "D_account": "ProductionEpochGame",
+        "currencies": [
+          {
+            "currency": "PHP",
+            "total_bet": 2227658.4,
+            "total_prize": 2212044.44,
+            "net_win": 15613.96,
+            "usd_rate": 0.0173,
+            "charge": 936.8376,
+            "charge_usdt": 16.207290479999998
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 270.12150799999995,
+        "total_charge_usdt": 16.207290479999998
+      }
+    ],
+    "total_transactions": 1,
+    "total_usdt": 270.12150799999995,
+    "total_charge_usdt": 16.207290479999998
+  },
+  "Betfarms": {
+    "merchant": "Betfarms",
+    "fee": 3.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": [
+      {
+        "cellPosition": null,
+        "link": "mailto:npgzd369@gmail.com",
+        "text": "npgzd369@gmail.com",
+        "type": "url"
+      }
+    ],
+    "method_TG": "GamingPanda X Betsfarms 财务群",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionBetfarms",
+        "D_account": "ProductionBetfarms",
+        "currencies": [
+          {
+            "currency": "BRL",
+            "total_bet": 3782594.25,
+            "total_prize": 3667792.19,
+            "net_win": 114802.06,
+            "usd_rate": 0.179,
+            "charge": 3444.0618,
+            "charge_usdt": 616.4870622
+          },
+          {
+            "currency": "CLP",
+            "total_bet": 2088497026.5,
+            "total_prize": 2045833052.56,
+            "net_win": 42663973.94,
+            "usd_rate": 0.001,
+            "charge": 1279919.2181999998,
+            "charge_usdt": 1279.9192181999997
+          },
+          {
+            "currency": "COP",
+            "total_bet": 1047575150.0,
+            "total_prize": 1012613020.56,
+            "net_win": 34962129.44,
+            "usd_rate": 0.0002,
+            "charge": 1048863.8831999998,
+            "charge_usdt": 209.77277663999996
+          },
+          {
+            "currency": "EGP",
+            "total_bet": 1805489.45,
+            "total_prize": 1757215.84,
+            "net_win": 48273.61,
+            "usd_rate": 0.0205,
+            "charge": 1448.2083,
+            "charge_usdt": 29.68827015
+          },
+          {
+            "currency": "IDR",
+            "total_bet": 50050.0,
+            "total_prize": 46240.47,
+            "net_win": 3809.53,
+            "usd_rate": 0.0001,
+            "charge": 114.2859,
+            "charge_usdt": 0.01142859
+          },
+          {
+            "currency": "INR",
+            "total_bet": 15723696.9,
+            "total_prize": 15642760.46,
+            "net_win": 80936.44,
+            "usd_rate": 0.0114,
+            "charge": 2428.0932,
+            "charge_usdt": 27.68026248
+          },
+          {
+            "currency": "MXN",
+            "total_bet": 84822276.4,
+            "total_prize": 81938878.88,
+            "net_win": 2883397.52,
+            "usd_rate": 0.0531,
+            "charge": 86501.9256,
+            "charge_usdt": 4593.25224936
+          },
+          {
+            "currency": "MYR",
+            "total_bet": 104355.2,
+            "total_prize": 101859.39,
+            "net_win": 2495.81,
+            "usd_rate": 0.2346,
+            "charge": 74.87429999999999,
+            "charge_usdt": 17.565510779999997
+          },
+          {
+            "currency": "NGN",
+            "total_bet": 17365.0,
+            "total_prize": 14391.0,
+            "net_win": 2974.0,
+            "usd_rate": 0.0007,
+            "charge": 89.22,
+            "charge_usdt": 0.062453999999999996
+          },
+          {
+            "currency": "PEN",
+            "total_bet": 2778874.6,
+            "total_prize": 2655974.31,
+            "net_win": 122900.29,
+            "usd_rate": 0.2796,
+            "charge": 3687.0087,
+            "charge_usdt": 1030.8876325200001
+          },
+          {
+            "currency": "PHP",
+            "total_bet": 60997701.85,
+            "total_prize": 59101443.41,
+            "net_win": 1896258.44,
+            "usd_rate": 0.0173,
+            "charge": 56887.7532,
+            "charge_usdt": 984.15813036
+          },
+          {
+            "currency": "PKR",
+            "total_bet": 365074.8,
+            "total_prize": 419806.38,
+            "net_win": -54731.58,
+            "usd_rate": 0.0035,
+            "charge": -1641.9474,
+            "charge_usdt": -5.7468159000000005
+          },
+          {
+            "currency": "USD",
+            "total_bet": 73994.75,
+            "total_prize": 70716.52,
+            "net_win": 3278.23,
+            "usd_rate": 1.0,
+            "charge": 98.34689999999999,
+            "charge_usdt": 98.34689999999999
+          }
+        ],
+        "total_transactions": 13,
+        "total_usdt": 296069.502646,
+        "total_charge_usdt": 8882.08507938
+      }
+    ],
+    "total_transactions": 13,
+    "total_usdt": 296069.502646,
+    "total_charge_usdt": 8882.08507938
+  },
+  "slotsapi": {
+    "merchant": "slotsapi",
+    "fee": 2.5,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "Wu3-熊猫bet",
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "Togame": {
+    "merchant": "Togame",
+    "fee": 3.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "GamePanda X To game/JBgame 财务群",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionTogame",
+        "D_account": "ProductionTogame",
+        "currencies": [
+          {
+            "currency": "BRL",
+            "total_bet": 117373.9,
+            "total_prize": 115825.47,
+            "net_win": 1548.43,
+            "usd_rate": 0.179,
+            "charge": 46.4529,
+            "charge_usdt": 8.315069099999999
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 277.16897,
+        "total_charge_usdt": 8.315069099999999
+      }
+    ],
+    "total_transactions": 1,
+    "total_usdt": 277.16897,
+    "total_charge_usdt": 8.315069099999999
+  },
+  "Nicegame": {
+    "merchant": "Nicegame",
+    "fee": 3.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "GamingPanda X Nicegame财务群",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionNicegame",
+        "D_account": "ProductionNicegame",
+        "currencies": [
+          {
+            "currency": "PHP",
+            "total_bet": 11085649.1,
+            "total_prize": 10815464.18,
+            "net_win": 270184.92,
+            "usd_rate": 0.0173,
+            "charge": 8105.547599999999,
+            "charge_usdt": 140.22597347999996
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 4674.199116,
+        "total_charge_usdt": 140.22597347999996
+      }
+    ],
+    "total_transactions": 1,
+    "total_usdt": 4674.199116,
+    "total_charge_usdt": 140.22597347999996
+  },
+  "JWgame": {
+    "merchant": "JWgame",
+    "fee": 3.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "panda对接 nice.game",
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "JBgame": {
+    "merchant": "JBgame",
+    "fee": 3.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "GamePanda X To game/JBgame 财务群",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionJBgame",
+        "D_account": "ProductionJBgame",
+        "currencies": [
+          {
+            "currency": "USD",
+            "total_bet": 62408.97,
+            "total_prize": 55464.2,
+            "net_win": 6944.77,
+            "usd_rate": 1.0,
+            "charge": 208.3431,
+            "charge_usdt": 208.3431
+          },
+          {
+            "currency": "USDT",
+            "total_bet": 8023.12,
+            "total_prize": 6279.7,
+            "net_win": 1743.42,
+            "usd_rate": 1.0,
+            "charge": 52.3026,
+            "charge_usdt": 52.3026
+          }
+        ],
+        "total_transactions": 2,
+        "total_usdt": 8688.19,
+        "total_charge_usdt": 260.6457
+      }
+    ],
+    "total_transactions": 2,
+    "total_usdt": 8688.19,
+    "total_charge_usdt": 260.6457
+  },
+  "KKGJ game": {
+    "merchant": "KKGJ game",
+    "fee": 3.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "panda对接 nice.game",
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "Mxlobo": {
+    "merchant": "Mxlobo",
+    "fee": 6.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": [
+      {
+        "cellPosition": null,
+        "link": "mailto:hcpeter002@gmail.com",
+        "text": "hcpeter002@gmail.com",
+        "type": "url"
+      }
+    ],
+    "method_TG": "Mxlobo-PandaGaming财务群",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "Mxlobo(PKR)",
+        "D_account": "ProductionMxlobo4",
+        "currencies": [
+          {
+            "currency": "PKR",
+            "total_bet": 423954.6,
+            "total_prize": 358866.66,
+            "net_win": 65087.94,
+            "usd_rate": 0.0035,
+            "charge": 3905.2764,
+            "charge_usdt": 13.6684674
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 227.80779,
+        "total_charge_usdt": 13.6684674
+      },
+      {
+        "C_merchant_name": "Mxlobo(MXN)",
+        "D_account": "ProductionMxlobo",
+        "currencies": [
+          {
+            "currency": "MXN",
+            "total_bet": 13933405.9,
+            "total_prize": 13515339.26,
+            "net_win": 418066.64,
+            "usd_rate": 0.0531,
+            "charge": 25083.9984,
+            "charge_usdt": 1331.96031504
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 22199.338584,
+        "total_charge_usdt": 1331.96031504
+      }
+    ],
+    "total_transactions": 2,
+    "total_usdt": 22427.146374,
+    "total_charge_usdt": 1345.6287824400001
+  },
+  "VG": {
+    "merchant": "VG",
+    "fee": 6.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [
+      {
+        "C_merchant_name": "vg777",
+        "D_account": "Productionvg777",
+        "currencies": [
+          {
+            "currency": "COP",
+            "total_bet": 7789.0,
+            "total_prize": 7330.36,
+            "net_win": 458.64,
+            "usd_rate": 0.0002,
+            "charge": 27.5184,
+            "charge_usdt": 0.00550368
+          },
+          {
+            "currency": "INR",
+            "total_bet": 50.0,
+            "total_prize": 96.0,
+            "net_win": -46.0,
+            "usd_rate": 0.0114,
+            "charge": -2.76,
+            "charge_usdt": -0.031464
+          },
+          {
+            "currency": "MXN",
+            "total_bet": 15929.2,
+            "total_prize": 12915.28,
+            "net_win": 3013.92,
+            "usd_rate": 0.0531,
+            "charge": 180.8352,
+            "charge_usdt": 9.60234912
+          }
+        ],
+        "total_transactions": 3,
+        "total_usdt": 159.60648,
+        "total_charge_usdt": 9.5763888
+      }
+    ],
+    "total_transactions": 3,
+    "total_usdt": 159.60648,
+    "total_charge_usdt": 9.5763888
+  },
+  "Unicorn66": {
+    "merchant": "Unicorn66",
+    "fee": 5.0,
+    "fee_source": "配置",
+    "language": "英文",
+    "method_email": [
+      {
+        "cellPosition": null,
+        "link": "mailto:finance@unicorn66.com",
+        "text": "finance@unicorn66.com",
+        "type": "url"
+      }
+    ],
+    "method_TG": "【Finance】Unicorn66-Gaming Panda",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "Unicorn66",
+        "D_account": "ProductionUnicorn66",
+        "currencies": [
+          {
+            "currency": "THB",
+            "total_bet": 9625745.8,
+            "total_prize": 9346875.17,
+            "net_win": 278870.63,
+            "usd_rate": 0.0306,
+            "charge": 13943.531500000001,
+            "charge_usdt": 426.6720639
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 8533.441278,
+        "total_charge_usdt": 426.6720639
+      }
+    ],
+    "total_transactions": 1,
+    "total_usdt": 8533.441278,
+    "total_charge_usdt": 426.6720639
+  },
+  "Unicorn67": {
+    "merchant": "Unicorn67",
+    "fee": 0.0,
+    "fee_source": "默认",
+    "language": "zh",
+    "method_email": "",
+    "method_TG": "",
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "RichGroup": {
+    "merchant": "RichGroup",
+    "fee": 8.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": [
+      {
+        "cellPosition": null,
+        "link": "mailto:365opera@gmail.com",
+        "text": "365opera@gmail.com",
+        "type": "url"
+      }
+    ],
+    "method_TG": "GamingPanda X RichGroup财务群",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "WON66",
+        "D_account": "ProductionWON66",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 7647.0,
+            "total_prize": 7551.59,
+            "net_win": 95.41,
+            "usd_rate": 0.2346,
+            "charge": 7.6328,
+            "charge_usdt": 1.79065488
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 22.383186,
+        "total_charge_usdt": 1.79065488
+      },
+      {
+        "C_merchant_name": "1UWIN",
+        "D_account": "Production1UWIN",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 1347.4,
+            "total_prize": 1229.72,
+            "net_win": 117.68,
+            "usd_rate": 0.2346,
+            "charge": 9.4144,
+            "charge_usdt": 2.2086182400000003
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 27.607728,
+        "total_charge_usdt": 2.2086182400000003
+      },
+      {
+        "C_merchant_name": "12POKIES",
+        "D_account": "Production12POKIES",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 4702.9,
+            "total_prize": 4234.72,
+            "net_win": 468.18,
+            "usd_rate": 0.2346,
+            "charge": 37.4544,
+            "charge_usdt": 8.78680224
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 109.83502800000001,
+        "total_charge_usdt": 8.78680224
+      },
+      {
+        "C_merchant_name": "5GAMING",
+        "D_account": "Production5GAMING",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 55.0,
+            "total_prize": 47.31,
+            "net_win": 7.69,
+            "usd_rate": 0.2346,
+            "charge": 0.6152000000000001,
+            "charge_usdt": 0.14432592000000002
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 1.8040740000000002,
+        "total_charge_usdt": 0.14432592000000002
+      },
+      {
+        "C_merchant_name": "A9GAMING",
+        "D_account": "ProductionA9GAMING",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 4821.2,
+            "total_prize": 4688.23,
+            "net_win": 132.97,
+            "usd_rate": 0.2346,
+            "charge": 10.6376,
+            "charge_usdt": 2.4955809600000003
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 31.194762,
+        "total_charge_usdt": 2.4955809600000003
+      },
+      {
+        "C_merchant_name": "1XPOKIES",
+        "D_account": "Production1XPOKIES",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 522.0,
+            "total_prize": 514.68,
+            "net_win": 7.32,
+            "usd_rate": 0.2346,
+            "charge": 0.5856,
+            "charge_usdt": 0.13738176
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 1.7172720000000001,
+        "total_charge_usdt": 0.13738176
+      },
+      {
+        "C_merchant_name": "ProductionADVANTPLAY",
+        "D_account": "ProductionADVANTPLAY",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 1292.1,
+            "total_prize": 1139.37,
+            "net_win": 152.73,
+            "usd_rate": 0.2346,
+            "charge": 12.218399999999999,
+            "charge_usdt": 2.86643664
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 35.830458,
+        "total_charge_usdt": 2.86643664
+      },
+      {
+        "C_merchant_name": "ProductionBCWIN",
+        "D_account": "ProductionBCWIN",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 3047.8,
+            "total_prize": 2850.59,
+            "net_win": 197.21,
+            "usd_rate": 0.2346,
+            "charge": 15.776800000000001,
+            "charge_usdt": 3.7012372800000004
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 46.265466,
+        "total_charge_usdt": 3.7012372800000004
+      },
+      {
+        "C_merchant_name": "ProductionFAFA",
+        "D_account": "ProductionFAFA",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 960.2,
+            "total_prize": 805.6,
+            "net_win": 154.6,
+            "usd_rate": 0.2346,
+            "charge": 12.368,
+            "charge_usdt": 2.9015328
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 36.26916,
+        "total_charge_usdt": 2.9015328
+      },
+      {
+        "C_merchant_name": "ProductionCASHNET",
+        "D_account": "ProductionCASHNET",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 12597.0,
+            "total_prize": 12507.05,
+            "net_win": 89.95,
+            "usd_rate": 0.2346,
+            "charge": 7.196000000000001,
+            "charge_usdt": 1.6881816
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 21.10227,
+        "total_charge_usdt": 1.6881816
+      },
+      {
+        "C_merchant_name": "ProductionURUSWIN",
+        "D_account": "ProductionURUSWIN",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 18192.8,
+            "total_prize": 17642.0,
+            "net_win": 550.8,
+            "usd_rate": 0.2346,
+            "charge": 44.064,
+            "charge_usdt": 10.3374144
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 129.21768,
+        "total_charge_usdt": 10.3374144
+      },
+      {
+        "C_merchant_name": "ProductionUPOKIES",
+        "D_account": "ProductionUPOKIES",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 67445.0,
+            "total_prize": 68082.17,
+            "net_win": -637.17,
+            "usd_rate": 0.2346,
+            "charge": -50.9736,
+            "charge_usdt": -11.95840656
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": -149.48008199999998,
+        "total_charge_usdt": -11.95840656
+      },
+      {
+        "C_merchant_name": "ProductionWAWAWIN",
+        "D_account": "ProductionWAWAWIN",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 5630.1,
+            "total_prize": 5888.75,
+            "net_win": -258.65,
+            "usd_rate": 0.2346,
+            "charge": -20.692,
+            "charge_usdt": -4.8543432
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": -60.679289999999995,
+        "total_charge_usdt": -4.8543432
+      },
+      {
+        "C_merchant_name": "ProductionGXBET",
+        "D_account": "ProductionGXBET",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 23975.0,
+            "total_prize": 25874.65,
+            "net_win": -1899.65,
+            "usd_rate": 0.2346,
+            "charge": -151.972,
+            "charge_usdt": -35.6526312
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": -445.65789,
+        "total_charge_usdt": -35.6526312
+      },
+      {
+        "C_merchant_name": "ProductionRICHPAPA",
+        "D_account": "ProductionRICHPAPA",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 8279.4,
+            "total_prize": 7742.28,
+            "net_win": 537.12,
+            "usd_rate": 0.2346,
+            "charge": 42.9696,
+            "charge_usdt": 10.08066816
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 126.008352,
+        "total_charge_usdt": 10.08066816
+      },
+      {
+        "C_merchant_name": "ProductionYAYAWIN",
+        "D_account": "ProductionYAYAWIN",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 7588.7,
+            "total_prize": 6794.99,
+            "net_win": 793.71,
+            "usd_rate": 0.2346,
+            "charge": 63.49680000000001,
+            "charge_usdt": 14.896349280000003
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 186.20436600000002,
+        "total_charge_usdt": 14.896349280000003
+      },
+      {
+        "C_merchant_name": "ProductionRICHMAMA",
+        "D_account": "ProductionRICHMAMA",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 2783.6,
+            "total_prize": 2366.05,
+            "net_win": 417.55,
+            "usd_rate": 0.2346,
+            "charge": 33.404,
+            "charge_usdt": 7.8365784000000005
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 97.95723000000001,
+        "total_charge_usdt": 7.8365784000000005
+      },
+      {
+        "C_merchant_name": "ProductionRedSpin",
+        "D_account": "ProductionRedSpin",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 8035.3,
+            "total_prize": 7371.43,
+            "net_win": 663.87,
+            "usd_rate": 0.2346,
+            "charge": 53.1096,
+            "charge_usdt": 12.459512160000001
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 155.743902,
+        "total_charge_usdt": 12.459512160000001
+      },
+      {
+        "C_merchant_name": "ProductionUUSPIN",
+        "D_account": "ProductionUUSPIN",
+        "currencies": [
+          {
+            "currency": "MYR",
+            "total_bet": 4650.2,
+            "total_prize": 3981.35,
+            "net_win": 668.85,
+            "usd_rate": 0.2346,
+            "charge": 53.508,
+            "charge_usdt": 12.552976800000001
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 156.91221000000002,
+        "total_charge_usdt": 12.552976800000001
+      }
+    ],
+    "total_transactions": 19,
+    "total_usdt": 530.2358820000001,
+    "total_charge_usdt": 42.41887056000001
+  },
+  "MxnGame777": {
+    "merchant": "MxnGame777",
+    "fee": 8.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [
+      {
+        "C_merchant_name": "MxnGame777",
+        "D_account": "ProductionMxnGame777",
+        "currencies": [
+          {
+            "currency": "MXN",
+            "total_bet": 421552.9,
+            "total_prize": 408149.07,
+            "net_win": 13403.83,
+            "usd_rate": 0.0531,
+            "charge": 1072.3064,
+            "charge_usdt": 56.93946984
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 711.743373,
+        "total_charge_usdt": 56.93946984
+      }
+    ],
+    "total_transactions": 1,
+    "total_usdt": 711.743373,
+    "total_charge_usdt": 56.93946984
+  },
+  "BossCuci": {
+    "merchant": "BossCuci",
+    "fee": 8.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "OLE777": {
+    "merchant": "OLE777",
+    "fee": 8.0,
+    "fee_source": "配置",
+    "language": "英文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "A99AU": {
+    "merchant": "A99AU",
+    "fee": 10.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "GamingPanda X Eg财务群",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "A99AU",
+        "D_account": "ProductionA99AU",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 15034.9,
+            "total_prize": 14347.73,
+            "net_win": 687.17,
+            "usd_rate": 0.6434,
+            "charge": 68.717,
+            "charge_usdt": 44.2125178
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 442.12517799999995,
+        "total_charge_usdt": 44.2125178
+      },
+      {
+        "C_merchant_name": "E99AU",
+        "D_account": "ProductionE99AU",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 189.1,
+            "total_prize": 167.79,
+            "net_win": 21.31,
+            "usd_rate": 0.6434,
+            "charge": 2.131,
+            "charge_usdt": 1.3710854
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 13.710854,
+        "total_charge_usdt": 1.3710854
+      },
+      {
+        "C_merchant_name": "M99AU",
+        "D_account": "ProductionM99AU",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 6311.3,
+            "total_prize": 6508.52,
+            "net_win": -197.22,
+            "usd_rate": 0.6434,
+            "charge": -19.722,
+            "charge_usdt": -12.6891348
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": -126.891348,
+        "total_charge_usdt": -12.6891348
+      },
+      {
+        "C_merchant_name": "YES77AU",
+        "D_account": "ProductionYES77AU",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 1295.0,
+            "total_prize": 1191.74,
+            "net_win": 103.26,
+            "usd_rate": 0.6434,
+            "charge": 10.326,
+            "charge_usdt": 6.6437484
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 66.437484,
+        "total_charge_usdt": 6.6437484
+      },
+      {
+        "C_merchant_name": "PP99AU",
+        "D_account": "ProductionPP99AU",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 8452.7,
+            "total_prize": 8053.39,
+            "net_win": 399.31,
+            "usd_rate": 0.6434,
+            "charge": 39.931000000000004,
+            "charge_usdt": 25.6916054
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 256.916054,
+        "total_charge_usdt": 25.6916054
+      },
+      {
+        "C_merchant_name": "W99AU",
+        "D_account": "ProductionW99AU",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 2358.1,
+            "total_prize": 1875.8,
+            "net_win": 482.3,
+            "usd_rate": 0.6434,
+            "charge": 48.230000000000004,
+            "charge_usdt": 31.031182
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 310.31182,
+        "total_charge_usdt": 31.031182
+      },
+      {
+        "C_merchant_name": "BS22AU",
+        "D_account": "ProductionBS22AU",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 1713.7,
+            "total_prize": 2111.53,
+            "net_win": -397.83,
+            "usd_rate": 0.6434,
+            "charge": -39.783,
+            "charge_usdt": -25.5963822
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": -255.96382199999996,
+        "total_charge_usdt": -25.5963822
+      },
+      {
+        "C_merchant_name": "TAB77AU",
+        "D_account": "ProductionTAB77AU",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 247.0,
+            "total_prize": 218.15,
+            "net_win": 28.85,
+            "usd_rate": 0.6434,
+            "charge": 2.8850000000000002,
+            "charge_usdt": 1.856209
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 18.56209,
+        "total_charge_usdt": 1.856209
+      },
+      {
+        "C_merchant_name": "SOUTHERN9",
+        "D_account": "ProductionSOUTHERN9",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 486.0,
+            "total_prize": 434.65,
+            "net_win": 51.35,
+            "usd_rate": 0.6434,
+            "charge": 5.135000000000001,
+            "charge_usdt": 3.303859
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 33.03859,
+        "total_charge_usdt": 3.303859
+      },
+      {
+        "C_merchant_name": "SLOTIFY",
+        "D_account": "ProductionSLOTIFY7",
+        "currencies": [
+          {
+            "currency": "AUD",
+            "total_bet": 2719.1,
+            "total_prize": 2856.82,
+            "net_win": -137.72,
+            "usd_rate": 0.6434,
+            "charge": -13.772,
+            "charge_usdt": -8.8609048
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": -88.609048,
+        "total_charge_usdt": -8.8609048
+      }
+    ],
+    "total_transactions": 10,
+    "total_usdt": 669.637852,
+    "total_charge_usdt": 66.96378520000002
+  },
+  "Win777": {
+    "merchant": "Win777",
+    "fee": 6.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "CasinoXen": {
+    "merchant": "CasinoXen",
+    "fee": 8.0,
+    "fee_source": "配置",
+    "language": "英文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "PUBCGAME": {
+    "merchant": "PUBCGAME",
+    "fee": 2.5,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "GamingPanda X PUBCGAME财务群",
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionPUBCGAME",
+        "D_account": "ProductionPUBCGAME",
+        "currencies": [
+          {
+            "currency": "BRL",
+            "total_bet": 106390.1,
+            "total_prize": 88423.58,
+            "net_win": 17966.52,
+            "usd_rate": 0.179,
+            "charge": 449.163,
+            "charge_usdt": 80.400177
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 3216.00708,
+        "total_charge_usdt": 80.400177
+      }
+    ],
+    "total_transactions": 1,
+    "total_usdt": 3216.00708,
+    "total_charge_usdt": 80.400177
+  },
+  "Jogar": {
+    "merchant": "Jogar",
+    "fee": 8.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionJogar",
+        "D_account": "ProductionJogar",
+        "currencies": [
+          {
+            "currency": "BRL",
+            "total_bet": 468.0,
+            "total_prize": 313.0,
+            "net_win": 155.0,
+            "usd_rate": 0.179,
+            "charge": 12.4,
+            "charge_usdt": 2.2196
+          }
+        ],
+        "total_transactions": 1,
+        "total_usdt": 27.744999999999997,
+        "total_charge_usdt": 2.2196
+      }
+    ],
+    "total_transactions": 1,
+    "total_usdt": 27.744999999999997,
+    "total_charge_usdt": 2.2196
+  },
+  "Richpanda": {
+    "merchant": "Richpanda",
+    "fee": 5.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "BSGame": {
+    "merchant": "BSGame",
+    "fee": 8.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "AAFUN": {
+    "merchant": "AAFUN",
+    "fee": 6.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [
+      {
+        "C_merchant_name": "ProductionAAFUN",
+        "D_account": "ProductionAAFUN",
+        "currencies": [
+          {
+            "currency": "CLP",
+            "total_bet": 538867.0,
+            "total_prize": 547534.0,
+            "net_win": -8667.0,
+            "usd_rate": 0.001,
+            "charge": -520.02,
+            "charge_usdt": -0.52002
+          },
+          {
+            "currency": "COP",
+            "total_bet": 153441088.0,
+            "total_prize": 148416332.06,
+            "net_win": 5024755.94,
+            "usd_rate": 0.0002,
+            "charge": 301485.3564,
+            "charge_usdt": 60.29707128
+          },
+          {
+            "currency": "EGP",
+            "total_bet": 256.0,
+            "total_prize": 273.5,
+            "net_win": -17.5,
+            "usd_rate": 0.0205,
+            "charge": -1.05,
+            "charge_usdt": -0.021525000000000002
+          },
+          {
+            "currency": "INR",
+            "total_bet": 29985175.4,
+            "total_prize": 28719390.49,
+            "net_win": 1265784.91,
+            "usd_rate": 0.0114,
+            "charge": 75947.0946,
+            "charge_usdt": 865.79687844
+          },
+          {
+            "currency": "MXN",
+            "total_bet": 594703.7,
+            "total_prize": 578281.73,
+            "net_win": 16421.97,
+            "usd_rate": 0.0531,
+            "charge": 985.3182,
+            "charge_usdt": 52.32039642
+          },
+          {
+            "currency": "PEN",
+            "total_bet": 78.2,
+            "total_prize": 56.57,
+            "net_win": 21.63,
+            "usd_rate": 0.2796,
+            "charge": 1.2977999999999998,
+            "charge_usdt": 0.36286488
+          },
+          {
+            "currency": "PHP",
+            "total_bet": 477602.1,
+            "total_prize": 451743.19,
+            "net_win": 25858.91,
+            "usd_rate": 0.0173,
+            "charge": 1551.5346,
+            "charge_usdt": 26.841548579999998
+          },
+          {
+            "currency": "PKR",
+            "total_bet": 37163.5,
+            "total_prize": 31818.89,
+            "net_win": 5344.61,
+            "usd_rate": 0.0035,
+            "charge": 320.67659999999995,
+            "charge_usdt": 1.1223680999999999
+          }
+        ],
+        "total_transactions": 8,
+        "total_usdt": 16769.993045,
+        "total_charge_usdt": 1006.1995827
+      }
+    ],
+    "total_transactions": 8,
+    "total_usdt": 16769.993045,
+    "total_charge_usdt": 1006.1995827
+  },
+  "ZF": {
+    "merchant": "ZF",
+    "fee": 5.5,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": "ZF_Gaming-Panda Finance财务群",
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "MARSBINGO": {
+    "merchant": "MARSBINGO",
+    "fee": 2.5,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "JuwaX": {
+    "merchant": "JuwaX",
+    "fee": 8.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "SonaGame": {
+    "merchant": "SonaGame",
+    "fee": 6.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "JackpotParty": {
+    "merchant": "JackpotParty",
+    "fee": 6.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "slotsmaker": {
+    "merchant": "slotsmaker",
+    "fee": 2.5,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": null,
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "BOTO": {
+    "merchant": "BOTO",
+    "fee": 8.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": [
+      {
+        "cellPosition": null,
+        "link": "mailto:testusdt@gmail.com",
+        "text": "testusdt@gmail.com",
+        "type": "url"
+      }
+    ],
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  },
+  "jayagaming": {
+    "merchant": "jayagaming",
+    "fee": 7.0,
+    "fee_source": "配置",
+    "language": "中文",
+    "method_email": [
+      {
+        "cellPosition": null,
+        "link": "mailto:qtduobao@gmail.com",
+        "text": "qtduobao@gmail.com",
+        "type": "url"
+      }
+    ],
+    "method_TG": null,
+    "sub_merchants": [],
+    "total_transactions": 0,
+    "total_usdt": 0,
+    "total_charge_usdt": 0
+  }
+}
