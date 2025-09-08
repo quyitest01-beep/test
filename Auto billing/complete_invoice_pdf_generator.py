@@ -10,7 +10,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Any
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter, A4
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch, mm
 from reportlab.pdfbase import pdfmetrics
@@ -1382,8 +1382,8 @@ def create_summary(self, merchant_data: Dict[str, Any]):
         # 應付縂金額=所有子商戶的exchange_rate之和
         # GGR（USDT）=所有子商戶的payable_usd之和
         summary_data = [
-            ['', '', '應付縂金額\nTotal Payable', f"{total_payable_usd:.2f} USDT"],
-            ['', '', 'GGR', f"{total_ggr_usd:.2f} USDT"]
+            ['', '', 'GGR', f"{total_ggr_usd:.2f} USDT"],
+            ['', '', '應付縂金額\nTotal Payable', f"{total_payable_usd:.2f} USDT"]
         ]
         
         summary_table = Table(summary_data, colWidths=[2.5*inch, 1.5*inch, 1.3*inch, 1.3*inch], rowHeights=[None, None])
@@ -1415,14 +1415,31 @@ def create_footer(self, merchant_data: Dict[str, Any]):
         elements = []
         
         # 中英雙語上下結構，支持换行符
-        footer_text = "若對賬單存疑，可聯係客服/n If you have any questions about the bill, please contact customer service."
-        # 将/n替换为<br/>以支持换行
-        footer_text = footer_text.replace('/n ', '<br/>')
+        footer_text = "若對賬單存疑，可聯係客服<br/>支援鏈接或掃碼匯款，匯款成功後請在TG群或郵件告知我司<br/>If you have any questions about the bill, please contact customer service.<br/>Payment can be made via link or QR code. Once the transfer is successful, please notify our company through the TG group or by email."
         elements.append(Paragraph(footer_text, self.styles['CompleteFooter']))
-        elements.append(Spacer(1, 20))
+        elements.append(Spacer(1, 15))
         
-        # Gaming Panda信息
+        # Gaming Panda汇款链接信息
         elements.append(Paragraph("Gaming Panda | 匯款鏈接: TMuwXuWKd4az3KuYHZgssLj3WqvVSHyKfr", self.styles['CompleteFooter']))
+        elements.append(Spacer(1, 5))
+        
+        # Gaming Panda汇款码信息
+        elements.append(Paragraph("Gaming Panda | 匯款碼:", self.styles['CompleteFooter']))
+        elements.append(Spacer(1, 10))
+        
+        # 添加二维码图片
+        try:
+            qr_code_path = os.path.join(os.path.dirname(__file__), 'qr_code.png')
+            if os.path.exists(qr_code_path):
+                # 创建二维码图片，设置合适的尺寸
+                qr_image = Image(qr_code_path, width=1.5*inch, height=1.5*inch)
+                elements.append(qr_image)
+            else:
+                # 如果二维码文件不存在，添加提示文本
+                elements.append(Paragraph("[二维码图片]", self.styles['CompleteFooter']))
+        except Exception as e:
+            print(f"[WARNING] 添加二维码图片失败: {str(e)}")
+            elements.append(Paragraph("[二维码图片]", self.styles['CompleteFooter']))
         
         return elements
 
