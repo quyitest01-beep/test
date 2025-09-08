@@ -12,6 +12,7 @@ import urllib.parse
 from typing import List, Dict, Any, Optional
 import logging
 from config_loader import get_config
+from bilingual_templates import BilingualTemplates
 
 class EmailSender:
     """邮件发送器 - 支持HTML正文、多收件人、附件"""
@@ -35,136 +36,12 @@ class EmailSender:
     
     def create_internal_confirmation_email(self, merchant_data: Dict[str, Any], 
                                          confirmation_url: str) -> str:
-        """创建内部确认邮件HTML内容"""
-        total_amount = sum(data.get('total_amount', 0) for data in merchant_data.values())
-        merchant_count = len(merchant_data)
-        
-        html_content = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <style>
-                body {{ font-family: Arial, sans-serif; margin: 20px; }}
-                .header {{ background-color: #f8f9fa; padding: 20px; border-radius: 5px; }}
-                .summary {{ background-color: #e9ecef; padding: 15px; margin: 20px 0; border-radius: 5px; }}
-                .merchant-list {{ margin: 20px 0; }}
-                .merchant-item {{ padding: 10px; border-bottom: 1px solid #dee2e6; }}
-                .confirm-button {{ 
-                    background-color: #28a745; 
-                    color: white; 
-                    padding: 12px 24px; 
-                    text-decoration: none; 
-                    border-radius: 5px; 
-                    display: inline-block; 
-                    margin: 20px 0;
-                }}
-                .reject-button {{ 
-                    background-color: #dc3545; 
-                    color: white; 
-                    padding: 12px 24px; 
-                    text-decoration: none; 
-                    border-radius: 5px; 
-                    display: inline-block; 
-                    margin: 20px 10px;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h2>[INFO] 月度账单内部确认</h2>
-                <p>账单月份: 2025年07月</p>
-                <p>生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
-            </div>
-            
-            <div class="summary">
-                <h3>[INFO] 账单汇总</h3>
-                <p><strong>商户数量:</strong> {merchant_count} 个</p>
-                <p><strong>总应付金额:</strong> ${total_amount:,.2f} USD</p>
-            </div>
-            
-            <div class="merchant-list">
-                <h3>[EMOJI] 商户明细</h3>
-        """
-        
-        for merchant_name, data in merchant_data.items():
-            amount = data.get('total_amount', 0)
-            sub_merchant_count = data.get('sub_merchant_count', 0)
-            html_content += f"""
-                <div class="merchant-item">
-                    <strong>{merchant_name}</strong> - ${amount:,.2f} USD ({sub_merchant_count} 个子账户)
-                </div>
-            """
-        
-        html_content += f"""
-            </div>
-            
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{confirmation_url}?action=confirm" class="confirm-button">[SUCCESS] 确认发送账单</a>
-                <a href="{confirmation_url}?action=reject" class="reject-button">[ERROR] 拒绝发送</a>
-            </div>
-            
-            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #dee2e6; color: #6c757d;">
-                <p><small>Gaming Panda | 财务系统自动生成</small></p>
-                <p><small>若对账单存疑，可联系客服 | If you have any questions about the bill, please contact customer service.</small></p>
-            </div>
-        </body>
-        </html>
-        """
-        
-        return html_content
+        """创建内部确认邮件HTML内容（中英双语）"""
+        return BilingualTemplates.format_email_internal_confirmation(merchant_data, confirmation_url)
     
     def create_customer_email(self, merchant_name: str, merchant_data: Dict[str, Any]) -> str:
-        """创建客户邮件HTML内容"""
-        total_amount = merchant_data.get('total_amount', 0)
-        sub_merchant_count = merchant_data.get('sub_merchant_count', 0)
-        
-        html_content = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <style>
-                body {{ font-family: Arial, sans-serif; margin: 20px; }}
-                .header {{ background-color: #f8f9fa; padding: 20px; border-radius: 5px; text-align: center; }}
-                .content {{ margin: 20px 0; }}
-                .summary {{ background-color: #e9ecef; padding: 15px; margin: 20px 0; border-radius: 5px; }}
-                .footer {{ margin-top: 30px; padding-top: 20px; border-top: 1px solid #dee2e6; color: #6c757d; }}
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h2>月度账单 Monthly Bill</h2>
-                <p>www.gaming-panda.com</p>
-            </div>
-            
-            <div class="content">
-                <h3>尊敬的 {merchant_name} 客户，</h3>
-                <p>您好！以下是您的月度账单详情：</p>
-                
-                <div class="summary">
-                    <h4>[INFO] 账单信息</h4>
-                    <p><strong>商户名称:</strong> {merchant_name}</p>
-                    <p><strong>账单月份:</strong> 2025年07月</p>
-                    <p><strong>子商户数:</strong> {sub_merchant_count}</p>
-                    <p><strong>应付金额:</strong> ${total_amount:,.2f} USD</p>
-                    <p><strong>生成日期:</strong> {datetime.now().strftime('%Y-%m-%d')}</p>
-                </div>
-                
-                <p>请查看附件中的详细账单PDF文件。</p>
-                <p>如有任何疑问，请及时联系我们。</p>
-            </div>
-            
-            <div class="footer">
-                <p>若对账单存疑，可联系客服</p>
-                <p>If you have any questions about the bill, please contact customer service.</p>
-                <p><strong>Gaming Panda | 汇款链接: TMuwXuWKd4az3KuYHZgssLj3WqvVSHyKfr</strong></p>
-            </div>
-        </body>
-        </html>
-        """
-        
-        return html_content
+        """创建客户邮件HTML内容（中英双语）"""
+        return BilingualTemplates.format_email_customer_bill(merchant_name, merchant_data)
     
     def send_email(self, to_emails: List[str], subject: str, html_content: str, 
                    attachments: List[str] = None, cc_emails: List[str] = None) -> Dict[str, Any]:
@@ -276,12 +153,16 @@ class EmailSender:
     
     def send_customer_bill(self, merchant_name: str, merchant_data: Dict[str, Any],
                           customer_emails: List[str]) -> Dict[str, Any]:
-        """发送客户账单邮件"""
-        subject = f"月度账单 Monthly Bill - {merchant_name} - {datetime.now().strftime('%Y年%m月')}"
+        """发送客户账单邮件（中英双语）"""
+        # 使用双语模板生成邮件主题
+        template = BilingualTemplates.get_email_customer_bill_template()
+        period = datetime.now().strftime('%Y年%m月')
+        subject = template['subject'].format(merchant_name=merchant_name, period=period)
+        
         html_content = self.create_customer_email(merchant_name, merchant_data)
         
         # 准备附件
-        pdf_path = f"invoice_pdfs/{merchant_name}_2025年07月_modified_invoice.pdf"
+        pdf_path = f"invoice_pdfs/{merchant_name}_{period}_modified_invoice.pdf"
         attachments = [pdf_path] if os.path.exists(pdf_path) else []
         
         return self.send_email(customer_emails, subject, html_content, attachments)

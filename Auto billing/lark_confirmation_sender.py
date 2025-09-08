@@ -14,6 +14,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 import logging
 from config_loader import get_config
+from bilingual_templates import BilingualTemplates
 
 # 强制设置UTF-8编码
 if sys.stdout.encoding != 'utf-8':
@@ -147,64 +148,30 @@ class LarkConfirmationSender:
             return ""
         
     def create_confirmation_message(self, zip_file: str, summary_data: Dict[str, Any]) -> str:
-        """创建确认消息 - 避免使用emoji表情"""
-        period = f"{self.year}年{self.month}月"
-        
-        message = f"""账单确认 - {period}
-
-文件: {zip_file}
-期间: {period}
-总金额: {summary_data.get('total_amount', 0):,.2f} USDT
-商户数量: {summary_data.get('total_count', 0)}个
-
-商户明细:
-"""
-        
-        # 获取商户数据
-        merchants = summary_data.get('merchants', {})
-        merchant_count = len(merchants)
-        
-        # 如果商户数量超过20个，只显示前20个，并添加提示
-        max_display = 20
-        if merchant_count > max_display:
-            message += f"（显示前{max_display}个商户，共{merchant_count}个）\n\n"
-            display_merchants = dict(list(merchants.items())[:max_display])
-        else:
-            display_merchants = merchants
-        
-        # 添加商户明细
-        for merchant, data in display_merchants.items():
-            message += f"• {merchant}: {data.get('amount', 0):,.2f} USDT\n"
-        
-        # 如果商户数量超过显示限制，添加提示
-        if merchant_count > max_display:
-            message += f"\n... 还有 {merchant_count - max_display} 个商户未显示\n"
-            message += f"完整商户列表请查看ZIP文件内容\n"
-            
-        message += f"""
-请确认账单信息无误后，点击下方按钮发送给客户。
-
-生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-"""
+        """创建确认消息内容（中英双语）"""
+        message = BilingualTemplates.format_lark_confirmation(zip_file, summary_data)
         
         # 检查消息长度
         message_length = len(message)
         if message_length > 2000:  # Lark消息长度限制
             print(f"[WARNING] 消息长度 ({message_length}) 可能超过Lark限制")
-            # 截断消息，只保留基本信息
-            message = f"""账单确认 - {period}
+            # 使用简化版本
+            period = f"{self.year}年{self.month.zfill(2)}月"
+            merchant_count = summary_data.get('total_count', 0)
+            template = BilingualTemplates.get_lark_confirmation_template()
+            message = f"""{template['title'].format(period=period)}
 
-文件: {zip_file}
-期间: {period}
-总金额: {summary_data.get('total_amount', 0):,.2f} USDT
-商户数量: {summary_data.get('total_count', 0)}个
+{template['file_label'].format(zip_file=zip_file)}
+{template['period_label'].format(period=period)}
+{template['total_amount_label'].format(total_amount=summary_data.get('total_amount', 0))}
+{template['merchant_count_label'].format(merchant_count=merchant_count)}
 
-商户明细: 共{merchant_count}个商户（详细列表请查看ZIP文件）
+商户明细 Merchant Details: 共{merchant_count}个商户（详细列表请查看ZIP文件）
+Total {merchant_count} merchants (please check ZIP file for detailed list)
 
-请确认账单信息无误后，点击下方按钮发送给客户。
+{template['confirmation_notice']}
 
-生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-"""
+{template['generation_time_label'].format(generation_time=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))}"""
         
         return message
         

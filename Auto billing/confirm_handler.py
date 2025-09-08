@@ -15,6 +15,7 @@ from datetime import datetime
 from typing import Dict, Any, List, Optional
 import urllib.parse
 from config_loader import get_config
+from bilingual_templates import BilingualTemplates
 
 class ConfirmHandler:
     """账单确认处理器"""
@@ -580,16 +581,8 @@ class ConfirmHandler:
                 else:
                     period = datetime.now().strftime('%Y年%m月')
             
-            # 构建消息内容
-            message = f"""
-📄 账单发送
-
-商户: {merchant_id}
-期间: {period}
-生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-
-请查收您的账单文件。
-            """
+            # 构建消息内容（中英双语）
+            message = BilingualTemplates.format_telegram_bill_send(merchant_id, period)
             
             print(f"[DEBUG] 开始发送TG文件: {pdf_path} -> {chat_id}")
             

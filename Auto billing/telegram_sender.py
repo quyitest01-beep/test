@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 import logging
+from bilingual_templates import BilingualTemplates
 
 class TelegramSender:
     """Telegram发送器 - 支持消息、文件发送"""
@@ -168,29 +169,8 @@ class TelegramSender:
             return result
     
     def create_bill_notification(self, merchant_name: str, merchant_data: Dict[str, Any]) -> str:
-        """创建账单通知消息"""
-        total_amount = merchant_data.get('total_amount', 0)
-        sub_merchant_count = merchant_data.get('sub_merchant_count', 0)
-        
-        message = f"""
-[EMOJI] <b>月度账单通知</b>
-
-[INFO] <b>商户信息</b>
-• 商户名称: {merchant_name}
-• 子商户数: {sub_merchant_count}
-• 应付金额: ${total_amount:,.2f} USD
-
-[INFO] <b>账单详情</b>
-• 账单月份: 2025年07月
-• 生成时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-
-[EMOJI] <b>汇款信息</b>
-Gaming Panda | 汇款链接: TMuwXuWKd4az3KuYHZgssLj3WqvVSHyKfr
-
-[EMOJI] 若对账单存疑，可联系客服
-        """
-        
-        return message.strip()
+        """创建账单通知消息（中英双语）"""
+        return BilingualTemplates.format_telegram_bill_notification(merchant_name, merchant_data)
     
     def send_bill_notification(self, merchant_name: str, merchant_data: Dict[str, Any],
                              pdf_path: str, chat_type: str = "finance") -> List[Dict[str, Any]]:
@@ -219,7 +199,8 @@ Gaming Panda | 汇款链接: TMuwXuWKd4az3KuYHZgssLj3WqvVSHyKfr
         
         # 发送PDF文件
         if os.path.exists(pdf_path):
-            caption = f"[EMOJI] {merchant_name} - 月度账单PDF"
+            template = BilingualTemplates.get_telegram_bill_send_template()
+            caption = template['caption_template'].format(merchant_name=merchant_name)
             file_result = self.send_document(chat_id, pdf_path, caption)
             results.append(file_result)
         

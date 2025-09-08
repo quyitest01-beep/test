@@ -242,3 +242,38 @@ OSError: [Errno 22] Invalid argument
 2025-09-05 16:47:31,641 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
 2025-09-05 16:53:00,446 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
 2025-09-05 16:56:00,282 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-08 14:13:11,994 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-08 14:13:20,035 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-08 14:20:45,316 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-08 14:25:13,185 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-08 16:12:10,215 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-08 16:44:45,343 - INFO - [2025-09-08 16:44:45] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250908_161206&action=confirm&code=f2218af6c450c8e5
+2025-09-08 16:44:45,343 - INFO - [2025-09-08 16:44:45] 解析参数 - bid: 20250908_161206, action: confirm, code: f2218af6c450c8e5
+2025-09-08 16:44:45,343 - INFO - [2025-09-08 16:44:45] 开始处理confirm请求 - 批次ID: 20250908_161206
+2025-09-08 16:44:48,589 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Betfarms - 2025年08月 -> npgzd369@gmail.com
+2025-09-08 16:45:09,940 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Betfarms_202508_Bill.pdf -> HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x0000016B96DBBA10>, 'Connection to api.telegram.org timed out. (connect timeout=None)'))
+2025-09-08 16:45:30,978 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Brabet_202508_Bill.pdf -> HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x0000016B96E9C690>, 'Connection to api.telegram.org timed out. (connect timeout=None)'))
+2025-09-08 16:45:52,035 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\EG_202508_Bill.pdf -> HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x0000016B96E9D1D0>, 'Connection to api.telegram.org timed out. (connect timeout=None)'))
+2025-09-08 16:46:13,091 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\EpicWin_202508_Bill.pdf -> HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x0000016B96E9D590>, 'Connection to api.telegram.org timed out. (connect timeout=None)'))
+2025-09-08 16:46:16,327 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Epoch Game - 2025年08月 -> josieb549@gmail.com
+2025-09-08 16:46:19,448 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Game Plus - 2025年08月 -> galaxyxx599@gmail.com
+2025-09-08 16:46:40,499 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\JackpotParty_202508_Bill.pdf -> HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x0000016B96E9D950>, 'Connection to api.telegram.org timed out. (connect timeout=None)'))
+2025-09-08 16:46:43,627 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - jayagaming - 2025年08月 -> qtduobao@gmail.com
+2025-09-08 16:46:46,124 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JBgame_202508_Bill.pdf -> -4823310293
+2025-09-08 16:46:49,618 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Jogar_202508_Bill.pdf -> -4867508986
+2025-09-08 16:46:52,025 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JWgame_202508_Bill.pdf -> -4613004029
+2025-09-08 16:46:53,465 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\MARSBINGO_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-08 16:46:56,751 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Mosaic_202508_Bill.pdf -> -1002687376219
+2025-09-08 16:46:59,925 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Mxlobo - 2025年08月 -> hcpeter002@gmail.com
+2025-09-08 16:47:02,548 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Mxlobo_202508_Bill.pdf -> -1002653006215
+2025-09-08 16:47:05,213 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Nicegame_202508_Bill.pdf -> -4887792489
+2025-09-08 16:47:08,356 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - RichGroup - 2025年08月 -> 365opera@gmail.com
+2025-09-08 16:47:11,744 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\RichGroup_202508_Bill.pdf -> -4828344488
+2025-09-08 16:47:15,013 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - slotsapi - 2025年08月 -> finance@slotsmaker.com
+2025-09-08 16:47:16,932 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\slotsmaker_202508_Bill.pdf -> -4972714184
+2025-09-08 16:47:20,041 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> lujingqiu01@gmail.com
+2025-09-08 16:47:21,619 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Sortebot2_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-08 16:47:23,838 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Togame_202508_Bill.pdf -> -4823310293
+2025-09-08 16:47:27,074 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Unicorn66 - 2025年08月 -> finance@unicorn66.com
+2025-09-08 16:47:29,134 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Unicorn66_202508_Bill.pdf -> -4934898666
+2025-09-08 16:47:31,209 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\VG_202508_Bill.pdf -> -4905618464
