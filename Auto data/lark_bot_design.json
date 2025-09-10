@@ -1,0 +1,206 @@
+{
+  "system_name": "Lark应用机器人集成系统",
+  "version": "1.0.0",
+  "description": "基于飞书开放平台的智能数据查询机器人，支持卡片交互、斜杠命令和表单收集",
+  "platform_info": {
+    "platform_name": "飞书(Lark)",
+    "api_version": "v1",
+    "sdk_version": "latest",
+    "webhook_support": true,
+    "card_interaction": true
+  },
+  "core_features": {
+    "interactive_cards": {
+      "description": "丰富的卡片交互界面",
+      "components": [
+        "查询参数输入卡片",
+        "结果展示卡片",
+        "确认操作卡片",
+        "进度状态卡片"
+      ]
+    },
+    "slash_commands": {
+      "description": "快捷斜杠命令",
+      "commands": [
+        "/query - 发起数据查询",
+        "/help - 查看帮助信息",
+        "/status - 查看查询状态",
+        "/history - 查看历史记录"
+      ]
+    },
+    "form_collection": {
+      "description": "表单数据收集",
+      "features": [
+        "动态表单生成",
+        "参数验证",
+        "多步骤收集",
+        "数据预览确认"
+      ]
+    },
+    "file_preview": {
+      "description": "在线文件预览",
+      "supported_formats": [
+        "Excel表格",
+        "PDF报告",
+        "图片图表",
+        "文本文件"
+      ]
+    }
+  },
+  "technical_architecture": {
+    "api_integration": {
+      "auth_method": "App Token + User Token",
+      "webhook_url": "/api/lark/webhook",
+      "event_subscription": [
+        "im.message.receive_v1",
+        "im.message.message_read_v1",
+        "application.bot.menu_v6"
+      ]
+    },
+    "message_processing": {
+      "message_types": [
+        "text",
+        "interactive",
+        "post",
+        "image",
+        "file"
+      ],
+      "response_formats": [
+        "text",
+        "interactive_card",
+        "rich_text",
+        "file_share"
+      ]
+    },
+    "card_framework": {
+      "template_engine": "Lark Card Builder",
+      "dynamic_rendering": true,
+      "event_handling": [
+        "button_click",
+        "form_submit",
+        "select_change",
+        "input_change"
+      ]
+    }
+  },
+  "user_interaction_flow": {
+    "query_initiation": {
+      "step1": "用户发送斜杠命令或@机器人",
+      "step2": "机器人发送查询参数收集卡片",
+      "step3": "用户填写表单并提交",
+      "step4": "机器人显示参数确认卡片"
+    },
+    "query_execution": {
+      "step1": "用户确认查询参数",
+      "step2": "机器人显示执行进度卡片",
+      "step3": "实时更新执行状态",
+      "step4": "完成后发送结果卡片"
+    },
+    "result_interaction": {
+      "step1": "结果卡片展示关键数据",
+      "step2": "提供详细数据下载链接",
+      "step3": "支持在线预览功能",
+      "step4": "提供相关操作按钮"
+    }
+  },
+  "card_templates": {
+    "query_form_card": {
+      "title": "数据查询参数设置",
+      "components": [
+        {
+          "type": "input",
+          "label": "查询场景",
+          "placeholder": "请选择或输入查询场景"
+        },
+        {
+          "type": "date_picker",
+          "label": "时间范围",
+          "required": true
+        },
+        {
+          "type": "select",
+          "label": "数据维度",
+          "options": ["按天", "按周", "按月"]
+        },
+        {
+          "type": "button",
+          "text": "提交查询",
+          "style": "primary"
+        }
+      ]
+    },
+    "result_display_card": {
+      "title": "查询结果",
+      "components": [
+        {
+          "type": "markdown",
+          "content": "## 查询摘要\n数据条数: {count}\n查询时间: {duration}"
+        },
+        {
+          "type": "table",
+          "headers": ["指标", "数值", "变化"],
+          "max_rows": 10
+        },
+        {
+          "type": "button_group",
+          "buttons": [
+            {"text": "下载Excel", "action": "download_excel"},
+            {"text": "在线预览", "action": "preview_online"},
+            {"text": "分享结果", "action": "share_result"}
+          ]
+        }
+      ]
+    }
+  },
+  "admin_management": {
+    "app_configuration": {
+      "app_id": "配置应用ID",
+      "app_secret": "配置应用密钥",
+      "verification_token": "配置验证令牌",
+      "encrypt_key": "配置加密密钥"
+    },
+    "permission_control": {
+      "user_whitelist": "用户白名单管理",
+      "group_authorization": "群组授权管理",
+      "feature_permissions": "功能权限控制",
+      "usage_quotas": "使用配额限制"
+    },
+    "monitoring_analytics": {
+      "usage_statistics": "使用统计分析",
+      "performance_metrics": "性能指标监控",
+      "error_tracking": "错误追踪记录",
+      "user_behavior": "用户行为分析"
+    }
+  },
+  "security_design": {
+    "authentication": {
+      "app_verification": "应用身份验证",
+      "user_authorization": "用户授权验证",
+      "token_management": "令牌管理机制",
+      "signature_validation": "签名验证"
+    },
+    "data_protection": {
+      "message_encryption": "消息加密传输",
+      "sensitive_data_masking": "敏感数据脱敏",
+      "access_logging": "访问日志记录",
+      "data_retention": "数据保留策略"
+    }
+  },
+  "integration_points": {
+    "unified_message_layer": {
+      "message_adapter": "消息适配器",
+      "protocol_converter": "协议转换器",
+      "response_formatter": "响应格式化器"
+    },
+    "business_logic_layer": {
+      "query_engine": "查询引擎接口",
+      "result_processor": "结果处理器",
+      "file_generator": "文件生成器"
+    },
+    "admin_panel_integration": {
+      "configuration_sync": "配置同步",
+      "statistics_reporting": "统计报告",
+      "user_management": "用户管理"
+    }
+  }
+}

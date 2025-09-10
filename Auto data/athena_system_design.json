@@ -1,0 +1,191 @@
+{
+  "system_name": "Athena智能数据查询系统",
+  "version": "1.0.0",
+  "description": "基于Amazon Athena的智能数据查询系统，支持自然语言输入、大数据集自动拆分和多格式导出",
+  "core_features": {
+    "natural_language_query": {
+      "description": "自然语言查询引擎",
+      "components": [
+        "NLP文本解析",
+        "意图识别",
+        "参数提取",
+        "SQL生成",
+        "查询优化"
+      ]
+    },
+    "athena_integration": {
+      "description": "Athena集成服务",
+      "components": [
+        "AWS SDK集成",
+        "查询执行管理",
+        "状态监控",
+        "成本控制",
+        "S3结果处理"
+      ]
+    },
+    "big_data_processing": {
+      "description": "大数据处理模块",
+      "components": [
+        "数据量检测",
+        "智能拆分策略",
+        "并行查询处理",
+        "结果合并",
+        "进度跟踪"
+      ]
+    },
+    "data_export": {
+      "description": "数据导出服务",
+      "components": [
+        "多格式导出",
+        "文件分割",
+        "压缩打包",
+        "安全下载",
+        "导出历史"
+      ]
+    }
+  },
+  "technical_architecture": {
+    "frontend": {
+      "framework": "React.js",
+      "ui_library": "Ant Design",
+      "state_management": "Redux Toolkit",
+      "build_tool": "Vite",
+      "features": [
+        "响应式设计",
+        "实时查询状态",
+        "拖拽文件上传",
+        "查询历史管理",
+        "结果预览"
+      ]
+    },
+    "backend": {
+      "runtime": "Node.js",
+      "framework": "Express.js",
+      "database": "MySQL 8.0",
+      "cache": "Redis",
+      "aws_services": [
+        "Amazon Athena",
+        "Amazon S3",
+        "AWS IAM",
+        "CloudWatch"
+      ]
+    },
+    "nlp_engine": {
+      "library": "Natural.js + Custom Rules",
+      "components": {
+        "tokenizer": "自然语言分词器",
+        "intent_classifier": "意图分类器",
+        "entity_extractor": "实体提取器",
+        "sql_generator": "SQL生成器"
+      }
+    },
+    "data_processing": {
+      "strategy": "基于数据量和查询复杂度的智能拆分",
+      "threshold": "100,000条记录",
+      "splitting_methods": [
+        "时间范围拆分",
+        "分区字段拆分",
+        "LIMIT分页拆分"
+      ]
+    }
+  },
+  "user_workflow": {
+    "step1": {
+      "name": "用户输入",
+      "description": "用户在Web界面输入自然语言查询需求",
+      "example": "我需要查看2024年1月到3月各个产品线的销售额和订单量"
+    },
+    "step2": {
+      "name": "NLP解析",
+      "description": "系统解析自然语言，提取查询参数",
+      "extracted_params": {
+        "time_range": "2024-01-01 to 2024-03-31",
+        "dimensions": ["product_line"],
+        "metrics": ["sales_amount", "order_count"]
+      }
+    },
+    "step3": {
+      "name": "SQL生成",
+      "description": "基于提取的参数生成Athena SQL查询",
+      "sql_example": "SELECT product_line, SUM(sales_amount) as total_sales, COUNT(order_id) as order_count FROM sales_table WHERE date_column BETWEEN '2024-01-01' AND '2024-03-31' GROUP BY product_line"
+    },
+    "step4": {
+      "name": "数据量检测",
+      "description": "预估查询结果数据量，决定是否需要拆分",
+      "logic": "如果预估结果>10万条，自动拆分查询"
+    },
+    "step5": {
+      "name": "查询执行",
+      "description": "在Athena中执行查询，监控执行状态",
+      "monitoring": ["查询进度", "执行时间", "成本估算"]
+    },
+    "step6": {
+      "name": "结果处理",
+      "description": "处理查询结果，合并拆分的数据",
+      "actions": ["数据合并", "格式化", "去重"]
+    },
+    "step7": {
+      "name": "数据导出",
+      "description": "将结果导出为用户指定格式",
+      "formats": ["Excel", "CSV", "JSON"]
+    }
+  },
+  "data_splitting_strategies": {
+    "time_based_splitting": {
+      "description": "基于时间字段拆分查询",
+      "example": "将年度查询拆分为月度查询",
+      "sql_pattern": "WHERE date_column BETWEEN '{start_date}' AND '{end_date}'"
+    },
+    "partition_based_splitting": {
+      "description": "基于分区字段拆分查询",
+      "example": "按地区或部门分区拆分",
+      "sql_pattern": "WHERE partition_column = '{partition_value}'"
+    },
+    "limit_based_splitting": {
+      "description": "使用LIMIT和OFFSET分页拆分",
+      "example": "每次查询10万条记录",
+      "sql_pattern": "LIMIT 100000 OFFSET {offset}"
+    }
+  },
+  "cost_optimization": {
+    "query_optimization": [
+      "使用分区裁剪减少扫描数据量",
+      "优化JOIN顺序和条件",
+      "使用列式存储格式(Parquet)",
+      "避免SELECT *查询"
+    ],
+    "cost_monitoring": [
+      "实时查询成本估算",
+      "每日/月度成本报告",
+      "成本预算告警",
+      "查询成本排行榜"
+    ]
+  },
+  "security_design": {
+    "authentication": "JWT Token认证",
+    "authorization": "基于角色的权限控制(RBAC)",
+    "data_access": "AWS IAM权限控制",
+    "audit_logging": "完整的操作审计日志",
+    "data_masking": "敏感数据脱敏处理"
+  },
+  "monitoring_alerting": {
+    "system_metrics": [
+      "查询响应时间",
+      "系统可用性",
+      "错误率统计",
+      "并发用户数"
+    ],
+    "business_metrics": [
+      "日查询量",
+      "用户活跃度",
+      "查询成功率",
+      "导出文件数量"
+    ],
+    "alerting_rules": [
+      "查询失败率>5%",
+      "响应时间>30秒",
+      "日成本超预算",
+      "系统错误频发"
+    ]
+  }
+}

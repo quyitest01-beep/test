@@ -1,0 +1,112 @@
+{
+  "template_id": "telegram_bot_interaction",
+  "template_name": "Telegram机器人交互模板",
+  "description": "支持Telegram群组中的智能对话和数据查询功能",
+  "version": "1.0",
+  "text_parsing_rules": {
+    "trigger_patterns": [
+      "@DataBot",
+      "@数据机器人",
+      "/query",
+      "/数据查询"
+    ],
+    "intent_recognition": {
+      "data_query": ["查询", "查看", "获取", "导出", "数据", "记录"],
+      "report_generation": ["报表", "报告", "月报", "周报", "日报", "统计"],
+      "anomaly_detection": ["异常", "问题", "检测", "风险", "分析"],
+      "help": ["帮助", "使用说明", "功能", "命令"]
+    },
+    "parameter_extraction": {
+      "time_expressions": {
+        "patterns": ["\\d+号到\\d+号", "本月", "上月", "昨天", "今天", "本周", "上周"],
+        "examples": ["1号到31号", "本月数据", "昨天的记录"]
+      },
+      "currency_codes": ["PHP", "INR", "USD", "CNY", "EUR", "JPY"],
+      "business_metrics": ["MAU", "DAU", "留存", "留存率", "净营收", "ARPU", "LTV"],
+      "game_parameters": ["MerchantID", "biz_id", "round_id", "player_id"]
+    }
+  },
+  "conversation_flow": {
+    "states": {
+      "initial": {
+        "description": "初始状态，等待用户输入",
+        "actions": ["parse_message", "identify_intent"]
+      },
+      "collecting_info": {
+        "description": "收集缺失的查询参数",
+        "actions": ["ask_missing_params", "validate_input"]
+      },
+      "confirming_request": {
+        "description": "确认用户查询需求",
+        "actions": ["show_summary", "wait_confirmation"]
+      },
+      "executing_query": {
+        "description": "执行数据查询",
+        "actions": ["call_query_engine", "show_progress"]
+      },
+      "sending_results": {
+        "description": "发送查询结果",
+        "actions": ["format_results", "upload_files", "send_message"]
+      }
+    },
+    "transitions": {
+      "initial -> collecting_info": "missing_parameters",
+      "collecting_info -> confirming_request": "all_params_collected",
+      "confirming_request -> executing_query": "user_confirmed",
+      "executing_query -> sending_results": "query_completed",
+      "sending_results -> initial": "results_sent"
+    }
+  },
+  "message_templates": {
+    "greeting": "你好！我是数据查询机器人🤖，可以帮你查询和分析各种数据。请告诉我你需要什么数据？",
+    "ask_time_range": "请提供具体的时间范围，例如：'1号到31号' 或 '本月' 📅",
+    "ask_currency": "需要查询哪些货币类型？例如：PHP、INR、USD 💰",
+    "ask_merchant_id": "请提供MerchantID和相关参数 🏪",
+    "confirm_request": "确认查询需求：\n📊 查询类型：{query_type}\n📅 时间范围：{time_range}\n💰 货币类型：{currencies}\n\n请回复'确认'开始查询，或'取消'重新输入",
+    "query_started": "正在查询数据...⏳ 请稍等",
+    "query_progress": "数据处理中，预计还需{estimated_time}分钟...📊",
+    "query_completed": "✅ 查询完成！\n\n📈 查询结果摘要：\n{summary}\n\n📎 详细数据文件：{file_links}",
+    "query_failed": "❌ 查询失败：{error_message}\n\n请检查参数后重试，或联系管理员",
+    "help_message": "🤖 数据查询机器人使用说明：\n\n1️⃣ @我 + 查询需求\n2️⃣ 支持自然语言描述\n3️⃣ 支持游戏数据、财务数据、用户数据查询\n4️⃣ 自动生成Excel/PDF报表\n\n示例：\n• @DataBot 查询昨天的游戏收入\n• @DataBot 导出本月PHP和INR数据\n• @DataBot 生成用户活跃度月报"
+  },
+  "file_handling": {
+    "supported_formats": ["xlsx", "csv", "pdf", "png", "jpg"],
+    "max_file_size": "50MB",
+    "upload_service": "telegram_file_api",
+    "temporary_link_duration": "24h"
+  },
+  "error_handling": {
+    "timeout_duration": "300s",
+    "max_retries": 3,
+    "error_messages": {
+      "timeout": "查询超时，请稍后重试",
+      "invalid_params": "参数格式不正确，请重新输入",
+      "no_data": "未找到符合条件的数据",
+      "system_error": "系统错误，请联系管理员"
+    }
+  },
+  "permissions": {
+    "allowed_groups": [],
+    "allowed_users": [],
+    "admin_users": [],
+    "rate_limiting": {
+      "max_requests_per_hour": 10,
+      "max_requests_per_day": 50
+    }
+  },
+  "integration": {
+    "webhook_url": "/api/telegram/webhook",
+    "bot_token": "${TELEGRAM_BOT_TOKEN}",
+    "api_base_url": "https://api.telegram.org/bot",
+    "file_base_url": "https://api.telegram.org/file/bot"
+  },
+  "monitoring": {
+    "log_conversations": true,
+    "track_user_behavior": true,
+    "performance_metrics": ["response_time", "success_rate", "user_satisfaction"],
+    "alert_conditions": {
+      "high_error_rate": "error_rate > 10%",
+      "slow_response": "avg_response_time > 30s"
+    }
+  }
+}

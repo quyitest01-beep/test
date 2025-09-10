@@ -1,0 +1,160 @@
+<svg width="900" height="700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #333; }
+      .step { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2; rx: 8; }
+      .decision { fill: #fff3e0; stroke: #f57c00; stroke-width: 2; }
+      .process { fill: #e8f5e8; stroke: #388e3c; stroke-width: 2; rx: 8; }
+      .result { fill: #fce4ec; stroke: #c2185b; stroke-width: 2; rx: 8; }
+      .text { font-family: Arial, sans-serif; font-size: 12px; fill: #333; text-anchor: middle; }
+      .small-text { font-family: Arial, sans-serif; font-size: 10px; fill: #666; text-anchor: middle; }
+      .arrow { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .label { font-family: Arial, sans-serif; font-size: 10px; fill: #333; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="450" y="25" class="title">自动化查数/导数/发送工具 - 用户操作流程图</text>
+  
+  <!-- Start -->
+  <ellipse cx="450" cy="60" rx="40" ry="20" class="step" />
+  <text x="450" y="65" class="text">开始</text>
+  
+  <!-- Step 1: Choose Template -->
+  <rect x="375" y="100" width="150" height="50" class="step" />
+  <text x="450" y="120" class="text">选择场景模板</text>
+  <text x="450" y="135" class="small-text">预设模板 / 自定义模板</text>
+  
+  <!-- Decision: Template Type -->
+  <polygon points="450,170 500,200 450,230 400,200" class="decision" />
+  <text x="450" y="205" class="text">模板类型?</text>
+  
+  <!-- Branch 1: Preset Template -->
+  <rect x="200" y="250" width="120" height="40" class="step" />
+  <text x="260" y="270" class="text">选择预设模板</text>
+  
+  <!-- Branch 2: Custom Template -->
+  <rect x="580" y="250" width="120" height="40" class="step" />
+  <text x="640" y="270" class="text">创建自定义模板</text>
+  
+  <!-- Step 2: Configure Parameters -->
+  <rect x="375" y="320" width="150" height="50" class="step" />
+  <text x="450" y="340" class="text">配置数据需求</text>
+  <text x="450" y="355" class="small-text">填写参数: 商户名称、月份等</text>
+  
+  <!-- Step 3: Workflow Configuration -->
+  <rect x="375" y="390" width="150" height="50" class="step" />
+  <text x="450" y="410" class="text">自定义流程配置</text>
+  <text x="450" y="425" class="small-text">完整流程 / 仅到导出</text>
+  
+  <!-- Decision: Workflow Type -->
+  <polygon points="450,460 500,490 450,520 400,490" class="decision" />
+  <text x="450" y="495" class="text">流程类型?</text>
+  
+  <!-- Branch 1: Full Workflow -->
+  <rect x="200" y="540" width="120" height="60" class="process" />
+  <text x="260" y="560" class="text">完整流程</text>
+  <text x="260" y="575" class="small-text">查数→导数→发送</text>
+  
+  <!-- Branch 2: Export Only -->
+  <rect x="580" y="540" width="120" height="60" class="process" />
+  <text x="640" y="560" class="text">部分流程</text>
+  <text x="640" y="575" class="small-text">查数→导数</text>
+  
+  <!-- Execution Process -->
+  <rect x="50" y="620" width="100" height="40" class="process" />
+  <text x="100" y="635" class="text">1. 数据查询</text>
+  <text x="100" y="650" class="small-text">执行SQL查询</text>
+  
+  <rect x="170" y="620" width="100" height="40" class="process" />
+  <text x="220" y="635" class="text">2. 数据导出</text>
+  <text x="220" y="650" class="small-text">格式转换</text>
+  
+  <rect x="290" y="620" width="100" height="40" class="process" />
+  <text x="340" y="635" class="text">3. 数据发送</text>
+  <text x="340" y="650" class="small-text">邮件/FTP等</text>
+  
+  <!-- Monitoring -->
+  <rect x="450" y="620" width="120" height="40" class="step" />
+  <text x="510" y="635" class="text">实时监控</text>
+  <text x="510" y="650" class="small-text">进度状态显示</text>
+  
+  <!-- Results -->
+  <rect x="600" y="620" width="120" height="40" class="result" />
+  <text x="660" y="635" class="text">查看结果</text>
+  <text x="660" y="650" class="small-text">下载文件/日志</text>
+  
+  <!-- End -->
+  <ellipse cx="780" cy="640" rx="40" ry="20" class="result" />
+  <text x="780" y="645" class="text">完成</text>
+  
+  <!-- Arrows -->
+  <line x1="450" y1="80" x2="450" y2="100" class="arrow" />
+  <line x1="450" y1="150" x2="450" y2="170" class="arrow" />
+  
+  <!-- Template branches -->
+  <line x1="425" y1="200" x2="320" y2="250" class="arrow" />
+  <text x="360" y="220" class="label">预设</text>
+  
+  <line x1="475" y1="200" x2="580" y2="250" class="arrow" />
+  <text x="530" y="220" class="label">自定义</text>
+  
+  <!-- Merge back -->
+  <line x1="260" y1="290" x2="425" y2="320" class="arrow" />
+  <line x1="640" y1="290" x2="475" y2="320" class="arrow" />
+  
+  <line x1="450" y1="370" x2="450" y2="390" class="arrow" />
+  <line x1="450" y1="440" x2="450" y2="460" class="arrow" />
+  
+  <!-- Workflow branches -->
+  <line x1="425" y1="490" x2="320" y2="540" class="arrow" />
+  <text x="360" y="510" class="label">完整</text>
+  
+  <line x1="475" y1="490" x2="580" y2="540" class="arrow" />
+  <text x="530" y="510" class="label">部分</text>
+  
+  <!-- Execution flow -->
+  <line x1="260" y1="600" x2="100" y2="620" class="arrow" />
+  <line x1="640" y1="600" x2="100" y2="620" class="arrow" />
+  
+  <line x1="150" y1="640" x2="170" y2="640" class="arrow" />
+  <line x1="270" y1="640" x2="290" y2="640" class="arrow" />
+  <line x1="390" y1="640" x2="450" y2="640" class="arrow" />
+  <line x1="570" y1="640" x2="600" y2="640" class="arrow" />
+  <line x1="720" y1="640" x2="740" y2="640" class="arrow" />
+  
+  <!-- Side panels for details -->
+  <rect x="50" y="50" width="200" height="120" fill="#f5f5f5" stroke="#ccc" stroke-width="1" rx="5" />
+  <text x="150" y="70" class="text">预设模板示例:</text>
+  <text x="60" y="90" class="small-text">• 游戏数据导出模板</text>
+  <text x="60" y="105" class="small-text">• 财务报表生成模板</text>
+  <text x="60" y="120" class="small-text">• 用户行为分析模板</text>
+  <text x="60" y="135" class="small-text">• 销售数据统计模板</text>
+  <text x="60" y="150" class="small-text">• 库存管理报表模板</text>
+  
+  <rect x="650" y="50" width="200" height="120" fill="#f5f5f5" stroke="#ccc" stroke-width="1" rx="5" />
+  <text x="750" y="70" class="text">支持的参数类型:</text>
+  <text x="660" y="90" class="small-text">• 字符串 (商户名称)</text>
+  <text x="660" y="105" class="small-text">• 日期 (月份、季度)</text>
+  <text x="660" y="120" class="small-text">• 数字 (金额、数量)</text>
+  <text x="660" y="135" class="small-text">• 选择 (部门、类型)</text>
+  <text x="660" y="150" class="small-text">• 布尔 (是否包含)</text>
+  
+  <rect x="50" y="200" width="200" height="100" fill="#f5f5f5" stroke="#ccc" stroke-width="1" rx="5" />
+  <text x="150" y="220" class="text">导出格式支持:</text>
+  <text x="60" y="240" class="small-text">• Excel (.xlsx)</text>
+  <text x="60" y="255" class="small-text">• CSV (.csv)</text>
+  <text x="60" y="270" class="small-text">• PDF (.pdf)</text>
+  <text x="60" y="285" class="small-text">• JSON (.json)</text>
+  
+  <rect x="650" y="200" width="200" height="100" fill="#f5f5f5" stroke="#ccc" stroke-width="1" rx="5" />
+  <text x="750" y="220" class="text">发送方式支持:</text>
+  <text x="660" y="240" class="small-text">• 邮件发送</text>
+  <text x="660" y="255" class="small-text">• FTP/SFTP上传</text>
+  <text x="660" y="270" class="small-text">• HTTP API推送</text>
+  <text x="660" y="285" class="small-text">• 消息队列</text>
+  
+</svg>

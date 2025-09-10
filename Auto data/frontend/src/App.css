@@ -1,0 +1,258 @@
+/* 全局样式重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+/* 应用布局样式 */
+.app-layout {
+  min-height: 100vh;
+}
+
+.content-layout {
+  background: #fff;
+}
+
+.app-content {
+  margin: 24px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 112px);
+}
+
+/* 查询页面样式 */
+.query-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.query-input-section {
+  background: #fafafa;
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border: 1px solid #d9d9d9;
+}
+
+.query-input {
+  margin-bottom: 16px;
+}
+
+.query-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.sql-preview {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #24292e;
+}
+
+/* 结果展示样式 */
+.results-section {
+  margin-top: 24px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #f0f2f5;
+  border-radius: 6px;
+}
+
+.results-info {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.results-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.data-table {
+  margin-top: 16px;
+}
+
+/* 查询状态样式 */
+.query-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 16px 0;
+}
+
+.query-status.running {
+  background: #e6f7ff;
+  border: 1px solid #91d5ff;
+  color: #1890ff;
+}
+
+.query-status.success {
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  color: #52c41a;
+}
+
+.query-status.error {
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  color: #ff4d4f;
+}
+
+/* 进度条样式 */
+.progress-container {
+  margin: 16px 0;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* 历史记录样式 */
+.history-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.history-filters {
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.history-item {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.history-item-header {
+  padding: 16px;
+  background: #fafafa;
+  border-bottom: 1px solid #d9d9d9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-item-content {
+  padding: 16px;
+}
+
+.history-query-text {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #262626;
+}
+
+.history-meta {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* 设置页面样式 */
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.settings-section {
+  background: #fafafa;
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border: 1px solid #d9d9d9;
+}
+
+.settings-section h3 {
+  margin-bottom: 16px;
+  color: #262626;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .app-content {
+    margin: 12px;
+    padding: 16px;
+  }
+  
+  .query-input-section,
+  .settings-section {
+    padding: 16px;
+  }
+  
+  .results-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  
+  .results-info {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  
+  .history-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* 加载动画 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+/* 空状态样式 */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+.empty-state .anticon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #d9d9d9;
+}

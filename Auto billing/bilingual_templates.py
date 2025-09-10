@@ -74,8 +74,8 @@ class BilingualTemplates:
             'merchant_label': '商户 Merchant: {merchant_id}',
             'period_label': '期间 Period: {period}',
             'generation_time_label': '生成时间 Generation Time: {generation_time}',
-            'notice': '请查收您的账单文件。<br>Please check your bill file.',
-            'caption_template': '[EMOJI] {merchant_name} - 月度账单PDF<br>Monthly Bill PDF'
+            'notice': '请查收您的账单文件。\nPlease check your bill file.',
+            'caption_template': '[EMOJI] {merchant_name} - 月度账单PDF\nMonthly Bill PDF'
         }
     
     @staticmethod

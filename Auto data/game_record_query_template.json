@@ -1,0 +1,168 @@
+{
+  "template_id": "game_record_query_v1",
+  "name": "游戏回合记录查询模板",
+  "description": "通过自然语言输入查询和分析游戏回合记录的异常情况",
+  "version": "1.0.0",
+  "category": "游戏数据分析",
+  "author": "系统管理员",
+  "created_at": "2024-01-09",
+  
+  "text_parsing_rules": {
+    "parameter_patterns": {
+      "MerchantID": {
+        "patterns": [
+          "MerchantID[：:：]\\s*([0-9]+)",
+          "商户ID[：:：]\\s*([0-9]+)",
+          "merchant_id[：:：]\\s*([0-9]+)"
+        ],
+        "validation": "^[0-9]{10,15}$",
+        "required": true
+      },
+      "biz_id": {
+        "patterns": [
+          "biz_id[：:：]\\s*([a-zA-Z0-9_-]+)",
+          "业务ID[：:：]\\s*([a-zA-Z0-9_-]+)",
+          "business_id[：:：]\\s*([a-zA-Z0-9_-]+)"
+        ],
+        "validation": "^[a-zA-Z0-9_-]{10,50}$",
+        "required": true
+      },
+      "round_id": {
+        "patterns": [
+          "round_id[：:：]\\s*([0-9]+)",
+          "回合ID[：:：]\\s*([0-9]+)",
+          "round[：:：]\\s*([0-9]+)"
+        ],
+        "validation": "^[0-9]{10,20}$",
+        "required": true
+      }
+    },
+    "intent_keywords": {
+      "异常检测": ["异常", "问题", "错误", "不正常", "检查"],
+      "数据查询": ["查看", "查询", "显示", "获取", "记录"],
+      "统计分析": ["分析", "统计", "汇总", "报告"]
+    }
+  },
+  
+  "database_config": {
+    "primary_table": "game_rounds",
+    "related_tables": [
+      "users",
+      "games",
+      "transactions",
+      "merchants"
+    ]
+  },
+  
+  "query_template": {
+    "base_query": "SELECT r.round_id, r.merchant_id, r.biz_id, r.user_id, r.game_id, r.bet_amount, r.win_amount, r.game_status, r.start_time, r.end_time, r.created_at, u.username, u.user_level, g.game_name, g.game_type, t.transaction_amount, t.transaction_status, t.transaction_time, m.merchant_name FROM game_rounds r LEFT JOIN users u ON r.user_id = u.id LEFT JOIN games g ON r.game_id = g.id LEFT JOIN transactions t ON r.round_id = t.round_id LEFT JOIN merchants m ON r.merchant_id = m.id",
+    "where_conditions": [
+      "r.merchant_id = '${MerchantID}'",
+      "r.biz_id = '${biz_id}'",
+      "r.round_id = '${round_id}'"
+    ],
+    "order_by": "r.created_at DESC"
+  },
+  
+  "anomaly_detection_rules": [
+    {
+      "rule_id": "amount_anomaly",
+      "name": "金额异常检测",
+      "description": "检测投注金额或中奖金额是否异常",
+      "condition": "bet_amount > 10000 OR win_amount > 50000 OR (win_amount > bet_amount * 100)",
+      "severity": "high",
+      "message": "检测到金额异常：投注金额超过1万或中奖金额超过5万或中奖倍数超过100倍",
+      "suggestion": "建议核实用户身份和游戏记录，检查是否存在作弊行为"
+    },
+    {
+      "rule_id": "time_anomaly",
+      "name": "时间异常检测",
+      "description": "检测游戏时长是否异常",
+      "condition": "TIMESTAMPDIFF(SECOND, start_time, end_time) < 1 OR TIMESTAMPDIFF(SECOND, start_time, end_time) > 3600",
+      "severity": "medium",
+      "message": "检测到时间异常：游戏时长过短（<1秒）或过长（>1小时）",
+      "suggestion": "建议检查游戏逻辑和网络连接状况"
+    },
+    {
+      "rule_id": "status_anomaly",
+      "name": "状态异常检测",
+      "description": "检测游戏状态是否异常",
+      "condition": "game_status NOT IN ('completed', 'settled', 'finished')",
+      "severity": "high",
+      "message": "检测到状态异常：游戏状态不在正常完成状态列表中",
+      "suggestion": "建议检查游戏流程和状态更新机制"
+    },
+    {
+      "rule_id": "transaction_anomaly",
+      "name": "交易异常检测",
+      "description": "检测交易状态和金额是否匹配",
+      "condition": "(transaction_status = 'success' AND transaction_amount != win_amount) OR (transaction_status = 'failed' AND win_amount > 0)",
+      "severity": "high",
+      "message": "检测到交易异常：交易状态与金额不匹配",
+      "suggestion": "建议检查支付系统和账务处理逻辑"
+    },
+    {
+      "rule_id": "frequency_anomaly",
+      "name": "频率异常检测",
+      "description": "检测用户游戏频率是否异常",
+      "condition": "(SELECT COUNT(*) FROM game_rounds WHERE user_id = r.user_id AND DATE(created_at) = DATE(r.created_at)) > 1000",
+      "severity": "medium",
+      "message": "检测到频率异常：用户当日游戏次数超过1000次",
+      "suggestion": "建议检查是否存在机器人或脚本操作"
+    }
+  ],
+  
+  "response_format": {
+    "success_response": {
+      "status": "success",
+      "data": {
+        "query_info": {
+          "merchant_id": "${MerchantID}",
+          "biz_id": "${biz_id}",
+          "round_id": "${round_id}",
+          "query_time": "${current_timestamp}"
+        },
+        "record_details": {
+          "basic_info": {},
+          "game_info": {},
+          "transaction_info": {},
+          "user_info": {}
+        },
+        "anomaly_analysis": {
+          "has_anomaly": false,
+          "anomaly_count": 0,
+          "anomaly_details": [],
+          "risk_level": "low",
+          "suggestions": []
+        }
+      },
+      "message": "查询成功，已完成异常检测分析"
+    },
+    "error_response": {
+      "status": "error",
+      "error_code": "QUERY_FAILED",
+      "message": "查询失败，请检查输入参数",
+      "details": {}
+    }
+  },
+  
+  "example_inputs": [
+    {
+      "input_text": "能查看这个回合记录有异常吗？\nMerchantID：1755248023\nbiz_id： gp0001964961557724336128-4-2\nround_id： 1964961557724336128",
+      "extracted_params": {
+        "MerchantID": "1755248023",
+        "biz_id": "gp0001964961557724336128-4-2",
+        "round_id": "1964961557724336128"
+      },
+      "intent": "异常检测"
+    },
+    {
+      "input_text": "查询商户ID 1755248023 的回合 1964961557724336128 的详细信息",
+      "extracted_params": {
+        "MerchantID": "1755248023",
+        "round_id": "1964961557724336128"
+      },
+      "intent": "数据查询"
+    }
+  ]
+}

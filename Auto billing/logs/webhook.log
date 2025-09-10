@@ -277,3 +277,145 @@ OSError: [Errno 22] Invalid argument
 2025-09-08 16:47:27,074 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Unicorn66 - 2025年08月 -> finance@unicorn66.com
 2025-09-08 16:47:29,134 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Unicorn66_202508_Bill.pdf -> -4934898666
 2025-09-08 16:47:31,209 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\VG_202508_Bill.pdf -> -4905618464
+2025-09-10 12:23:09,994 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-10 12:23:48,870 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-10 12:23:56,145 - INFO - [2025-09-10 12:23:56] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250910_122343&action=confirm&code=92da90c01faa7ed4
+2025-09-10 12:23:56,145 - INFO - [2025-09-10 12:23:56] 解析参数 - bid: 20250910_122343, action: confirm, code: 92da90c01faa7ed4
+2025-09-10 12:23:56,145 - INFO - [2025-09-10 12:23:56] 开始处理confirm请求 - 批次ID: 20250910_122343
+2025-09-10 12:23:58,029 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Betfarms_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 12:24:01,305 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Game Plus - 2025年08月 -> poon@gaming-panda.com
+2025-09-10 12:24:02,768 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\JBgame_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 12:24:04,256 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Mxlobo_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 12:24:07,345 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Nicegame - 2025年08月 -> poon@gaming-panda.com
+2025-09-10 12:24:08,855 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Nicegame_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 12:24:12,035 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - RichGroup - 2025年08月 -> poon@gaming-panda.com
+2025-09-10 12:24:15,193 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - slotsapi - 2025年08月 -> poon@gaming-panda.com
+2025-09-10 12:24:18,369 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> poon@gaming-panda.com
+2025-09-10 12:24:20,060 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Togame_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 12:24:23,357 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - Unicorn66 - 2025年08月 -> poon@gaming-panda.com
+2025-09-10 12:28:47,457 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-10 12:33:37,050 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-10 12:40:44,198 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-10 13:39:24,741 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-10 13:39:58,973 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-10 13:40:48,769 - INFO - [2025-09-10 13:40:48] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250910_133954&action=confirm&code=f57f247621d2f0e4
+2025-09-10 13:40:48,770 - INFO - [2025-09-10 13:40:48] 解析参数 - bid: 20250910_133954, action: confirm, code: f57f247621d2f0e4
+2025-09-10 13:40:48,770 - INFO - [2025-09-10 13:40:48] 开始处理confirm请求 - 批次ID: 20250910_133954
+2025-09-10 13:40:50,634 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Betfarms_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 13:40:52,137 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\JBgame_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 13:40:53,711 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Mxlobo_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 13:40:55,153 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Nicegame_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 13:40:58,235 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> poon@gaming-panda.com
+2025-09-10 13:40:59,708 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Togame_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 13:40:59,711 - ERROR - [2025-09-10 13:40:48] 服务器异常: [Errno 22] Invalid argument
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_handler.py", line 617, in send_results_to_lark
+    print(f"[DEBUG] 批次记录: {batch_record}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_handler.py", line 180, in handle_confirmation
+    lark_result = self.send_results_to_lark(batch_record, send_results)
+  File "D:\cursor\Auto billing\confirm_handler.py", line 745, in send_results_to_lark
+    traceback.print_exc()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 208, in print_exc
+    print_exception(sys.exception(), limit=limit, file=file, chain=chain)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 130, in print_exception
+    te.print(file=file, chain=chain, colorize=colorize)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 1470, in print
+    print(line, file=file, end="")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_webhook.py", line 63, in do_GET
+    ok = handler.handle_confirmation(full_url, apply=(action == "confirm"))
+  File "D:\cursor\Auto billing\confirm_handler.py", line 227, in handle_confirmation
+    traceback.print_exc()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 208, in print_exc
+    print_exception(sys.exception(), limit=limit, file=file, chain=chain)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 130, in print_exception
+    te.print(file=file, chain=chain, colorize=colorize)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 1470, in print
+    print(line, file=file, end="")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+2025-09-10 13:40:59,717 - INFO - [2025-09-10 13:40:59] HTTP请求: "GET /confirm?bid=20250910_133954&action=confirm&code=f57f247621d2f0e4 HTTP/1.1" 500 -
+2025-09-10 13:40:59,717 - INFO - [2025-09-10 13:40:59] 响应发送 - 状态码: 500, 内容: Server Error: [Errno 22] Invalid argument
+2025-09-10 13:41:19,161 - INFO - [2025-09-10 13:41:19] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250910_133954&action=confirm&code=f57f247621d2f0e4
+2025-09-10 13:41:19,161 - INFO - [2025-09-10 13:41:19] 解析参数 - bid: 20250910_133954, action: confirm, code: f57f247621d2f0e4
+2025-09-10 13:41:19,161 - INFO - [2025-09-10 13:41:19] 开始处理confirm请求 - 批次ID: 20250910_133954
+2025-09-10 13:41:20,620 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Betfarms_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 13:41:22,236 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\JBgame_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 13:41:23,729 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Mxlobo_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 13:41:25,210 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Nicegame_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 13:41:28,184 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> poon@gaming-panda.com
+2025-09-10 13:41:30,102 - ERROR - [ERROR] Telegram文件发送失败: complete_invoice_pdfs\Togame_202508_Bill.pdf -> 400 Client Error: Bad Request for url: https://api.telegram.org/bot8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw/sendDocument
+2025-09-10 13:41:30,103 - ERROR - [2025-09-10 13:41:19] 服务器异常: [Errno 22] Invalid argument
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_handler.py", line 617, in send_results_to_lark
+    print(f"[DEBUG] 批次记录: {batch_record}")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_handler.py", line 180, in handle_confirmation
+    lark_result = self.send_results_to_lark(batch_record, send_results)
+  File "D:\cursor\Auto billing\confirm_handler.py", line 745, in send_results_to_lark
+    traceback.print_exc()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 208, in print_exc
+    print_exception(sys.exception(), limit=limit, file=file, chain=chain)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 130, in print_exception
+    te.print(file=file, chain=chain, colorize=colorize)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 1470, in print
+    print(line, file=file, end="")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\cursor\Auto billing\confirm_webhook.py", line 63, in do_GET
+    ok = handler.handle_confirmation(full_url, apply=(action == "confirm"))
+  File "D:\cursor\Auto billing\confirm_handler.py", line 227, in handle_confirmation
+    traceback.print_exc()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 208, in print_exc
+    print_exception(sys.exception(), limit=limit, file=file, chain=chain)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 130, in print_exception
+    te.print(file=file, chain=chain, colorize=colorize)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.2032.0_x64__qbz5n2kfra8p0\Lib\traceback.py", line 1470, in print
+    print(line, file=file, end="")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument
+2025-09-10 13:41:30,105 - INFO - [2025-09-10 13:41:30] HTTP请求: "GET /confirm?bid=20250910_133954&action=confirm&code=f57f247621d2f0e4 HTTP/1.1" 500 -
+2025-09-10 13:41:30,105 - INFO - [2025-09-10 13:41:30] 响应发送 - 状态码: 500, 内容: Server Error: [Errno 22] Invalid argument
+2025-09-10 13:44:15,145 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-10 13:44:46,718 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-10 13:44:59,665 - INFO - [2025-09-10 13:44:59] 收到请求 - IP: 127.0.0.1, Path: /confirm?bid=20250910_134441&action=confirm&code=ebf83b14a1772479
+2025-09-10 13:44:59,666 - INFO - [2025-09-10 13:44:59] 解析参数 - bid: 20250910_134441, action: confirm, code: ebf83b14a1772479
+2025-09-10 13:44:59,666 - INFO - [2025-09-10 13:44:59] 开始处理confirm请求 - 批次ID: 20250910_134441
+2025-09-10 13:45:02,418 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Betfarms_202508_Bill.pdf -> -1002888231635
+2025-09-10 13:45:04,833 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\JBgame_202508_Bill.pdf -> -1003052721567
+2025-09-10 13:45:07,152 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Mxlobo_202508_Bill.pdf -> -1002995523623
+2025-09-10 13:45:09,328 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Nicegame_202508_Bill.pdf -> -1002995523623
+2025-09-10 13:45:12,517 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> poon@gaming-panda.com
+2025-09-10 13:45:14,659 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Togame_202508_Bill.pdf -> -1003052721567

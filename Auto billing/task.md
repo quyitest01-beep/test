@@ -26,6 +26,7 @@
 - [x] 任务23: 账单发送文案中英双语化 ✅
 - [x] 任务24: 账单重试工具Lark群确认功能 ✅
 - [x] 任务25: 重试工具双向确认机制实现 ✅
+- [x] 任务26: TG发送功能修复 - 解决HTML标签导致的发送失败问题 ✅
 
 ## 任务详情
 
@@ -1324,7 +1325,38 @@ python retry_failed_bills.py --batch-id 20250101_120000 --analyze-only
 
 ---
 
-*最后更新：2025-01-09 15:30*
+### 任务26: TG发送功能修复 - 解决HTML标签导致的发送失败问题 ✅
+**状态**: 已完成 - TG发送功能完全修复
+
+**问题描述**:
+- Betfarms等商户的TG账单发送失败，返回400 Bad Request错误
+- 错误信息："can't parse entities: Unsupported start tag 'br' at byte offset 168"
+- 文本消息发送正常，但PDF文件发送失败
+
+**问题分析**:
+1. ✅ TG配置正确：bot_token和chat_id都配置正确
+2. ✅ 权限正常：bot在目标群组中有发送权限
+3. ✅ PDF文件有效：文件格式和大小都正常
+4. ❌ **根本原因**：BilingualTemplates中包含HTML标签`<br>`导致TG API解析失败
+
+**解决方案**:
+- 修复 `bilingual_templates.py` 中的 `get_telegram_bill_send_template()` 方法
+- 将HTML标签 `<br>` 替换为换行符 `\n`
+- 修复字段：
+  - `notice`: '请查收您的账单文件。\nPlease check your bill file.'
+  - `caption_template`: '[EMOJI] {merchant_name} - 月度账单PDF\nMonthly Bill PDF'
+
+**测试验证**:
+- ✅ Betfarms商户TG发送测试成功
+- ✅ PDF文件发送功能正常
+- ✅ 消息格式显示正确
+- ✅ 所有TG发送功能恢复正常
+
+**完成时间**: 2025-09-10 12:49
+
+---
+
+*最后更新：2025-09-10 12:49*
 
 
 

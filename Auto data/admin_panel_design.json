@@ -1,0 +1,382 @@
+{
+  "admin_panel_design": {
+    "system_name": "智能数据查询后台管理系统",
+    "version": "1.0",
+    "description": "支持Telegram群组管理、查询记录管理和场景配置的后台管理系统",
+    "modules": {
+      "platform_management": {
+        "module_name": "多平台管理模块",
+        "description": "统一管理Telegram和Lark等多平台机器人",
+        "sub_modules": {
+          "telegram_management": {
+            "module_name": "Telegram管理",
+            "description": "管理Telegram机器人所在的群组和权限配置"
+          },
+          "lark_management": {
+            "module_name": "Lark应用管理",
+            "description": "管理Lark应用配置和用户权限",
+            "features": {
+              "app_configuration": {
+                "name": "应用配置管理",
+                "functions": [
+                  "Lark应用基本信息配置",
+                  "App ID和App Secret管理",
+                  "事件订阅配置",
+                  "权限范围设置",
+                  "回调地址配置"
+                ]
+              },
+              "bot_management": {
+                "name": "机器人管理",
+                "functions": [
+                  "机器人基本信息设置",
+                  "机器人头像和描述配置",
+                  "可用性范围设置",
+                  "机器人状态监控",
+                  "消息处理配置"
+                ]
+              },
+              "permission_management": {
+                "name": "权限管理",
+                "functions": [
+                  "用户权限分配",
+                  "群组访问控制",
+                  "API调用权限设置",
+                  "数据访问级别配置",
+                  "功能模块权限控制"
+                ]
+              },
+              "integration_settings": {
+                "name": "集成设置",
+                "functions": [
+                  "斜杠命令配置",
+                  "消息卡片模板设置",
+                  "工作流集成配置",
+                  "第三方服务连接",
+                  "数据同步设置"
+                ]
+              }
+            }
+          }
+        },
+      "group_management": {
+        "module_name": "群组管理模块",
+        "description": "管理Telegram机器人所在的群组和权限配置",
+        "features": {
+          "group_list": {
+            "name": "群组列表管理",
+            "functions": [
+              "查看所有已添加的Telegram群组",
+              "显示群组基本信息（群组名、ID、成员数、状态）",
+              "批量导入群组信息",
+              "搜索和筛选群组",
+              "群组状态监控（在线/离线/异常）"
+            ],
+            "ui_components": [
+              "群组列表表格",
+              "搜索筛选栏",
+              "批量操作按钮",
+              "状态指示器",
+              "分页组件"
+            ]
+          },
+          "group_addition": {
+            "name": "群组添加功能",
+            "functions": [
+              "单个群组手动添加",
+              "批量群组导入（Excel/CSV）",
+              "群组邀请链接验证",
+              "机器人权限检查",
+              "群组信息自动同步"
+            ],
+            "validation_rules": [
+              "群组ID格式验证",
+              "群组访问权限验证",
+              "重复群组检查",
+              "机器人管理员权限验证"
+            ]
+          },
+          "permission_control": {
+            "name": "权限控制管理",
+            "functions": [
+              "设置群组查询权限级别",
+              "配置用户访问白名单",
+              "设置查询频率限制",
+              "配置功能开关（查询/报表/异常检测）",
+              "管理员权限分配"
+            ],
+            "permission_levels": [
+              "基础查询权限",
+              "高级分析权限",
+              "报表生成权限",
+              "系统管理权限"
+            ]
+          }
+        }
+      },
+      "query_history": {
+        "module_name": "查询记录管理",
+        "description": "管理和分析所有数据查询历史记录",
+        "features": {
+          "history_list": {
+            "name": "查询历史列表",
+            "functions": [
+              "显示所有查询记录",
+              "按时间、用户、群组、查询类型筛选",
+              "查询详情查看",
+              "查询结果预览",
+              "导出查询记录"
+            ],
+            "display_fields": [
+              "查询时间",
+              "用户信息（用户名、ID）",
+              "群组信息",
+              "查询内容",
+              "查询类型",
+              "执行状态",
+              "执行时长",
+              "结果大小"
+            ]
+          },
+          "statistics_analysis": {
+            "name": "统计分析功能",
+            "functions": [
+              "查询量统计（日/周/月）",
+              "用户活跃度分析",
+              "群组使用情况统计",
+              "查询类型分布分析",
+              "系统性能指标统计"
+            ],
+            "charts": [
+              "查询量趋势图",
+              "用户活跃度热力图",
+              "查询类型饼图",
+              "响应时间分布图",
+              "成功率统计图"
+            ]
+          },
+          "error_monitoring": {
+            "name": "错误监控管理",
+            "functions": [
+              "查询失败记录查看",
+              "错误类型统计分析",
+              "异常告警配置",
+              "错误日志详情查看",
+              "问题处理跟踪"
+            ],
+            "error_types": [
+              "参数错误",
+              "数据库连接错误",
+              "查询超时",
+              "权限不足",
+              "系统异常"
+            ]
+          }
+        }
+      },
+      "scenario_management": {
+        "module_name": "场景配置管理",
+        "description": "管理和配置各种数据查询场景模板",
+        "features": {
+          "platform_specific_templates": {
+            "telegram_templates": {
+              "name": "Telegram场景模板",
+              "features": [
+                "文本消息模板",
+                "内联键盘配置",
+                "文件分享模板",
+                "群组交互模板"
+              ]
+            },
+            "lark_templates": {
+              "name": "Lark场景模板",
+              "features": [
+                "交互卡片模板",
+                "表单收集配置",
+                "斜杠命令设置",
+                "富文本响应模板"
+              ]
+            }
+          },
+          "template_management": {
+            "name": "模板管理功能",
+            "functions": [
+              "查看所有场景模板",
+              "创建新的场景模板",
+              "编辑现有模板配置",
+              "模板启用/禁用控制",
+              "模板版本管理",
+              "模板导入/导出",
+              "多平台模板适配"
+            ],
+            "template_types": [
+              "游戏回合记录查询",
+              "时间范围数据查询",
+              "业务指标报表生成",
+              "异常检测分析",
+              "自定义查询模板"
+            ]
+          },
+          "template_editor": {
+            "name": "模板编辑器",
+            "functions": [
+              "可视化模板配置界面",
+              "参数配置和验证规则设置",
+              "查询SQL模板编辑",
+              "多平台响应格式配置",
+              "测试模板功能"
+            ],
+            "editor_components": [
+              "参数配置面板",
+              "SQL编辑器",
+              "JSON配置编辑器",
+              "预览和测试面板",
+              "语法高亮和错误提示",
+              "平台兼容性检查器"
+            ]
+          },
+          "template_testing": {
+            "name": "模板测试功能",
+            "functions": [
+              "模板语法验证",
+              "参数解析测试",
+              "查询执行测试",
+              "结果格式验证",
+              "性能测试",
+              "跨平台兼容性测试"
+            ],
+            "test_cases": [
+              "正常参数测试",
+              "边界值测试",
+              "异常参数测试",
+              "性能压力测试",
+              "平台差异化测试"
+            ]
+          }
+        }
+      },
+      "system_monitoring": {
+        "module_name": "系统监控模块",
+        "description": "监控系统运行状态和性能指标",
+        "features": {
+          "performance_monitoring": {
+            "name": "性能监控",
+            "metrics": [
+              "CPU使用率",
+              "内存使用率",
+              "数据库连接数",
+              "API响应时间",
+              "并发查询数",
+              "Bot消息处理速度"
+            ],
+            "alerts": [
+              "高CPU使用率告警",
+              "内存不足告警",
+              "数据库连接异常告警",
+              "响应时间过长告警"
+            ]
+          },
+          "bot_status": {
+            "name": "Bot状态监控",
+            "functions": [
+              "Bot在线状态监控",
+              "消息发送成功率统计",
+              "群组连接状态检查",
+              "WebHook状态监控",
+              "API调用频率统计"
+            ]
+          },
+          "log_management": {
+            "name": "日志管理",
+            "functions": [
+              "系统日志查看",
+              "错误日志分析",
+              "用户操作日志",
+              "API调用日志",
+              "日志搜索和筛选"
+            ]
+          }
+        }
+      }
+    },
+    "user_interface": {
+      "layout": {
+        "header": {
+          "components": ["系统标题", "用户信息", "通知中心", "设置菜单"]
+        },
+        "sidebar": {
+          "menu_items": [
+            "仪表板",
+            "群组管理",
+            "查询记录",
+            "场景配置",
+            "系统监控",
+            "用户管理",
+            "系统设置"
+          ]
+        },
+        "main_content": {
+          "components": ["面包屑导航", "页面标题", "操作按钮", "内容区域"]
+        }
+      },
+      "responsive_design": {
+        "breakpoints": {
+          "desktop": "1200px+",
+          "tablet": "768px-1199px",
+          "mobile": "<768px"
+        },
+        "features": [
+          "自适应布局",
+          "移动端优化",
+          "触摸友好的交互",
+          "响应式表格"
+        ]
+      }
+    },
+    "security": {
+      "authentication": {
+        "methods": ["用户名密码", "双因素认证", "SSO集成"],
+        "session_management": "JWT Token + Redis存储",
+        "password_policy": "强密码策略 + 定期更换"
+      },
+      "authorization": {
+        "rbac": "基于角色的访问控制",
+        "permissions": [
+          "群组管理权限",
+          "查询记录查看权限",
+          "场景配置权限",
+          "系统管理权限"
+        ]
+      },
+      "data_protection": {
+        "encryption": "敏感数据加密存储",
+        "audit_log": "操作审计日志",
+        "data_masking": "敏感信息脱敏显示"
+      }
+    },
+    "api_design": {
+      "rest_apis": {
+        "group_management": [
+          "GET /api/admin/groups - 获取群组列表",
+          "POST /api/admin/groups - 添加新群组",
+          "PUT /api/admin/groups/{id} - 更新群组信息",
+          "DELETE /api/admin/groups/{id} - 删除群组",
+          "POST /api/admin/groups/batch - 批量导入群组"
+        ],
+        "query_history": [
+          "GET /api/admin/queries - 获取查询记录",
+          "GET /api/admin/queries/{id} - 获取查询详情",
+          "GET /api/admin/queries/statistics - 获取统计数据",
+          "POST /api/admin/queries/export - 导出查询记录"
+        ],
+        "scenario_management": [
+          "GET /api/admin/templates - 获取模板列表",
+          "POST /api/admin/templates - 创建新模板",
+          "PUT /api/admin/templates/{id} - 更新模板",
+          "DELETE /api/admin/templates/{id} - 删除模板",
+          "POST /api/admin/templates/{id}/test - 测试模板"
+        ]
+      }
+    }
+  }
+}}
