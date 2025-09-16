@@ -1,4 +1,4 @@
-import pandas as pd
+﻿import pandas as pd
 from sqlalchemy import create_engine, text
 import re
 import requests
@@ -745,7 +745,9 @@ def get_data_and_export(month, logger):
         provider_game_output_file = os.path.join(EXPORT_DIR, f'{month}_provider_game_currency.xlsx')
         if os.path.exists(provider_game_output_file):
             os.remove(provider_game_output_file)
-        provider_game_grouped = all_data.groupby(['date', 'provider', 'game', 'currency']).agg(
+        # 过滤掉商户名为demo的数据
+        provider_game_data = all_data[all_data['merchant'].astype(str).str.strip().str.lower() != 'demo']
+        provider_game_grouped = provider_game_data.groupby(['date', 'provider', 'game', 'currency']).agg(
             pay_in=('pay_in', 'sum'),
             pay_out=('pay_out', 'sum'),
             count=('count', 'sum')
@@ -821,6 +823,214 @@ def get_data_and_export(month, logger):
                 worksheet.write(0, col_num, value, header_format)
         logger.info(f"导出完成，文件名：{provider_game_output_file}")
 
+        # 导出商户+货币维度汇总表
+        merchant_currency_output_file = os.path.join(EXPORT_DIR, f'{month}_merchant_currency.xlsx')
+        if os.path.exists(merchant_currency_output_file):
+            os.remove(merchant_currency_output_file)
+        
+        # 商户+货币维度分组聚合
+        # 过滤掉商户名为demo的数据
+        merchant_currency_data = all_data[all_data['merchant'].astype(str).str.strip().str.lower() != 'demo']
+        merchant_currency_grouped = merchant_currency_data.groupby(['date', 'merchant', 'currency']).agg(
+            pay_in=('pay_in', 'sum'),
+            pay_out=('pay_out', 'sum'),
+            count=('count', 'sum')
+        ).reset_index()
+        
+        merchant_currency_grouped['时间'] = merchant_currency_grouped['date'].apply(safe_year_month)
+        merchant_currency_grouped['总投注'] = pd.to_numeric(merchant_currency_grouped['pay_in'], errors='coerce').fillna(0).round(2)
+        merchant_currency_grouped['总派奖'] = pd.to_numeric(merchant_currency_grouped['pay_out'], errors='coerce').fillna(0).round(2)
+        merchant_currency_grouped['总局数'] = pd.to_numeric(merchant_currency_grouped['count'], errors='coerce').fillna(0)
+        merchant_currency_grouped['USD汇率'] = merchant_currency_grouped['currency'].map(exchange_rate_dict).round(6)
+        merchant_currency_grouped['USD汇率'] = pd.to_numeric(merchant_currency_grouped['USD汇率'], errors='coerce').fillna(0)
+        merchant_currency_grouped['总投注USD'] = (merchant_currency_grouped['总投注'] * merchant_currency_grouped['USD汇率']).round(4)
+        merchant_currency_grouped['总派奖USD'] = (merchant_currency_grouped['总派奖'] * merchant_currency_grouped['USD汇率']).round(4)
+        merchant_currency_grouped['RTP'] = merchant_currency_grouped.apply(
+            lambda row: f"{(row['总派奖'] / row['总投注'] * 100):.2f}%" if row['总投注'] > 0 else "0.00%", axis=1)
+        merchant_currency_grouped['GGR'] = (merchant_currency_grouped['总投注'] - merchant_currency_grouped['总派奖']).round(2)
+        merchant_currency_grouped['GGR-USD'] = (merchant_currency_grouped['GGR'] * merchant_currency_grouped['USD汇率']).round(4)
+        merchant_currency_grouped['商户ID'] = merchant_currency_grouped['merchant'].astype(str).str.strip()
+        merchant_currency_grouped['商户名'] = merchant_currency_grouped['商户ID'].map(merchant_to_name)
+        merchant_currency_grouped['商户名'] = merchant_currency_grouped.apply(lambda row: row['商户名'] if pd.notnull(row['商户名']) and row['商户名'] != '' else row['商户ID'], axis=1)
+        merchant_currency_grouped.rename(columns={'currency': '货币'}, inplace=True)
+        
+        # 按用户要求的字段顺序排列
+        merchant_currency_final_cols = [
+            '时间', '商户名', '商户ID', '货币', 'USD汇率',
+            '总投注', '总投注USD', '总派奖', '总派奖USD',
+            '总局数', 'RTP', 'GGR', 'GGR-USD'
+        ]
+        merchant_currency_grouped = merchant_currency_grouped[merchant_currency_final_cols]
+        
+        # 导出Excel
+        with pd.ExcelWriter(merchant_currency_output_file, engine='xlsxwriter') as writer:
+            merchant_currency_grouped.to_excel(writer, index=False, sheet_name='Sheet1')
+            workbook = writer.book
+            worksheet = writer.sheets['Sheet1']
+            num_format_4 = workbook.add_format({'num_format': '0.0000', 'align': 'right'})
+            num_format_6 = workbook.add_format({'num_format': '0.000000', 'align': 'right'})
+            num_format_2 = workbook.add_format({'num_format': '0.00', 'align': 'right'})
+            num_format_int = workbook.add_format({'num_format': '0', 'align': 'right'})
+            percent_format = workbook.add_format({'num_format': '0.00%', 'align': 'right'})
+            text_format = workbook.add_format({'align': 'left'})
+            worksheet.set_column('A:A', 10, text_format)   # 时间
+            worksheet.set_column('B:B', 15, text_format)   # 商户名
+            worksheet.set_column('C:C', 15, text_format)   # 商户ID
+            worksheet.set_column('D:D', 10, text_format)   # 货币
+            worksheet.set_column('E:E', 12, num_format_6)  # USD汇率（6位小数）
+            worksheet.set_column('F:F', 15, num_format_2)  # 总投注（2位小数）
+            worksheet.set_column('G:G', 15, num_format_4)  # 总投注USD
+            worksheet.set_column('H:H', 15, num_format_2)  # 总派奖（2位小数）
+            worksheet.set_column('I:I', 15, num_format_4)  # 总派奖USD
+            worksheet.set_column('J:J', 10, num_format_int)  # 总局数
+            worksheet.set_column('K:K', 10, percent_format)  # RTP
+            worksheet.set_column('L:L', 15, num_format_2)  # GGR
+            worksheet.set_column('M:M', 15, num_format_4)  # GGR-USD
+            header_format = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 'bg_color': '#D9D9D9'})
+            for col_num, value in enumerate(merchant_currency_grouped.columns.values):
+                worksheet.write(0, col_num, value, header_format)
+        logger.info(f"导出完成，文件名：{merchant_currency_output_file}")
+
+        # 导出商户+货币+游戏维度汇总表
+        merchant_game_output_file = os.path.join(EXPORT_DIR, f'{month}_merchant_currency_game.xlsx')
+        if os.path.exists(merchant_game_output_file):
+            os.remove(merchant_game_output_file)
+        
+        # 过滤掉商户名为demo的数据，并且只统计gp和popular厂商
+        merchant_game_data = all_data[(all_data['merchant'].astype(str).str.strip().str.lower() != 'demo') & 
+                                     (all_data['provider'].isin(['gp', 'popular']))].copy()
+        
+        # 商户-货币-游戏分组合计所有字段
+        merchant_game_grouped = merchant_game_data.groupby(['date', 'merchant', 'currency', 'game']).agg(
+            pay_in=('pay_in', 'sum'),
+            pay_out=('pay_out', 'sum'),
+            count=('count', 'sum')
+        ).reset_index()
+        
+        merchant_game_grouped['时间'] = merchant_game_grouped['date'].apply(safe_year_month)
+        merchant_game_grouped['总投注'] = pd.to_numeric(merchant_game_grouped['pay_in'], errors='coerce').fillna(0).round(2)
+        merchant_game_grouped['总派奖'] = pd.to_numeric(merchant_game_grouped['pay_out'], errors='coerce').fillna(0).round(2)
+        merchant_game_grouped['总局数'] = pd.to_numeric(merchant_game_grouped['count'], errors='coerce').fillna(0)
+        merchant_game_grouped['USD汇率'] = merchant_game_grouped['currency'].map(exchange_rate_dict).round(6)
+        merchant_game_grouped['USD汇率'] = pd.to_numeric(merchant_game_grouped['USD汇率'], errors='coerce').fillna(0)
+        merchant_game_grouped['总投注USD'] = (merchant_game_grouped['总投注'] * merchant_game_grouped['USD汇率']).round(4)
+        merchant_game_grouped['总派奖USD'] = (merchant_game_grouped['总派奖'] * merchant_game_grouped['USD汇率']).round(4)
+        merchant_game_grouped['RTP'] = merchant_game_grouped.apply(
+            lambda row: f"{(row['总派奖'] / row['总投注'] * 100):.2f}%" if row['总投注'] > 0 else "0.00%", axis=1)
+        merchant_game_grouped['GGR'] = (merchant_game_grouped['总投注'] - merchant_game_grouped['总派奖']).round(2)
+        merchant_game_grouped['GGR-USD'] = (merchant_game_grouped['GGR'] * merchant_game_grouped['USD汇率']).round(4)
+        merchant_game_grouped['商户ID'] = merchant_game_grouped['merchant'].astype(str).str.strip()
+        merchant_game_grouped['商户名'] = merchant_game_grouped['商户ID'].map(merchant_to_name)
+        merchant_game_grouped['商户名'] = merchant_game_grouped.apply(lambda row: row['商户名'] if pd.notnull(row['商户名']) and row['商户名'] != '' else row['商户ID'], axis=1)
+        
+        # 游戏名映射 - 采用与provider_game_currency相同的两步映射逻辑
+        # 由于merchant_game_data已经过滤只包含gp和popular厂商，直接使用两步映射
+        merchant_game_grouped['游戏名'] = merchant_game_grouped['game'].map(lambda x: gp_game_to_name.get(x, x))
+        unknown_games = merchant_game_grouped[merchant_game_grouped['游戏名'] == merchant_game_grouped['game']]['game'].unique()
+        if len(unknown_games) > 0:
+            logger.warning(f"merchant_currency_game表未匹配到游戏名的 game: {unknown_games[:10]} 共{len(unknown_games)}个")
+        
+        merchant_game_grouped.rename(columns={'currency': '货币'}, inplace=True)
+        
+        # 按用户要求的字段顺序排列
+        merchant_game_final_cols = [
+            '时间', '商户名', '货币', 'USD汇率', '游戏名',
+            '总投注', '总投注USD', '总派奖', '总派奖USD',
+            '总局数', 'RTP', 'GGR', 'GGR-USD'
+        ]
+        merchant_game_grouped = merchant_game_grouped[merchant_game_final_cols]
+        
+        # 按商户+货币分组合计所有字段，插入合计行
+        sum_cols = ['总投注', '总投注USD', '总派奖', '总派奖USD', '总局数', 'GGR', 'GGR-USD']
+        def insert_sum_rows(df):
+            result = []
+            for (merchant, currency), group in df.groupby(['商户名', '货币']):
+                result.append(group)
+                sum_row = {col: group[col].sum() for col in sum_cols}
+                sum_row.update({
+                    '时间': '',
+                    '商户名': merchant,
+                    '货币': currency,
+                    'USD汇率': '',
+                    '游戏名': '合计',
+                    'RTP': '',
+                })
+                result.append(pd.DataFrame([sum_row]))
+            return pd.concat(result, ignore_index=True)
+        
+        merchant_game_grouped = insert_sum_rows(merchant_game_grouped)
+        
+        # 导出Excel
+        with pd.ExcelWriter(merchant_game_output_file, engine='xlsxwriter') as writer:
+            merchant_game_grouped.to_excel(writer, index=False, sheet_name='Sheet1')
+            workbook = writer.book
+            worksheet = writer.sheets['Sheet1']
+            num_format_4 = workbook.add_format({'num_format': '0.0000', 'align': 'right'})
+            num_format_6 = workbook.add_format({'num_format': '0.000000', 'align': 'right'})
+            num_format_2 = workbook.add_format({'num_format': '0.00', 'align': 'right'})
+            num_format_int = workbook.add_format({'num_format': '0', 'align': 'right'})
+            percent_format = workbook.add_format({'num_format': '0.00%', 'align': 'right'})
+            text_format = workbook.add_format({'align': 'left'})
+            
+            columns = [
+                ('A:A', 10, text_format),   # 时间
+                ('B:B', 15, text_format),   # 商户名
+                ('C:C', 10, text_format),   # 货币
+                ('D:D', 12, num_format_6),  # USD汇率
+                ('E:E', 20, text_format),   # 游戏名
+                ('F:F', 15, num_format_2),  # 总投注
+                ('G:G', 15, num_format_4),  # 总投注USD
+                ('H:H', 15, num_format_2),  # 总派奖
+                ('I:I', 15, num_format_4),  # 总派奖USD
+                ('J:J', 10, num_format_int),  # 总局数
+                ('K:K', 10, percent_format),  # RTP
+                ('L:L', 15, num_format_2),  # GGR
+                ('M:M', 15, num_format_4),  # GGR-USD
+            ]
+            
+            for col_range, width, fmt in columns:
+                worksheet.set_column(col_range, width, fmt)
+            
+            header_format = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter', 'bg_color': '#D9D9D9'})
+            for col_num, value in enumerate(merchant_game_grouped.columns.values):
+                worksheet.write(0, col_num, value, header_format)
+            
+            # 添加合计行加粗格式和空白行
+            # 创建不同列的加粗格式，保持原有对齐方式
+            bold_text_format = workbook.add_format({'bold': True, 'align': 'left'})
+            bold_num_format_2 = workbook.add_format({'bold': True, 'align': 'right', 'num_format': '#,##0.00'})
+            bold_num_format_4 = workbook.add_format({'bold': True, 'align': 'right', 'num_format': '#,##0.0000'})
+            bold_num_format_int = workbook.add_format({'bold': True, 'align': 'right', 'num_format': '#,##0'})
+            bold_percent_format = workbook.add_format({'bold': True, 'align': 'right', 'num_format': '0.00%'})
+            
+            # 获取商户游戏汇总表数据
+            last_row = len(merchant_game_grouped)
+            
+            # 遍历所有行，为游戏名为"合计"的行设置加粗格式
+            for row_num in range(1, last_row + 1):
+                game_name = merchant_game_grouped.iloc[row_num - 1]['游戏名']
+                if game_name == '合计':
+                    # 根据列类型设置不同的加粗格式
+                    for col_num, col_name in enumerate(merchant_game_grouped.columns):
+                        cell_value = merchant_game_grouped.iloc[row_num - 1, col_num]
+                        
+                        # 根据列名设置对应的格式
+                        if col_name in ['总投注USD', '总派奖USD', 'GGR-USD']:
+                            worksheet.write(row_num, col_num, cell_value, bold_num_format_4)
+                        elif col_name in ['总投注', '总派奖', 'GGR']:
+                            worksheet.write(row_num, col_num, cell_value, bold_num_format_2)
+                        elif col_name == '总局数':
+                            worksheet.write(row_num, col_num, cell_value, bold_num_format_int)
+                        elif col_name == 'RTP':
+                            worksheet.write(row_num, col_num, cell_value, bold_percent_format)
+                        else:
+                            worksheet.write(row_num, col_num, cell_value, bold_text_format)
+                    
+                    # 在合计行后插入空白行
+                    worksheet.set_row(row_num + 1, None, None, {'hidden': False, 'level': 0, 'collapsed': False})
+        
+        logger.info(f"导出完成，文件名：{merchant_game_output_file}")
+
         # 导出无汇率明细
         no_rate = grouped[grouped['USD汇率'] == 0]
         if not no_rate.empty:
@@ -830,7 +1040,7 @@ def get_data_and_export(month, logger):
                 no_rate.to_excel(writer, index=False)
                 logger.info(f"已导出无汇率币种明细：{no_rate_file}")
 
-        return True, (output_file, provider_output_file, provider_game_output_file)
+        return True, (output_file, provider_output_file, provider_game_output_file, merchant_currency_output_file, merchant_game_output_file)
 
     except Exception as e:
         error_msg = f"数据处理失败：{str(e)}\n{traceback.format_exc()}"
@@ -845,7 +1055,18 @@ def parse_args():
 
 def get_target_month(args):
     if args.date:
-        dt = datetime.strptime(args.date, '%Y-%m')
+        # 尝试多种日期格式
+        date_formats = ['%Y-%m', '%Y-%m-%d', '%Y-%m-%d %H:%M:%S']
+        dt = None
+        for fmt in date_formats:
+            try:
+                dt = datetime.strptime(args.date, fmt)
+                break
+            except ValueError:
+                continue
+        if dt is None:
+            # 如果所有格式都失败，使用当前时间
+            dt = datetime.now()
     else:
         dt = datetime.now()
     return dt.strftime('%Y%m'), dt
@@ -998,9 +1219,9 @@ def new_monthly_billing(month, mode='manual'):
             logger.error(f"数据导出失败：{result}")
             return
         
-        # 组装三个要发送的文件名
-        main_file, provider_file, provider_game_file = result
-        file_paths = [main_file, provider_file, provider_game_file]
+        # 组装五个要发送的文件名
+        main_file, provider_file, provider_game_file, merchant_currency_file, merchant_game_file = result
+        file_paths = [main_file, provider_file, provider_game_file, merchant_currency_file, merchant_game_file]
         
         # 发送邮件，传递模式和月份
         success, message = send_email(file_paths, logger, mode=args.mode, month_str=month)
@@ -1016,4 +1237,5 @@ def new_monthly_billing(month, mode='manual'):
         logger.info("=== 任务执行结束 ===")
 
 if __name__ == "__main__":
-    new_monthly_billing('2025-08', 'manual')
+    args = parse_args()
+    new_monthly_billing(args.date, args.mode)
