@@ -32,3 +32,6 @@ ENV/
 .DS_Store
 Thumbs.db 
 auto_insert.py
+
+# 忽略外部目录
+../*
