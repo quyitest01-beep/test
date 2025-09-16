@@ -32,7 +32,7 @@ const consoleFormat = winston.format.combine(
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
   format: logFormat,
-  defaultMeta: { service: 'athena-query-backend' },
+  defaultMeta: { service: 'query-backend' },
   transports: [
     // 错误日志文件
     new winston.transports.File({
@@ -78,7 +78,7 @@ logger.logRequest = (req, res, responseTime) => {
 
 // 添加查询日志方法
 logger.logQuery = (requestId, queryData) => {
-  logger.info('Athena query executed', {
+  logger.info('Query executed', {
     requestId,
     queryId: queryData.queryId,
     sql: queryData.sql?.substring(0, 200) + (queryData.sql?.length > 200 ? '...' : ''),

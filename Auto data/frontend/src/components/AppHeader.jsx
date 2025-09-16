@@ -86,7 +86,7 @@ const AppHeader = () => {
           <span style={{ color: '#fff', fontSize: '16px', fontWeight: 'bold' }}>A</span>
         </div>
         <Title level={4} style={{ margin: 0, color: '#262626' }}>
-          Athena智能数据查询系统
+          智能数据查询系统
         </Title>
       </div>
       

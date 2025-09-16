@@ -4,6 +4,11 @@ const Joi = require('joi')
 const logger = require('../utils/logger')
 const athenaService = require('../services/athenaService')
 const sqlGenerator = require('../services/sqlGenerator')
+const queryOptimizer = require('../services/queryOptimizer')
+const memoryManager = require('../services/memoryManager')
+const pythonCodeGenerator = require('../services/pythonCodeGenerator')
+const pythonExecutor = require('../services/pythonExecutor')
+// 认证中间件已移除
 
 // 请求验证schemas
 const generateSQLSchema = Joi.object({
@@ -32,6 +37,18 @@ const splitQuerySchema = Joi.object({
     batchSize: Joi.number().integer().min(1000).max(100000).default(50000),
     strategy: Joi.string().valid('date_range', 'id_range', 'hash_partition').default('date_range')
   }).optional()
+})
+
+// 新增Python查询schema
+const pythonQuerySchema = Joi.object({
+  query: Joi.string().required().min(1).max(2000),
+  options: Joi.object({
+    limit: Joi.number().integer().min(1).max(100000).default(1000),
+    splitThreshold: Joi.number().integer().min(10000).max(1000000).default(100000),
+    maxReturnRows: Joi.number().integer().min(100).max(50000).default(10000),
+    timeout: Joi.number().integer().min(5000).max(600000).default(300000),
+    optimize: Joi.boolean().default(true)
+  }).default({})
 })
 
 // 生成SQL
@@ -79,7 +96,7 @@ router.post('/generate-sql', async (req, res, next) => {
   }
 })
 
-// 执行查询
+// 执行查询（带内存优化）
 router.post('/execute', async (req, res, next) => {
   try {
     // 验证请求参数
@@ -101,26 +118,62 @@ router.post('/execute', async (req, res, next) => {
       database 
     })
 
-    // 执行查询
-    const result = await athenaService.executeQuery(sql, {
+    // 优化查询（内存感知）
+    const optimizationResult = queryOptimizer.optimizeQuery(sql, 'memory', {
+      maxRows: options.maxRows || 50000,
+      removeUnnecessarySorting: true,
+      optimizeSelect: true
+    })
+    
+    // 检查内存限制
+    const memoryStatus = memoryManager.getMemoryStatus()
+    const availableMemory = memoryStatus.limits.safeThreshold - memoryStatus.process.heapUsed
+    
+    if (!queryOptimizer.isQuerySuitableForMemory(optimizationResult.sql, availableMemory)) {
+      return res.status(400).json({
+        success: false,
+        message: '查询所需内存超过系统限制，请简化查询或分批执行',
+        requestId: req.requestId,
+        memoryStatus: {
+          available: availableMemory,
+          required: memoryManager.estimateQueryMemory(optimizationResult.sql),
+          currentUsage: memoryStatus.process.heapUsed
+        },
+        suggestions: queryOptimizer.generateOptimizationSuggestions(optimizationResult.analysis)
+      })
+    }
+
+    // 执行优化后的查询
+    const result = await athenaService.executeQuery(optimizationResult.sql, {
       database: database || process.env.ATHENA_DATABASE,
       requestId: req.requestId,
-      ...options
+      ...options,
+      expectedRows: options.maxRows || 50000
     })
 
     // 记录查询日志
     logger.logQuery(req.requestId, {
       queryId: result.queryId,
-      sql,
+      sql: optimizationResult.sql,
       executionTime: result.executionTime,
       dataScanned: result.dataScanned,
       cost: result.cost,
-      recordCount: result.recordCount
+      recordCount: result.recordCount,
+      memoryUsage: result.memoryUsage
     })
 
     res.json({
       success: true,
-      data: result,
+      data: {
+        ...result,
+        optimization: {
+          applied: optimizationResult.changes.length > 0,
+          changes: optimizationResult.changes,
+          memoryReduction: optimizationResult.memoryReduction,
+          originalSqlLength: sql.length,
+          optimizedSqlLength: optimizationResult.sql.length
+        }
+      },
       requestId: req.requestId
     })
 
@@ -129,7 +182,7 @@ router.post('/execute', async (req, res, next) => {
   }
 })
 
-// 拆分查询（处理大数据集）
+// 分割查询
 router.post('/split', async (req, res, next) => {
   try {
     // 验证请求参数
@@ -177,7 +230,182 @@ router.post('/split', async (req, res, next) => {
   }
 })
 
-// 获取查询状态
+// Python查询 - 生成并执行
+router.post('/python-query', async (req, res, next) => {
+  try {
+    const { error, value } = pythonQuerySchema.validate(req.body)
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid request data',
+        details: error.details
+      })
+    }
+
+    const { query, options } = value
+    const requestId = req.requestId
+
+    logger.info('Python query request', { 
+      requestId, 
+      query: query.substring(0, 100),
+      dbType: process.env.DB_TYPE || 'mysql'
+    })
+
+    // 1. 生成Python代码（使用环境变量配置）
+    const codeGenResult = await pythonCodeGenerator.generatePythonCode(
+      query, 
+      null, // 不再传递数据库配置，由服务内部从环境变量读取
+      options
+    )
+
+    logger.info('Python code generated', { 
+      requestId,
+      intent: codeGenResult.intent,
+      estimatedRows: codeGenResult.estimated_rows,
+      requiresSplit: codeGenResult.requires_split
+    })
+
+    // 2. 执行Python代码
+    let executionResult
+    if (codeGenResult.requires_split) {
+      // 需要拆分执行
+      const splitSuggestions = codeGenResult.split_suggestions || [{
+        type: 'limit',
+        estimated_parts: Math.ceil(codeGenResult.estimated_rows / options.splitThreshold)
+      }]
+      
+      executionResult = await pythonExecutor.executeSplitQuery(
+        codeGenResult.python_code,
+        splitSuggestions[0],
+        {
+          maxChunkSize: options.splitThreshold,
+          timeout: options.timeout
+        }
+      )
+    } else {
+      // 直接执行
+      executionResult = await pythonExecutor.executePythonCode(
+        codeGenResult.python_code,
+        {
+          timeout: options.timeout
+        }
+      )
+    }
+
+    logger.info('Python query completed', { 
+      requestId,
+      success: executionResult.success,
+      rowCount: executionResult.row_count,
+      executionTime: executionResult.execution_time
+    })
+
+    // 3. 返回结果
+    res.json({
+      success: true,
+      data: {
+        query_result: executionResult,
+        code_info: {
+          intent: codeGenResult.intent,
+          sql_query: codeGenResult.sql_query,
+          estimated_time: codeGenResult.estimated_time,
+          requires_split: codeGenResult.requires_split
+        },
+        execution_info: {
+          execution_id: executionResult.execution_id,
+          execution_time: executionResult.execution_time,
+          memory_usage: executionResult.memory_usage
+        }
+      }
+    })
+
+  } catch (error) {
+    logger.error('Python query failed', { 
+      requestId: req.requestId,
+      error: error.message 
+    })
+    next(error)
+  }
+})
+
+// Python环境检查
+router.get('/python-env', async (req, res, next) => {
+  try {
+    const requestId = req.requestId
+    
+    logger.info('Python environment check request', { requestId })
+    
+    const envInfo = await pythonExecutor.checkPythonEnvironment()
+    
+    logger.info('Python environment check completed', { 
+      requestId,
+      pythonVersion: envInfo.python_version?.split(' ')[0],
+      availableModules: envInfo.available_modules?.length
+    })
+    
+    res.json({
+      success: true,
+      data: envInfo
+    })
+    
+  } catch (error) {
+    logger.error('Python environment check failed', { 
+      requestId: req.requestId,
+      error: error.message 
+    })
+    next(error)
+  }
+})
+
+// 生成Python代码（不执行）
+router.post('/generate-python', async (req, res, next) => {
+  try {
+    const { error, value } = pythonQuerySchema.validate(req.body)
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid request data',
+        details: error.details
+      })
+    }
+
+    const { query, options } = value
+    const requestId = req.requestId
+
+    logger.info('Generate Python code request', { 
+      requestId, 
+      query: query.substring(0, 100),
+      dbType: process.env.DB_TYPE || 'mysql'
+    })
+
+    // 生成Python代码（使用环境变量配置）
+    const result = await pythonCodeGenerator.generatePythonCode(
+      query, 
+      null, // 不再传递数据库配置，由服务内部从环境变量读取
+      options
+    )
+
+    logger.info('Python code generation completed', { 
+      requestId,
+      intent: result.intent,
+      estimatedRows: result.estimated_rows,
+      codeLength: result.python_code.length
+    })
+
+    res.json({
+      success: true,
+      data: result
+    })
+
+  } catch (error) {
+    logger.error('Python code generation failed', { 
+      requestId: req.requestId,
+      error: error.message 
+    })
+    next(error)
+  }
+})
+
+// 查询状态
 router.get('/status/:queryId', async (req, res, next) => {
   try {
     const { queryId } = req.params
@@ -232,5 +460,95 @@ router.post('/cancel/:queryId', async (req, res, next) => {
     next(error)
   }
 })
+
+/**
+ * 获取内存状态
+ */
+router.get('/memory/status', (req, res) => {
+  try {
+    const status = memoryManager.getMemoryStatus();
+    
+    res.json({
+      success: true,
+      data: status,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    logger.error('Failed to get memory status', { error: error.message });
+    
+    res.status(500).json({
+      success: false,
+      message: `Failed to get memory status: ${error.message}`
+    });
+  }
+});
+
+/**
+ * 获取查询优化建议
+ */
+router.post('/optimize/suggestions', (req, res) => {
+  try {
+    const { sql } = req.body;
+    
+    if (!sql) {
+      return res.status(400).json({
+        success: false,
+        message: 'SQL query is required for optimization suggestions'
+      });
+    }
+    
+    const analysis = queryOptimizer.analyzeQuery(sql);
+    const suggestions = queryOptimizer.generateOptimizationSuggestions(analysis);
+    
+    res.json({
+      success: true,
+      data: {
+        analysis,
+        suggestions,
+        memoryEstimate: memoryManager.estimateQueryMemory(sql)
+      }
+    });
+    
+  } catch (error) {
+    logger.error('Failed to generate optimization suggestions', { error: error.message });
+    
+    res.status(500).json({
+      success: false,
+      message: `Failed to generate optimization suggestions: ${error.message}`
+    });
+  }
+});
+
+/**
+ * 优化查询
+ */
+router.post('/optimize', (req, res) => {
+  try {
+    const { sql, strategy = 'balanced', options = {} } = req.body;
+    
+    if (!sql) {
+      return res.status(400).json({
+        success: false,
+        message: 'SQL query is required for optimization'
+      });
+    }
+    
+    const result = queryOptimizer.optimizeQuery(sql, strategy, options);
+    
+    res.json({
+      success: true,
+      data: result
+    });
+    
+  } catch (error) {
+    logger.error('Failed to optimize query', { error: error.message });
+    
+    res.status(500).json({
+      success: false,
+      message: `Failed to optimize query: ${error.message}`
+    });
+  }
+});
 
 module.exports = router

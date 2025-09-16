@@ -6,7 +6,7 @@ const logger = require('../utils/logger')
 router.get('/', (req, res) => {
   res.json({
     success: true,
-    message: 'Athena Query Backend is running',
+    message: 'Query Backend is running',
     timestamp: new Date().toISOString(),
     version: process.env.npm_package_version || '1.0.0',
     environment: process.env.NODE_ENV || 'development',

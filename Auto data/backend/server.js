@@ -57,7 +57,7 @@ app.use((error, req, res, next) => {
 
 // 启动服务器
 app.listen(PORT, () => {
-  logger.info(`🚀 Athena Query Backend Server running on port ${PORT}`)
+  logger.info(`🚀 Query Backend Server running on port ${PORT}`)
   logger.info(`📊 Environment: ${process.env.NODE_ENV || 'development'}`)
   logger.info(`🌐 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`)
 })

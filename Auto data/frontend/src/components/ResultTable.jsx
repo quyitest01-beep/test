@@ -122,7 +122,7 @@ const ResultTable = ({
       const wb = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(wb, ws, 'Query Results')
       
-      const fileName = `athena_query_results_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.xlsx`
+      const fileName = `query_results_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.xlsx`
       XLSX.writeFile(wb, fileName)
       
       message.success('数据导出成功')
@@ -161,7 +161,7 @@ const ResultTable = ({
       const link = document.createElement('a')
       const url = URL.createObjectURL(blob)
       link.setAttribute('href', url)
-      link.setAttribute('download', `athena_query_results_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`)
+      link.setAttribute('download', `query_results_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`)
       link.style.visibility = 'hidden'
       document.body.appendChild(link)
       link.click()

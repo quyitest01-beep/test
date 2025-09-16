@@ -1,7 +1,7 @@
 {
-  "system_name": "Athena智能数据查询系统",
+  "system_name": "智能数据查询系统",
   "version": "1.0.0",
-  "description": "基于Amazon Athena的智能数据查询系统，支持自然语言输入、大数据集自动拆分和多格式导出",
+  "description": "基于云数据库的智能数据查询系统，支持自然语言输入、大数据集自动拆分和多格式导出",
   "core_features": {
     "natural_language_query": {
       "description": "自然语言查询引擎",

@@ -19,7 +19,7 @@ import {
 } from 'antd'
 import {
   SaveOutlined,
-  TestOutlined,
+
   ReloadOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -272,7 +272,7 @@ const SettingsPage = () => {
               
               <Form.Item>
                 <Button
-                  icon={<TestOutlined />}
+                  icon={<CheckCircleOutlined />}
                   onClick={handleTestConnection}
                   loading={testing}
                 >

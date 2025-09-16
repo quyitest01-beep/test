@@ -2,6 +2,7 @@ const { AthenaClient, StartQueryExecutionCommand, GetQueryExecutionCommand, Stop
 const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3')
 const { v4: uuidv4 } = require('uuid')
 const logger = require('../utils/logger')
+const memoryManager = require('./memoryManager')
 
 // 初始化AWS客户端
 const athenaClient = new AthenaClient({
@@ -29,17 +30,32 @@ class AthenaService {
   }
 
   /**
-   * 执行Athena查询
+   * 执行查询（带内存检查）
    */
   async executeQuery(sql, options = {}) {
-    const {
-      database,
-      requestId,
-      timeout = 60000,
-      maxCost = 10
-    } = options
-
+    const requestId = options.requestId || uuidv4();
+    const startTime = Date.now();
+    
     try {
+      logger.logQuery(requestId, 'Starting query execution', { sql: sql.substring(0, 200) + (sql.length > 200 ? '...' : '') });
+      
+      // 估算内存需求
+      const estimatedMemory = memoryManager.estimateQueryMemory(sql, options.expectedRows || 10000);
+      
+      // 检查内存是否足够
+      if (!memoryManager.canExecuteQuery(estimatedMemory)) {
+        throw new Error(`内存不足，无法执行查询。预估需要${estimatedMemory}MB内存，当前可用内存不足`);
+      }
+      
+      // 注册查询到内存管理器
+      memoryManager.registerQuery(requestId, estimatedMemory);
+      
+      const {
+        database,
+        timeout = 60000,
+        maxCost = 10
+      } = options
+
       // 启动查询执行
       const queryId = await this.startQueryExecution(sql, database, requestId)
       
@@ -52,6 +68,10 @@ class AthenaService {
       // 计算查询统计信息
       const stats = this.calculateQueryStats(queryExecution)
       
+      // 更新实际内存使用
+      const actualMemory = Math.max(estimatedMemory, Math.round(results.recordCount / 1000)); // 每千行约1MB
+      memoryManager.updateQueryMemory(requestId, actualMemory);
+      
       // 检查成本限制
       if (stats.cost > maxCost) {
         logger.warn('Query cost exceeds limit', { 
@@ -62,11 +82,25 @@ class AthenaService {
         })
       }
 
+      const executionTime = Date.now() - startTime;
+      
+      logger.logQuery(requestId, 'Query execution completed', {
+        executionTime,
+        rowCount: results.recordCount,
+        estimatedMemory,
+        actualMemory,
+        ...stats
+      });
+
       return {
+        success: true,
+        requestId,
         queryId,
-        results: results.data,
-        recordCount: results.recordCount,
-        executionTime: stats.executionTime,
+        executionTime,
+        row_count: results.recordCount,
+        data: results.data,
+        columns: results.columns,
+        memoryUsage: actualMemory,
         dataScanned: stats.dataScanned,
         cost: stats.cost,
         status: 'SUCCEEDED'
@@ -76,9 +110,19 @@ class AthenaService {
       logger.error('Query execution failed', { 
         requestId, 
         sql: sql.substring(0, 200), 
-        error: error.message 
+        error: error.message,
+        stack: error.stack
       })
-      throw new Error(`Query execution failed: ${error.message}`)
+      
+      // 从内存管理器中移除查询
+      memoryManager.removeQuery(requestId);
+      
+      return {
+        success: false,
+        requestId,
+        error: error.message,
+        executionTime: Date.now() - startTime
+      }
     }
   }
 

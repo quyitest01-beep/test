@@ -419,3 +419,5 @@ OSError: [Errno 22] Invalid argument
 2025-09-10 13:45:09,328 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Nicegame_202508_Bill.pdf -> -1002995523623
 2025-09-10 13:45:12,517 - INFO - [SUCCESS] 邮件发送成功: 月度账单通知 - sortebot - 2025年08月 -> poon@gaming-panda.com
 2025-09-10 13:45:14,659 - INFO - [SUCCESS] Telegram文件发送成功: complete_invoice_pdfs\Togame_202508_Bill.pdf -> -1003052721567
+2025-09-10 13:55:52,687 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm
+2025-09-10 18:53:32,024 - INFO - Confirm webhook 启动成功 - 监听地址: http://127.0.0.1:8787/confirm

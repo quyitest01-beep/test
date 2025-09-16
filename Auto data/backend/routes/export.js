@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const exportService = require('../services/exportService');
 const logger = require('../utils/logger');
+// 认证中间件已移除
 
 const router = express.Router();
 

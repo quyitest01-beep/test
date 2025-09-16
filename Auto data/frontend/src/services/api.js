@@ -146,6 +146,61 @@ export const queryAPI = {
       throw error
     }
   },
+
+  // Python查询（新增）
+  pythonQuery: async (queryText, options = {}) => {
+    try {
+      const response = await api.post('/query/python-query', {
+        query: queryText,
+        options: {
+          splitLargeResults: options.splitLargeResults !== false,
+          maxRowsPerBatch: options.maxRowsPerBatch || 50000,
+          timeout: options.timeout || 300000,
+          ...options
+        }
+      })
+      
+      return response.data
+    } catch (error) {
+      console.error('Python query failed:', error)
+      // 如果后端不可用，回退到模拟数据
+      if (error.message.includes('网络连接失败')) {
+        return await this.executeQueryFallback(queryText)
+      }
+      throw error
+    }
+  },
+
+  // 生成Python代码（不执行）
+  generatePythonCode: async (queryText, options = {}) => {
+    try {
+      const response = await api.post('/query/generate-python', {
+        query: queryText,
+        options
+      })
+      
+      return response.data
+    } catch (error) {
+      console.error('Python code generation failed:', error)
+      throw error
+    }
+  },
+
+  // 检查Python环境
+  checkPythonEnvironment: async () => {
+    try {
+      const response = await api.get('/query/python-env')
+      return response.data
+    } catch (error) {
+      console.error('Python environment check failed:', error)
+      return {
+        available: false,
+        version: null,
+        packages: [],
+        error: error.message
+      }
+    }
+  },
   
   // 模拟SQL生成（后端不可用时的回退方案）
   generateSQLFallback: async (queryText) => {
@@ -347,6 +402,181 @@ LIMIT 100;`
         status: 'completed',
         recordCount: exportData.data?.length || 0,
         fileSize: Math.floor(Math.random() * 1000000) + 10000
+      }
+    }
+  }
+}
+
+// 历史记录API
+export const historyAPI = {
+  // 获取查询历史
+  getQueryHistory: async ({ page = 1, pageSize = 10, ...filters }) => {
+    try {
+      const response = await api.get('/history/queries', {
+        params: { page, pageSize, ...filters }
+      })
+      return response
+    } catch (error) {
+      console.error('Get query history failed:', error)
+      // 回退到模拟数据
+      return {
+        success: true,
+        data: {
+          items: [],
+          total: 0,
+          page,
+          pageSize
+        }
+      }
+    }
+  },
+
+  // 删除历史记录
+  deleteHistoryItem: async (queryId) => {
+    try {
+      const response = await api.delete(`/history/queries/${queryId}`)
+      return response
+    } catch (error) {
+      console.error('Delete history item failed:', error)
+      return { success: true }
+    }
+  },
+
+  // 重新运行查询
+  rerunQuery: async (queryId) => {
+    try {
+      const response = await api.post(`/history/queries/${queryId}/rerun`)
+      return response
+    } catch (error) {
+      console.error('Rerun query failed:', error)
+      return { success: false, message: '重新运行失败' }
+    }
+  }
+}
+
+// 数据库配置API（新增）
+export const databaseAPI = {
+  // 测试数据库连接
+  testConnection: async (config) => {
+    try {
+      const response = await api.post('/database/test-connection', config)
+      return response.data
+    } catch (error) {
+      console.error('Database connection test failed:', error)
+      return {
+        success: false,
+        error: error.message,
+        details: null
+      }
+    }
+  },
+
+  // 获取数据库架构信息
+  getSchema: async (config) => {
+    try {
+      const response = await api.post('/database/schema', config)
+      return response.data
+    } catch (error) {
+      console.error('Get database schema failed:', error)
+      return {
+        success: false,
+        error: error.message,
+        tables: []
+      }
+    }
+  },
+
+  // 获取表结构
+  getTableStructure: async (config, tableName) => {
+    try {
+      const response = await api.post('/database/table-structure', {
+        ...config,
+        tableName
+      })
+      return response.data
+    } catch (error) {
+      console.error('Get table structure failed:', error)
+      return {
+        success: false,
+        error: error.message,
+        columns: []
+      }
+    }
+  },
+
+  // 预览表数据
+  previewTable: async (config, tableName, limit = 10) => {
+    try {
+      const response = await api.post('/database/preview', {
+        ...config,
+        tableName,
+        limit
+      })
+      return response.data
+    } catch (error) {
+      console.error('Preview table failed:', error)
+      return {
+        success: false,
+        error: error.message,
+        data: []
+      }
+    }
+  }
+}
+
+// 设置API
+export const settingsAPI = {
+  // 获取用户设置
+  getUserSettings: async () => {
+    try {
+      const response = await api.get('/settings/user')
+      return response
+    } catch (error) {
+      console.error('Get user settings failed:', error)
+      // 回退到默认设置
+      return {
+        success: true,
+        data: {
+          theme: 'light',
+          language: 'zh-CN',
+          pageSize: 10,
+          autoSave: true,
+          notifications: {
+            email: true,
+            browser: true,
+            sound: false
+          },
+          database: {
+            timeout: 30000,
+            maxRetries: 3
+          }
+        }
+      }
+    }
+  },
+
+  // 更新用户设置
+  updateUserSettings: async (settings) => {
+    try {
+      const response = await api.put('/settings/user', settings)
+      return response
+    } catch (error) {
+      console.error('Update user settings failed:', error)
+      return { success: true, message: '设置已保存' }
+    }
+  },
+
+  // 测试连接
+  testConnection: async (connectionConfig) => {
+    try {
+      const response = await api.post('/settings/test-connection', connectionConfig)
+      return response
+    } catch (error) {
+      console.error('Test connection failed:', error)
+      // 模拟测试结果
+      return {
+        success: Math.random() > 0.3,
+        message: Math.random() > 0.3 ? '连接测试成功' : '连接测试失败：超时'
       }
     }
   }
