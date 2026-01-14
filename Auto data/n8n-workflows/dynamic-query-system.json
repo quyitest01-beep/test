@@ -1,0 +1,177 @@
+{
+  "name": "Dynamic Query System",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "id": "telegram-trigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "请分析以下查询消息，识别查询场景和特征：\n\n原始消息：{{ $json.message.text }}\n消息时间：{{ new Date($json.message.date * 1000).toISOString() }}\n\n请返回以下JSON格式：\n{\n  \"scenarioType\": \"场景类型\",\n  \"complexity\": \"简单|中等|复杂\",\n  \"keywords\": [\"关键词列表\"],\n  \"entities\": [\"实体列表\"],\n  \"timeRange\": \"时间范围\",\n  \"confidence\": 0.0-1.0\n}",
+        "options": {
+          "systemMessage": "你是一个查询场景分析专家，专门识别和分析用户的查询意图。\n\n支持的场景类型：\n- ID查询：包含具体ID的查询\n- 用户查询：基于用户信息的查询\n- 时间查询：基于时间范围的查询\n- 统计查询：需要聚合计算的查询\n- 游戏查询：基于游戏类型的查询\n- 商户查询：基于商户信息的查询\n- 混合查询：包含多种条件的查询\n- 新场景：未识别的新查询类型\n\n复杂度评估：\n- 简单：单一条件查询\n- 中等：多个条件组合\n- 复杂：需要复杂逻辑或计算\n\n请准确识别查询场景和特征。"
+        }
+      },
+      "id": "scenario-analyzer",
+      "name": "Scenario Analyzer",
+      "type": "n8n-nodes-base.agent",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "options": {
+          "temperature": 0.1,
+          "maxTokens": 500
+        }
+      },
+      "id": "analysis-model",
+      "name": "Analysis Model",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [460, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 动态生成提示词\nconst analysis = $json.output || $json.text || $json.message;\nlet analysisData;\n\ntry {\n  if (typeof analysis === 'string') {\n    const jsonMatch = analysis.match(/\\{[\\s\\S]*\\}/);\n    if (jsonMatch) {\n      analysisData = JSON.parse(jsonMatch[0]);\n    } else {\n      throw new Error('No valid JSON found');\n    }\n  } else {\n    analysisData = analysis;\n  }\n} catch (error) {\n  analysisData = {\n    scenarioType: '未知场景',\n    complexity: '中等',\n    keywords: [],\n    entities: [],\n    timeRange: '',\n    confidence: 0.0\n  };\n}\n\n// 根据场景类型生成动态提示词\nconst scenarioTemplates = {\n  'ID查询': {\n    systemMessage: `你是一个专业的SQL查询助手，专门处理ID查询场景。\n\n数据库信息：\n- 数据库名：gmp\n- 主要表：game_records\n\n表结构：\n- id (varchar): 记录ID，通常为16位以上数字\n- uid (varchar): 用户ID\n- merchant_id (varchar): 商户ID\n- game_id (bigint): 游戏ID\n- game_code (varchar): 游戏代码\n- result (integer): 游戏结果，1表示赢，0表示输\n- currency (varchar): 货币类型\n- amount (double): 投注金额\n- pay_out (double): 支付金额\n- multiplier (varchar): 倍数\n- balance (varchar): 余额\n- detail (varchar): 详细信息\n- created_at (bigint): 创建时间戳（毫秒）\n- updated_at (bigint): 更新时间戳（毫秒）\n- provider (varchar): 提供商，常见值：'gp', 'popular'\n- merchant (varchar): 商户标识\n\nID查询规则：\n1. 识别16位以上的数字ID\n2. 支持PANDA-前缀的ID格式\n3. 使用IN语句查询多个ID\n4. 默认包含provider过滤条件\n5. 限制结果数量使用LIMIT 100\n\nSQL模板：\nSELECT id, uid, merchant_id, game_id, game_code, result, currency, \n       ROUND(CAST(amount AS DOUBLE), 2) AS amount, \n       ROUND(CAST(pay_out AS DOUBLE), 2) AS pay_out, \n       multiplier, balance, detail, \n       DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s') AS created_at,\n       DATE_FORMAT(FROM_UNIXTIME(updated_at / 1000), '%Y-%m-%d %H:%i:%s') AS updated_at\nFROM game_records \nWHERE id IN ('ID1', 'ID2', 'ID3')\n  AND provider IN ('gp', 'popular')\nLIMIT 100;`,\n    userMessage: `请分析以下ID查询消息，生成准确的SQL查询：\n\n原始消息：{{ $json.message.text }}\n识别到的ID：${analysisData.entities.join(', ')}\n置信度：${analysisData.confidence}\n\n请严格按照以下JSON格式返回结果：\n{\n  \"queryType\": \"ID查询\",\n  \"confidence\": ${analysisData.confidence},\n  \"extractedInfo\": {\n    \"ids\": [\"提取的ID列表\"],\n    \"userInfo\": \"用户相关信息\",\n    \"timeRange\": \"时间范围信息\",\n    \"gameInfo\": \"游戏相关信息\",\n    \"merchantInfo\": \"商户相关信息\"\n  },\n  \"missingInfo\": [\"缺失的关键信息\"],\n  \"suggestedQuestions\": [\"建议的澄清问题\"],\n  \"canExecute\": true,\n  \"reason\": \"判断理由\",\n  \"generatedSQL\": \"生成的SQL查询语句\"\n}\n\n重要：只返回JSON，不要包含任何解释文字。`\n  },\n  '用户查询': {\n    systemMessage: `你是一个专业的SQL查询助手，专门处理用户查询场景。\n\n用户查询规则：\n1. 识别用户ID格式：li-xxxxx, Userxxxxxxxx\n2. 默认查询最近7天数据\n3. 按时间倒序排列\n4. 包含用户的所有游戏记录\n\nSQL模板：\nSELECT id, uid, merchant_id, game_id, game_code, result, currency, \n       ROUND(CAST(amount AS DOUBLE), 2) AS amount, \n       ROUND(CAST(pay_out AS DOUBLE), 2) AS pay_out, \n       multiplier, balance, detail, \n       DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s') AS created_at,\n       DATE_FORMAT(FROM_UNIXTIME(updated_at / 1000), '%Y-%m-%d %H:%i:%s') AS updated_at\nFROM game_records \nWHERE uid = 'USER_ID'\n  AND provider IN ('gp', 'popular')\n  AND updated_at BETWEEN TO_UNIXTIME(PARSE_DATETIME('START_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 \n                     AND TO_UNIXTIME(PARSE_DATETIME('END_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000\nORDER BY updated_at DESC\nLIMIT 100;`,\n    userMessage: `请分析以下用户查询消息，生成准确的SQL查询：\n\n原始消息：{{ $json.message.text }}\n识别到的用户：${analysisData.entities.join(', ')}\n时间范围：${analysisData.timeRange || '最近7天'}\n置信度：${analysisData.confidence}\n\n请严格按照以下JSON格式返回结果：\n{\n  \"queryType\": \"用户查询\",\n  \"confidence\": ${analysisData.confidence},\n  \"extractedInfo\": {\n    \"ids\": [],\n    \"userInfo\": \"用户相关信息\",\n    \"timeRange\": \"时间范围信息\",\n    \"gameInfo\": \"游戏相关信息\",\n    \"merchantInfo\": \"商户相关信息\"\n  },\n  \"missingInfo\": [\"缺失的关键信息\"],\n  \"suggestedQuestions\": [\"建议的澄清问题\"],\n  \"canExecute\": true,\n  \"reason\": \"判断理由\",\n  \"generatedSQL\": \"生成的SQL查询语句\"\n}\n\n重要：只返回JSON，不要包含任何解释文字。`\n  },\n  '统计查询': {\n    systemMessage: `你是一个专业的SQL查询助手，专门处理统计查询场景。\n\n统计查询规则：\n1. 使用聚合函数：COUNT, SUM, AVG\n2. 计算胜率：COUNT(CASE WHEN result = 1 THEN 1 END) * 100.0 / COUNT(*)\n3. 按条件分组统计\n4. 包含时间范围过滤\n\nSQL模板：\nSELECT \n    COUNT(*) as total_records,\n    SUM(CAST(amount AS DOUBLE)) as total_amount,\n    SUM(CAST(pay_out AS DOUBLE)) as total_pay_out,\n    AVG(CAST(amount AS DOUBLE)) as avg_amount,\n    COUNT(CASE WHEN result = 1 THEN 1 END) as win_count,\n    COUNT(CASE WHEN result = 0 THEN 1 END) as lose_count,\n    ROUND(COUNT(CASE WHEN result = 1 THEN 1 END) * 100.0 / COUNT(*), 2) as win_rate\nFROM game_records \nWHERE provider IN ('gp', 'popular')\n  AND updated_at BETWEEN TO_UNIXTIME(PARSE_DATETIME('START_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 \n                     AND TO_UNIXTIME(PARSE_DATETIME('END_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000;`,\n    userMessage: `请分析以下统计查询消息，生成准确的SQL查询：\n\n原始消息：{{ $json.message.text }}\n统计类型：${analysisData.keywords.join(', ')}\n时间范围：${analysisData.timeRange || '最近7天'}\n置信度：${analysisData.confidence}\n\n请严格按照以下JSON格式返回结果：\n{\n  \"queryType\": \"统计查询\",\n  \"confidence\": ${analysisData.confidence},\n  \"extractedInfo\": {\n    \"ids\": [],\n    \"userInfo\": \"用户相关信息\",\n    \"timeRange\": \"时间范围信息\",\n    \"gameInfo\": \"游戏相关信息\",\n    \"merchantInfo\": \"商户相关信息\"\n  },\n  \"missingInfo\": [\"缺失的关键信息\"],\n  \"suggestedQuestions\": [\"建议的澄清问题\"],\n  \"canExecute\": true,\n  \"reason\": \"判断理由\",\n  \"generatedSQL\": \"生成的SQL查询语句\"\n}\n\n重要：只返回JSON，不要包含任何解释文字。`\n  },\n  '新场景': {\n    systemMessage: `你是一个专业的SQL查询助手，遇到了一个新的查询场景。\n\n请根据以下信息分析查询需求：\n- 原始消息：{{ $json.message.text }}\n- 识别到的关键词：${analysisData.keywords.join(', ')}\n- 识别到的实体：${analysisData.entities.join(', ')}\n- 时间范围：${analysisData.timeRange}\n- 复杂度：${analysisData.complexity}\n\n请尝试理解查询意图，并生成相应的SQL查询。如果无法确定，请返回canExecute: false并说明原因。`,\n    userMessage: `请分析以下新场景查询消息，生成准确的SQL查询：\n\n原始消息：{{ $json.message.text }}\n识别到的关键词：${analysisData.keywords.join(', ')}\n识别到的实体：${analysisData.entities.join(', ')}\n时间范围：${analysisData.timeRange}\n复杂度：${analysisData.complexity}\n置信度：${analysisData.confidence}\n\n请严格按照以下JSON格式返回结果：\n{\n  \"queryType\": \"新场景\",\n  \"confidence\": ${analysisData.confidence},\n  \"extractedInfo\": {\n    \"ids\": [],\n    \"userInfo\": \"用户相关信息\",\n    \"timeRange\": \"时间范围信息\",\n    \"gameInfo\": \"游戏相关信息\",\n    \"merchantInfo\": \"商户相关信息\"\n  },\n  \"missingInfo\": [\"缺失的关键信息\"],\n  \"suggestedQuestions\": [\"建议的澄清问题\"],\n  \"canExecute\": true,\n  \"reason\": \"判断理由\",\n  \"generatedSQL\": \"生成的SQL查询语句\"\n}\n\n重要：只返回JSON，不要包含任何解释文字。`\n  }\n};\n\n// 获取场景模板\nconst template = scenarioTemplates[analysisData.scenarioType] || scenarioTemplates['新场景'];\n\n// 生成动态提示词\nconst dynamicPrompt = {\n  systemMessage: template.systemMessage,\n  userMessage: template.userMessage,\n  scenarioType: analysisData.scenarioType,\n  complexity: analysisData.complexity,\n  confidence: analysisData.confidence,\n  keywords: analysisData.keywords,\n  entities: analysisData.entities,\n  timeRange: analysisData.timeRange\n};\n\nreturn {\n  json: {\n    ...analysisData,\n    dynamicPrompt: dynamicPrompt\n  }\n};"
+      },
+      "id": "dynamic-prompt-generator",
+      "name": "Dynamic Prompt Generator",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.dynamicPrompt.userMessage }}",
+        "options": {
+          "systemMessage": "={{ $json.dynamicPrompt.systemMessage }}"
+        }
+      },
+      "id": "sql-generator",
+      "name": "SQL Generator",
+      "type": "n8n-nodes-base.agent",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "options": {
+          "temperature": 0.1,
+          "maxTokens": 1000
+        }
+      },
+      "id": "sql-model",
+      "name": "SQL Model",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [900, 500]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理SQL生成结果并记录新场景\nconst result = $json.output || $json.text || $json.message;\nlet sqlResult;\n\ntry {\n  if (typeof result === 'string') {\n    const jsonMatch = result.match(/\\{[\\s\\S]*\\}/);\n    if (jsonMatch) {\n      sqlResult = JSON.parse(jsonMatch[0]);\n    } else {\n      throw new Error('No valid JSON found');\n    }\n  } else {\n    sqlResult = result;\n  }\n} catch (error) {\n  sqlResult = {\n    queryType: '解析失败',\n    confidence: 0.0,\n    extractedInfo: {},\n    missingInfo: ['AI输出格式错误'],\n    suggestedQuestions: ['请重新发送查询'],\n    canExecute: false,\n    reason: 'AI输出格式无法解析',\n    generatedSQL: ''\n  };\n}\n\n// 添加场景分析信息\nsqlResult.scenarioAnalysis = {\n  scenarioType: $('Dynamic Prompt Generator').item.json.scenarioType,\n  complexity: $('Dynamic Prompt Generator').item.json.complexity,\n  confidence: $('Dynamic Prompt Generator').item.json.confidence,\n  keywords: $('Dynamic Prompt Generator').item.json.keywords,\n  entities: $('Dynamic Prompt Generator').item.json.entities,\n  timeRange: $('Dynamic Prompt Generator').item.json.timeRange\n};\n\n// 添加原始消息信息\nsqlResult.originalMessage = $('Telegram Trigger').item.json.message.text;\nsqlResult.chatId = $('Telegram Trigger').item.json.message.chat.id;\nsqlResult.messageId = $('Telegram Trigger').item.json.message.message_id;\nsqlResult.timestamp = new Date().toISOString();\n\n// 如果是新场景且执行成功，记录到知识库\nif (sqlResult.queryType === '新场景' && sqlResult.canExecute && sqlResult.confidence > 0.7) {\n  // 这里可以添加逻辑，将新场景记录到知识库\n  sqlResult.newScenarioDetected = true;\n  sqlResult.suggestion = '建议将此场景添加到知识库模板中';\n}\n\nreturn {\n  json: sqlResult\n};"
+      },
+      "id": "result-processor",
+      "name": "Result Processor",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Scenario Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scenario Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Dynamic Prompt Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analysis Model": {
+      "main": [
+        [
+          {
+            "node": "Scenario Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dynamic Prompt Generator": {
+      "main": [
+        [
+          {
+            "node": "SQL Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SQL Generator": {
+      "main": [
+        [
+          {
+            "node": "Result Processor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SQL Model": {
+      "main": [
+        [
+          {
+            "node": "SQL Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-11T04:00:00.000Z",
+      "updatedAt": "2025-10-11T04:00:00.000Z",
+      "id": "dynamic-query-system",
+      "name": "Dynamic Query System"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-11T04:00:00.000Z",
+  "versionId": "1"
+}

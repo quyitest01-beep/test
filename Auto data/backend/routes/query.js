@@ -551,4 +551,103 @@ router.post('/optimize', (req, res) => {
   }
 });
 
+/**
+ * 批量获取查询结果文件大小
+ * POST /api/query/file-size/batch
+ */
+router.post('/file-size/batch', async (req, res, next) => {
+  try {
+    const { queryIds } = req.body;
+    const requestId = req.requestId || `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    if (!Array.isArray(queryIds) || queryIds.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid input',
+        message: '请提供有效的查询ID数组',
+        requestId
+      });
+    }
+
+    if (queryIds.length > 50) {
+      return res.status(400).json({
+        success: false,
+        error: 'Too many queries',
+        message: '一次最多查询50个查询ID',
+        requestId
+      });
+    }
+
+    logger.info('Getting batch file sizes', { requestId, count: queryIds.length });
+
+    const results = [];
+    
+    // 并行处理所有查询（但限制并发数，避免过多S3请求）
+    const batchSize = 10; // 每批处理10个
+    for (let i = 0; i < queryIds.length; i += batchSize) {
+      const batch = queryIds.slice(i, i + batchSize);
+      const batchPromises = batch.map(async (queryId) => {
+        try {
+          // 获取文件大小
+          const fileSize = await athenaService.getResultFileSizeByQueryId(queryId);
+          
+          if (!fileSize) {
+            return {
+              queryId,
+              success: false,
+              error: 'File not found',
+              message: '未找到查询结果文件'
+            };
+          }
+
+          // 获取处理建议
+          const recommendation = athenaService.getProcessingRecommendation(fileSize.totalSizeMB);
+
+          return {
+            queryId,
+            success: true,
+            fileSize: {
+              totalSizeBytes: fileSize.totalSizeBytes,
+              totalSizeMB: fileSize.totalSizeMB,
+              totalSizeGB: fileSize.totalSizeGB,
+              fileCount: fileSize.fileCount,
+              formattedSize: fileSize.formattedSize,
+              contentType: fileSize.contentType,
+              lastModified: fileSize.lastModified
+            },
+            recommendation: recommendation,
+            bucket: fileSize.bucket,
+            fileKey: fileSize.fileKey
+          };
+
+        } catch (error) {
+          logger.error('Failed to get file size for query', { requestId, queryId, error: error.message });
+          return {
+            queryId,
+            success: false,
+            error: error.message,
+            message: '获取文件大小失败'
+          };
+        }
+      });
+
+      const batchResults = await Promise.all(batchPromises);
+      results.push(...batchResults);
+    }
+
+    return res.json({
+      success: true,
+      data: results,
+      totalQueries: queryIds.length,
+      successfulQueries: results.filter(r => r.success).length,
+      failedQueries: results.filter(r => !r.success).length,
+      requestId
+    });
+
+  } catch (error) {
+    logger.error('Batch file size API error', { requestId: req.requestId, error: error.message });
+    next(error);
+  }
+});
+
 module.exports = router

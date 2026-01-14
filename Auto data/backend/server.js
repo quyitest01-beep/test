@@ -8,6 +8,12 @@ const logger = require('./utils/logger')
 const queryRoutes = require('./routes/query')
 const healthRoutes = require('./routes/health')
 const exportRoutes = require('./routes/export')
+const webhookRoutes = require('./routes/webhook')
+const asyncQueryRoutes = require('./routes/asyncQuery')
+const queryEstimateRoutes = require('./routes/queryEstimate')
+const progressiveQueryRoutes = require('./routes/progressiveQuery')
+const batchQueryRoutes = require('./routes/batchQuery')
+const queryCountRoutes = require('./routes/queryCount')
 
 const app = express()
 const PORT = process.env.PORT || 8000
@@ -33,6 +39,12 @@ app.use((req, res, next) => {
 app.use('/api/health', healthRoutes)
 app.use('/api/query', queryRoutes)
 app.use('/api/export', exportRoutes)
+app.use('/api/webhook', webhookRoutes)
+app.use('/api/async', asyncQueryRoutes)
+app.use('/api/query', queryEstimateRoutes)
+app.use('/api/query', progressiveQueryRoutes)
+app.use('/api/batch', batchQueryRoutes)
+app.use('/api/query-count', queryCountRoutes)
 
 // 404处理
 app.use('*', (req, res) => {

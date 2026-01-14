@@ -1,0 +1,136 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// 准备 PDF 上传数据（见 upload-pdf-to-google-sheets.js）"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "prepare-upload",
+      "name": "准备上传数据"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+        "authentication": "oAuth2",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "multipart/related; boundary=boundary123"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart/form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "metadata",
+              "value": "={{ JSON.stringify({ name: $json.fileName, mimeType: 'application/pdf' }) }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "id": "upload-to-drive",
+      "name": "上传PDF到Google Drive",
+      "credentials": {
+        "googleApi": {
+          "id": "YOUR_GOOGLE_API_CREDENTIAL_ID",
+          "name": "Google Drive API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理上传结果，提取文件 ID 和链接\nconst uploadResult = $input.first().json;\nconst fileId = uploadResult.id;\nconst fileName = uploadResult.name;\n\n// 构建 Google Drive 查看链接\nconst fileUrl = `https://drive.google.com/file/d/${fileId}/view`;\n\n// 构建用于写入 Google Sheets 的数据\nreturn [{\n  json: {\n    file_id: fileId,\n    file_name: fileName,\n    file_url: fileUrl,\n    report_title: $('准备上传数据').first().json.reportTitle,\n    report_period: $('准备上传数据').first().json.reportPeriod,\n    generated_at: new Date().toISOString(),\n    // 用于 Google Sheets 的行数据\n    sheet_row: [\n      $('准备上传数据').first().json.reportTitle,  // A列：报告标题\n      $('准备上传数据').first().json.reportPeriod, // B列：报告周期\n      new Date().toISOString().split('T')[0],      // C列：生成日期\n      fileName,                                     // D列：文件名\n      fileUrl                                       // E列：PDF链接\n    ]\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "id": "process-upload-result",
+      "name": "处理上传结果"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": "YOUR_GOOGLE_SHEET_ID",
+        "sheetName": "PDF报告列表",
+        "columnToMatchOn": "A",
+        "valueToMatchOn": "={{ $json.report_title }}",
+        "options": {
+          "useFirstRowAsHeaders": true
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "报告标题": "={{ $json.report_title }}",
+            "报告周期": "={{ $json.report_period }}",
+            "生成日期": "={{ $json.generated_at.split('T')[0] }}",
+            "文件名": "={{ $json.file_name }}",
+            "PDF链接": "={{ $json.file_url }}"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.2,
+      "id": "write-to-sheets",
+      "name": "写入Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "准备上传数据": {
+      "main": [
+        [
+          {
+            "node": "上传PDF到Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "上传PDF到Google Drive": {
+      "main": [
+        [
+          {
+            "node": "处理上传结果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理上传结果": {
+      "main": [
+        [
+          {
+            "node": "写入Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
+
+
+
+

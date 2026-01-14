@@ -1,0 +1,98 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.larksuite.com/open-apis/bitable/v1/apps/{{ $json.lark_app_id }}/tables",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $json.lark_token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "table",
+              "value": "={{ JSON.stringify({ name: $json.table_name, default_view_name: $json.table_name + '_视图' }) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2500,
+        100
+      ],
+      "id": "lark-create-table",
+      "name": "创建Lark子表"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.larksuite.com/open-apis/bitable/v1/apps/{{ $json.lark_app_id }}/tables/{{ $json.table_id }}/records/batch_create",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ $json.lark_token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "records",
+              "value": "={{ JSON.stringify($json.lark_data.rows.map(row => ({ fields: Object.fromEntries($json.lark_data.headers.map((header, index) => [header, row[index]])) }))) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2700,
+        100
+      ],
+      "id": "lark-insert-data",
+      "name": "写入Lark数据"
+    }
+  ],
+  "connections": {
+    "创建Lark子表": {
+      "main": [
+        [
+          {
+            "node": "写入Lark数据",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
+
+
+
+
+
+
+

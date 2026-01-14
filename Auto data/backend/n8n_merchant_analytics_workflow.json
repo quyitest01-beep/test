@@ -1,0 +1,154 @@
+{
+  "name": "商户游戏分析查询工作流",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "merchant-analytics",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook触发器",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析Webhook请求参数\nconst inputData = $input.all();\nconst requestBody = inputData[0].json.body;\n\nconsole.log('=== 解析请求参数 ===');\nconsole.log('请求体:', requestBody);\n\n// 提取参数\nconst {\n  startDate = '20250901',\n  endDate = '20250930',\n  startMonth = '202509',\n  endMonth = '202510',\n  merchantId = null,\n  gameId = null,\n  statType = 'all' // 'merchant_daily', 'merchant_monthly', 'game_daily', 'game_monthly', 'all'\n} = requestBody;\n\n// 验证日期格式\nfunction validateDateFormat(dateStr) {\n  return /^\\d{8}$/.test(dateStr);\n}\n\nfunction validateMonthFormat(monthStr) {\n  return /^\\d{6}$/.test(monthStr);\n}\n\n// 参数验证\nif (!validateDateFormat(startDate) || !validateDateFormat(endDate)) {\n  throw new Error('日期格式错误，应为YYYYMMDD格式');\n}\n\nif (!validateMonthFormat(startMonth) || !validateMonthFormat(endMonth)) {\n  throw new Error('月份格式错误，应为YYYYMM格式');\n}\n\n// 构建SQL查询条件\nlet whereConditions = [];\nlet orderByClause = '';\n\n// 根据统计类型构建查询条件\nif (statType === 'all') {\n  whereConditions.push(`(\n    (stat_type IN ('merchant_daily', 'game_daily') \n     AND date_str >= '${startDate}' \n     AND date_str <= '${endDate}')\n    OR \n    (stat_type IN ('merchant_monthly', 'game_monthly') \n     AND month_str >= '${startMonth}' \n     AND month_str <= '${endMonth}')\n  )`);\n  orderByClause = 'ORDER BY stat_type, month_str, date_str, merchant, game_id';\n} else {\n  if (statType.includes('daily')) {\n    whereConditions.push(`stat_type = '${statType}'`);\n    whereConditions.push(`date_str >= '${startDate}'`);\n    whereConditions.push(`date_str <= '${endDate}'`);\n    orderByClause = 'ORDER BY date_str, merchant, game_id';\n  } else if (statType.includes('monthly')) {\n    whereConditions.push(`stat_type = '${statType}'`);\n    whereConditions.push(`month_str >= '${startMonth}'`);\n    whereConditions.push(`month_str <= '${endMonth}'`);\n    orderByClause = 'ORDER BY month_str, merchant, game_id';\n  }\n}\n\n// 添加商户ID过滤条件\nif (merchantId) {\n  whereConditions.push(`merchant = '${merchantId}'`);\n}\n\n// 添加游戏ID过滤条件\nif (gameId) {\n  whereConditions.push(`game_id = '${gameId}'`);\n}\n\n// 构建完整SQL查询\nconst sqlQuery = `\nSELECT \n    stat_type,\n    date_str,\n    month_str,\n    merchant,\n    game_id,\n    unique_users\nFROM merchant_game_analytics\nWHERE ${whereConditions.join(' AND ')}\n${orderByClause};\n`;\n\nconsole.log('=== 构建的SQL查询 ===');\nconsole.log(sqlQuery);\n\n// 返回查询参数\nreturn {\n  json: {\n    sqlQuery: sqlQuery.trim(),\n    parameters: {\n      startDate,\n      endDate,\n      startMonth,\n      endMonth,\n      merchantId,\n      gameId,\n      statType\n    },\n    whereConditions: whereConditions,\n    orderByClause: orderByClause\n  }\n};"
+      },
+      "id": "parse-parameters",
+      "name": "解析参数",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/query/execute",
+        "authentication": "none",
+        "requestMethod": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "sql",
+              "value": "={{ $json.sqlQuery }}"
+            },
+            {
+              "name": "database",
+              "value": "gmp"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "execute-query",
+      "name": "执行查询",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理查询结果\nconst inputData = $input.all();\nconst queryResult = inputData[0].json;\n\nconsole.log('=== 处理查询结果 ===');\nconsole.log('查询结果:', queryResult);\n\n// 检查查询是否成功\nif (!queryResult.success) {\n  throw new Error(`查询失败: ${queryResult.error || '未知错误'}`);\n}\n\nconst data = queryResult.data || [];\nconst rowCount = queryResult.rowCount || 0;\n\nconsole.log(`查询成功，返回 ${rowCount} 条记录`);\n\n// 按统计类型分组数据\nconst groupedData = {\n  merchant_daily: [],\n  merchant_monthly: [],\n  game_daily: [],\n  game_monthly: []\n};\n\n// 分组数据\ndata.forEach(row => {\n  const statType = row.stat_type;\n  if (groupedData[statType]) {\n    groupedData[statType].push(row);\n  }\n});\n\n// 计算汇总统计\nconst summary = {\n  total_records: rowCount,\n  merchant_daily_count: groupedData.merchant_daily.length,\n  merchant_monthly_count: groupedData.merchant_monthly.length,\n  game_daily_count: groupedData.game_daily.length,\n  game_monthly_count: groupedData.game_monthly.length,\n  total_unique_users: data.reduce((sum, row) => sum + (row.unique_users || 0), 0)\n};\n\n// 按商户汇总\nconst merchantSummary = {};\ndata.forEach(row => {\n  if (row.merchant) {\n    if (!merchantSummary[row.merchant]) {\n      merchantSummary[row.merchant] = {\n        merchant: row.merchant,\n        total_unique_users: 0,\n        daily_records: 0,\n        monthly_records: 0\n      };\n    }\n    merchantSummary[row.merchant].total_unique_users += row.unique_users || 0;\n    if (row.stat_type.includes('daily')) {\n      merchantSummary[row.merchant].daily_records++;\n    } else if (row.stat_type.includes('monthly')) {\n      merchantSummary[row.merchant].monthly_records++;\n    }\n  }\n});\n\nconsole.log('=== 汇总统计 ===');\nconsole.log('总记录数:', summary.total_records);\nconsole.log('总唯一用户数:', summary.total_unique_users);\nconsole.log('商户汇总:', Object.keys(merchantSummary).length, '个商户');\n\n// 返回处理后的结果\nreturn {\n  json: {\n    success: true,\n    summary: summary,\n    merchantSummary: Object.values(merchantSummary),\n    groupedData: groupedData,\n    rawData: data,\n    queryInfo: {\n      rowCount: rowCount,\n      executionTime: queryResult.executionTime || 0,\n      queryId: queryResult.queryId\n    }\n  }\n};"
+      },
+      "id": "process-results",
+      "name": "处理结果",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 格式化输出结果\nconst inputData = $input.all();\nconst processedData = inputData[0].json;\n\nconsole.log('=== 格式化输出结果 ===');\n\nconst { summary, merchantSummary, groupedData, rawData, queryInfo } = processedData;\n\n// 构建响应消息\nlet responseMessage = `📊 **商户游戏分析查询结果**\\n\\n`;\n\n// 汇总信息\nresponseMessage += `📈 **汇总统计**\\n`;\nresponseMessage += `• 总记录数: ${summary.total_records}\\n`;\nresponseMessage += `• 总唯一用户数: ${summary.total_unique_users.toLocaleString()}\\n`;\nresponseMessage += `• 商户维度每日记录: ${summary.merchant_daily_count}\\n`;\nresponseMessage += `• 商户维度月度记录: ${summary.merchant_monthly_count}\\n`;\nresponseMessage += `• 游戏维度每日记录: ${summary.game_daily_count}\\n`;\nresponseMessage += `• 游戏维度月度记录: ${summary.game_monthly_count}\\n\\n`;\n\n// 商户汇总\nif (merchantSummary.length > 0) {\n  responseMessage += `🏢 **商户汇总**\\n`;\n  merchantSummary.slice(0, 10).forEach(merchant => {\n    responseMessage += `• 商户 ${merchant.merchant}: ${merchant.total_unique_users.toLocaleString()} 唯一用户\\n`;\n  });\n  if (merchantSummary.length > 10) {\n    responseMessage += `• ... 还有 ${merchantSummary.length - 10} 个商户\\n`;\n  }\n  responseMessage += `\\n`;\n}\n\n// 查询信息\nresponseMessage += `🔍 **查询信息**\\n`;\nresponseMessage += `• 查询ID: ${queryInfo.queryId}\\n`;\nresponseMessage += `• 执行时间: ${queryInfo.executionTime}ms\\n`;\nresponseMessage += `• 返回记录: ${queryInfo.rowCount}\\n`;\n\n// 如果有数据，提供下载链接\nif (rawData.length > 0) {\n  responseMessage += `\\n📥 **数据下载**\\n`;\n  responseMessage += `• 数据已导出，可通过查询ID下载详细结果\\n`;\n}\n\nconsole.log('响应消息长度:', responseMessage.length);\n\n// 返回格式化结果\nreturn {\n  json: {\n    success: true,\n    message: responseMessage,\n    summary: summary,\n    merchantSummary: merchantSummary,\n    queryInfo: queryInfo,\n    hasData: rawData.length > 0,\n    dataCount: rawData.length\n  }\n};"
+      },
+      "id": "format-output",
+      "name": "格式化输出",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}"
+      },
+      "id": "webhook-response",
+      "name": "Webhook响应",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1340, 300]
+    }
+  ],
+  "connections": {
+    "webhook-trigger": {
+      "main": [
+        [
+          {
+            "node": "parse-parameters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "parse-parameters": {
+      "main": [
+        [
+          {
+            "node": "execute-query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "execute-query": {
+      "main": [
+        [
+          {
+            "node": "process-results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "process-results": {
+      "main": [
+        [
+          {
+            "node": "format-output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format-output": {
+      "main": [
+        [
+          {
+            "node": "webhook-response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "versionId": "1"
+}

@@ -1,0 +1,6 @@
+{
+    "codingcopilot.enableCompletionLanguage": {
+        "scmInput": false
+    },
+    "kiroAgent.configureMCP": "Disabled"
+}

@@ -1,0 +1,165 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// 提取查询ID数组\nconst inputData = $input.all();\n\nconsole.log('=== 提取查询ID ===');\nconsole.log('输入数据:', inputData);\n\n// 检查输入数据\nif (!inputData || !Array.isArray(inputData) || inputData.length === 0) {\n  return {\n    success: false,\n    error: '没有输入数据',\n    queryIds: []\n  };\n}\n\n// 提取所有查询ID\nconst queryIds = [];\nconst queryRecords = [];\n\nfor (const item of inputData) {\n  if (item.json && item.json.queryId) {\n    queryIds.push(item.json.queryId);\n    queryRecords.push({\n      id: item.json.id,\n      queryId: item.json.queryId,\n      result: item.json.result,\n      createdAt: item.json.createdAt,\n      updatedAt: item.json.updatedAt\n    });\n  }\n}\n\nconsole.log('提取到的查询ID:', queryIds);\nconsole.log('查询记录数量:', queryRecords.length);\n\nif (queryIds.length === 0) {\n  return {\n    success: false,\n    error: '没有找到有效的查询ID',\n    queryIds: [],\n    queryRecords: []\n  };\n}\n\nreturn {\n  success: true,\n  queryIds: queryIds,\n  queryRecords: queryRecords,\n  totalCount: queryIds.length,\n  message: `准备批量处理 ${queryIds.length} 个查询`\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        240
+      ],
+      "id": "extract-query-ids",
+      "name": "提取查询ID"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ebooks-life-point-interactions.trycloudflare.com/api/export/batch-query-result",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "queryIds",
+              "value": "={{ $json.queryIds }}"
+            },
+            {
+              "name": "format",
+              "value": "csv"
+            },
+            {
+              "name": "options",
+              "value": "={{ { \"filename\": \"batch_export_\" + Date.now() } }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        600,
+        240
+      ],
+      "id": "batch-export-query",
+      "name": "批量导出查询"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理批量导出结果\nconst inputData = $input.all();\n\nconsole.log('=== 处理批量导出结果 ===');\nconsole.log('输入数据:', inputData);\n\n// 检查输入数据\nif (!inputData || !Array.isArray(inputData) || inputData.length === 0) {\n  return {\n    success: false,\n    error: '没有批量导出结果数据'\n  };\n}\n\nconst batchResult = inputData[0].json;\nconsole.log('批量结果:', batchResult);\n\nif (!batchResult.success) {\n  return {\n    success: false,\n    error: batchResult.message || '批量导出失败',\n    details: batchResult\n  };\n}\n\nconst { data } = batchResult;\nconst { results, summary } = data;\n\n// 处理成功和失败的结果\nconst successfulExports = [];\nconst failedExports = [];\n\nfor (const result of results) {\n  if (result.success) {\n    successfulExports.push({\n      queryId: result.queryId,\n      files: result.data.files,\n      downloadUrls: result.data.downloadUrls,\n      totalRows: result.data.totalRows\n    });\n  } else {\n    failedExports.push({\n      queryId: result.queryId,\n      error: result.error\n    });\n  }\n}\n\n// 生成汇总消息\nlet summaryMessage = `📊 批量导出完成\\n\\n`;\nsummaryMessage += `✅ 成功: ${data.successful} 个查询\\n`;\nsummaryMessage += `❌ 失败: ${data.failed} 个查询\\n`;\nsummaryMessage += `📁 总文件数: ${summary.totalFiles}\\n`;\nsummaryMessage += `📄 总行数: ${summary.totalRows}\\n\\n`;\n\nif (successfulExports.length > 0) {\n  summaryMessage += `📋 成功导出的文件:\\n`;\n  for (const export_ of successfulExports) {\n    summaryMessage += `- 查询 ${export_.queryId}: ${export_.files.length} 个文件, ${export_.totalRows} 行\\n`;\n    for (const file of export_.files) {\n      summaryMessage += `  📄 ${file.filename} (${file.size} 字节)\\n`;\n    }\n  }\n}\n\nif (failedExports.length > 0) {\n  summaryMessage += `\\n❌ 失败的查询:\\n`;\n  for (const failed of failedExports) {\n    summaryMessage += `- 查询 ${failed.queryId}: ${failed.error}\\n`;\n  }\n}\n\n// 准备Telegram发送数据\nconst telegramData = {\n  message: summaryMessage,\n  successfulExports: successfulExports,\n  failedExports: failedExports,\n  summary: summary,\n  totalSuccessful: data.successful,\n  totalFailed: data.failed\n};\n\nconsole.log('处理完成:', {\n  successful: data.successful,\n  failed: data.failed,\n  totalFiles: summary.totalFiles,\n  totalRows: summary.totalRows\n});\n\nreturn {\n  success: true,\n  telegramData: telegramData,\n  batchResult: batchResult,\n  message: `批量处理完成: ${data.successful} 成功, ${data.failed} 失败`\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        240
+      ],
+      "id": "process-batch-result",
+      "name": "处理批量结果"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot{{ $json.telegramBotToken }}/sendMessage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "={{ $json.telegramData.chatId || -1003129050838 }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.telegramData.message }}"
+            },
+            {
+              "name": "parse_mode",
+              "value": "Markdown"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1000,
+        240
+      ],
+      "id": "send-batch-summary",
+      "name": "发送批量汇总"
+    }
+  ],
+  "connections": {
+    "提取查询ID": {
+      "main": [
+        [
+          {
+            "node": "批量导出查询",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "批量导出查询": {
+      "main": [
+        [
+          {
+            "node": "处理批量结果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理批量结果": {
+      "main": [
+        [
+          {
+            "node": "发送批量汇总",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "62d009a67fe5901697153ecb2e26ec4404d739c9e5b61b72ca043aa4cd52bd0d"
+  }
+}
+
+
+
+
+
+
+
+
+

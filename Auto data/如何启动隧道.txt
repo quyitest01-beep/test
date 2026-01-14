@@ -1,0 +1,91 @@
+========================================
+如何启动 Cloudflare Tunnel
+========================================
+
+当前状态：
+- ✅ 后端服务已运行（端口 8000）
+- ❌ 需要启动隧道暴露到公网
+
+步骤：
+
+1. 下载 cloudflared
+   ==================
+   访问：https://github.com/cloudflare/cloudflared/releases/latest
+   
+   下载文件：cloudflared-windows-amd64.exe
+   
+   下载后：
+   - 重命名为：cloudflared.exe
+   - 放到目录：D:\cursor\Auto data\
+
+
+2. 启动隧道
+   ==================
+   打开新的 PowerShell 窗口，运行：
+   
+   cd "D:\cursor\Auto data"
+   cloudflared tunnel --url http://localhost:8000
+   
+   或者直接双击运行：start-athena-tunnel.bat
+
+
+3. 获取公网 URL
+   ==================
+   隧道启动后，会显示类似：
+   
+   +----------------------------------------------------------------------+
+   |  Your quick Tunnel has been created! Visit it at:                   |
+   |  https://abc-def-ghi-jkl.trycloudflare.com                         |
+   +----------------------------------------------------------------------+
+   
+   复制这个 URL！
+
+
+4. 在 n8n 中配置
+   ==================
+   在 n8n 工作流的 HTTP Request 节点中：
+   
+   URL：https://你的隧道URL.trycloudflare.com/api/webhook/query/natural
+   
+   Headers：
+   - Name: X-API-Key
+   - Value: f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d
+
+
+5. 测试连接
+   ==================
+   在 PowerShell 中运行：
+   
+   Invoke-RestMethod -Uri "https://你的隧道URL.trycloudflare.com/api/webhook/health" -Headers @{"X-API-Key"="f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"}
+   
+   应该返回：
+   {
+     "success": true,
+     "status": "healthy"
+   }
+
+
+⚠️ 重要提醒：
+==================
+- 需要同时运行两个窗口：
+  窗口1：后端服务（start-server.bat）
+  窗口2：Cloudflare 隧道（cloudflared）
+  
+- 不要关闭任何一个窗口
+- 隧道 URL 每次重启可能会变化
+
+
+如有问题，查看：CLOUDFLARE_TUNNEL_GUIDE.md
+
+
+
+
+
+
+
+
+
+
+
+
+

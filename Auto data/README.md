@@ -6,6 +6,199 @@
 
 ## 🚀 项目状态
 
+### 🔧 N8N留存数据映射器未知商户和游戏问题修复 (2026-01-14)
+- 🎯 **修复目标**：解决输出中大量"未知商户"和"未知游戏"的问题
+- 🐛 **问题分析**：
+  - 商户映射数据源错误：代码依赖外部shangy.json文件，但该文件格式不完整
+  - 忽略了xiayou.json中的商户信息：`metrics.global.users`数组包含完整的商户映射信息
+  - 映射逻辑不完整：只从shangy.json提取商户映射，没有从xiayou.json中提取
+- ✅ **修复方案**：
+  - 从xiayou.json的`metrics.global.users`数组中提取商户映射信息
+  - 每个user对象包含：`merchant_id`、`platform_name`、`main_merchant_name`
+  - 保持向后兼容，仍支持shangy.json作为补充数据源
+  - 游戏映射从`target_game`对象提取
+- 📁 **相关文件**：
+  - `backend/fixed-retention-data-mapper-n8n.js` - 修复后的映射器代码
+- 🔍 **修复效果**：
+  - 商户映射数据源：xiayou.json的`metrics.global.users`数组
+  - 游戏映射数据源：xiayou.json的`target_game`对象
+  - 预期效果：大幅减少"未知商户"和"未知游戏"的数量
+
+### 🔧 N8N留存数据映射器游戏映射支持增强 (2026-01-14)
+- 🎯 **增强目标**：支持输出游戏映射数据（当没有留存数据时）
+- 🐛 **问题分析**：
+  - 功能不完整：只支持输出商户映射数据，不支持游戏映射数据
+  - 数据利用不充分：游戏映射数据被收集但未被使用
+- ✅ **增强方案**：
+  - 添加游戏映射数据输出功能
+  - 优化输出优先级：留存数据 > 商户映射 > 游戏映射
+  - 保持向后兼容性
+- 📁 **相关文件**：
+  - `backend/fixed-retention-data-mapper-n8n.js` - 增强版映射器代码
+- 🔍 **增强效果**：
+  - 游戏映射数据正确输出：包含游戏名、游戏ID、数据类型等信息
+  - 输出优先级正确：留存数据 > 商户映射 > 游戏映射
+  - 向后兼容：保持原有留存数据和商户映射处理能力
+
+### 🔧 PDF服务和导出服务Content-Disposition编码修复完成 (2026-01-13)
+- 🎯 **修复目标**：解决Content-Disposition响应头包含非ASCII字符导致的`ERR_INVALID_CHAR`错误
+- 🐛 **问题分析**：
+  - 错误现象：`TypeError: [ERR_INVALID_CHAR]: Invalid character in header content ["Content-Disposition"]`
+  - 根本原因：HTTP响应头中的Content-Disposition字段包含中文等非ASCII字符
+  - 影响范围：PDF服务的`/render`和`/render-url`端点、导出服务的`/api/export/download/:filename`端点
+- ✅ **修复方案**：
+  - 将所有非ASCII字符替换为下划线，创建ASCII安全的fallback文件名
+  - 对原始文件名进行URL编码，保留完整的中文字符信息
+  - 使用RFC 5987格式：`filename="${safeFilename}"; filename*=UTF-8''${encodedFilename}`
+- 📁 **相关文件**：
+  - `backend/pdf-service/server.js` - PDF服务修复
+  - `backend/routes/export.js` - 导出服务修复
+  - `PDF_SERVICE_TROUBLESHOOTING.md` - 故障排查文档更新
+- 🔍 **验证方法**：
+  - 重启PDF服务和主后端服务
+  - 测试包含中文字符的PDF生成和文件下载
+  - 确认不再出现`ERR_INVALID_CHAR`错误
+
+### 🎯 任务状态同步更新 (2026-01-13)
+- 🔧 **PDF服务Header字符编码修复完成**：修复Content-Disposition header包含非ASCII字符导致的错误，支持中文文件名
+- 🔧 **PDF API服务修复完成**：Chrome路径配置问题已解决，服务在8787端口正常运行
+- 📊 **N8N留存数据映射器修复完成**：商户映射、币种信息、主商户名处理逻辑已优化，商户映射成功率100%
+- 📈 **日度报告系统完成**：AI提示词文档和数据聚合脚本已完成，支持完整的日报生成流程
+- 📝 **文档状态同步**：task.md和worklog.md已更新，确保项目状态文档的准确性和一致性
+
+### 🔧 N8N留存数据映射器修复完成 (2026-01-13)
+- 🎯 **修复目标**：解决商户、游戏映射名没有正确处理以及币种数据没有正确保留的问题
+- 🐛 **问题分析**：
+  - 商户映射不准确：没有优先使用shangy.json的商户映射数据
+  - 币种信息缺失：没有正确从xiayou.json的revenue.breakdown中提取币种
+  - 主商户名缺失：输出结果缺少主商户名字段
+  - 排序逻辑不合理：没有按业务逻辑排序
+- ✅ **修复方案**：
+  - 优先使用shangy.json的filtered_merchants进行商户映射
+  - 从xiayou.json的revenue.breakdown中正确提取币种信息
+  - 添加主商户名字段到输出结果
+  - 优化排序逻辑：按主商户名、商户名、游戏名、数据类型排序
+- 📁 **相关文件**：
+  - `backend/fixed-retention-data-mapper-n8n.js` - 修复后的映射器代码
+  - `backend/test-fixed-retention-mapper.js` - 测试脚本
+  - `backend/test-retention-mapper-output.json` - 测试结果
+- 🔍 **修复效果**：
+  - 商户映射成功率：100%（10/10）
+  - 币种信息正确提取：支持多币种显示（如"COP, PHP, CLP, MXN, BRL, ARS, PEN, USD"）
+  - 主商户名正确显示：如"RD1"、"sortebot"、"Game Plus"等
+  - 数据排序优化：按业务逻辑层次结构排序
+
+### 🎯 AI 智能查询项目交付目标 (2025-11-19)
+- 📋 **交付目标文档**：`AI_QUERY_DELIVERY_TARGET.md`
+- 🎯 **三大交付标准**：
+  1. 查数意图识别与交互能力（准确率≥95%、澄清机制、过滤处理）
+  2. 智能SQL生成能力（基础功能、知识库、拆分查询）
+  3. 数据返回与呈现能力（时效性、可读性）
+- 📊 **开发阶段**：Phase 1 核心功能完善（进行中）
+- 📝 **任务跟踪**：详见 `task.md` 中 "2025-11-19 AI 智能查询项目交付任务"
+
+### ✅ Lark群消息智能查数系统（知识库版）(2025-11-19)
+- 🔄 **完整工作流**：`n8n-workflows/4-lark-smart-query-with-knowledge-base.json`
+- 📚 **使用指南**：`LARK_SMART_QUERY_WITH_KB_GUIDE.md`
+- 🎯 **核心功能**：
+  1. 实时监听Lark群消息（Webhook触发）
+  2. 自动记录消息到Google表格
+  3. AI识别查数意图（OpenAI GPT-3.5-turbo）
+  4. 智能匹配知识库SQL（GetNote API）
+  5. 自动生成新SQL并保存到知识库
+  6. 向用户发送处理结果
+- 🔧 **技术栈**：Lark Webhook + Google Sheets + OpenAI + GetNote知识库
+
+### 🛠️ 游戏评分工具多游戏支持 (2025-11-21)
+- 🧩 **任务内容**：为 `backend/game-rating-calculator.js` 引入多游戏输入遍历逻辑，兼容数组/单对象两种来源
+- 📊 **目标结果**：每个游戏独立计算全局 + 平台得分，输出标准结构供 AI 报告节点逐条消费
+- 🗂️ **相关文档**：进度与实现细节同步记录在 `task.md`、`worklog.md`
+- ✅ **当前状态**：已实现多游戏评分、平台排序与进度日志，n8n 可一次性输出多条结果
+
+### 📦 n8n 拆分/批量查询文件追踪 (2025-11-24)
+- 🧠 **功能优化**：`n8n-workflows/process-query-results-with-file-size.js` 现可将「拆分触发查询」「批量子查询」与批量文件大小响应按 `queryId` 精准匹配
+- 📎 **输出规范**：保持“一条 SQL → 一条 item”的输出方式，同时附带 `relationSummary`、`queryRole`、`fileStatus` 及 `fileInfo`
+- 📂 **适用场景**：用于在 n8n 中自动识别需拆分的大文件查询，并为每个子查询补充文件大小与处理建议
+- 📤 **Telegram 文件发送**：新增 `prepare-telegram-file-send.js` 节点，整理拆分查询结果并生成说明文案，输出格式兼容 Telegram 发送文件节点
+- 📝 **使用指南**：详见 `N8N_TELEGRAM_FILE_SEND_GUIDE.md`
+
+### ✅ 周报聚合商户名归一化 (2025-12-08 完成)
+- 🎯 修复 `n8n-workflows/weekly-report-data-aggregator.js` 商户名 trim+lowercase 匹配，避免留存/新用户为 0
+- 📌 进度：已完成，详见 `task.md` 2025-12-08 临时任务
+
+### ✅ 周报终版输出新增 GGR 负值榜单 (2025-12-08 完成)
+- 🧩 `n8n-workflows/weekly-final-for-ai.js` 增加商户/游戏 GGR 负值榜单：`this_top.low_ggr`、`wow_top.ggr_low`
+- 📊 支持本期 GGR 负值 Top3 及本周 vs 上周环比，便于异常识别
+
+### 🧩 多意图查数请求拆分状态标记 (2025-11-26)
+- 🧾 **拆分逻辑**：`split-request.js`（n8n Code 节点）会先输出原始主请求，并将 `status/processingStatus` 设为 `"需依次查数"`
+- 🔁 **子请求串行**：每个拆分后 item 带有 `requestIndex`、`isSubRequest`、`subIntent`，并统一写入 `status = "需执行查数"`
+- 📬 **上下游兼容**：保留 `chatid/senderid/messagid/reason` 等字段，确保 Telegram 提醒与批量执行节点依旧按“一个 SQL → 一个 item”运行
+
+### 📬 查数上下文过滤串行化 (2025-11-26)
+- 🧠 **识别策略**：`filter-context-messages.js` 现同时识别 `status = "需依次查数"` 和 `status = "需执行查数"`，自动判断是否进入串行模式
+- 🔢 **顺序执行**：当存在主请求时，优先选取 `requestIndex` 最小的子请求作为输出，确保“依次查数”场景严格按顺序推进
+- 📝 **上下文信息**：输出新增 `requestIndex`、`isSubRequest` 字段并保留完整 `contextMessages`，方便 Google Sheet 记录与后续节点引用
+
+### 🕹️ 游戏维度查数要素判定 (2025-11-26)
+- 🧾 **提示词更新**：`n8n-workflows/optimized-ai-scenario-matching-prompt.md` 说明“谁”要素时新增 game_code 规则，明确 `gp_arcade_82` 等游戏ID即可视为查数对象
+- 🎯 **支持范围**：累计投注/派奖、活跃用户、新&活跃留存等游戏维度查询不再强制要求 `merchant_id`
+- 📌 **AI 提醒**：Text Prompt “特别提醒”同步加入该规则，避免 AI 误报“缺少 merchant_id”
+
+### 📚 AI 场景识别改为工具驱动 (2025-11-26)
+- 🛠️ **提示词精简**：`optimized-ai-scenario-matching-prompt.md` 不再硬编码 S1-S13 列表，改为强制调用“获取知识库场景”工具读取最新配置
+- 🔄 **自动跟进**：知识库更新后无需再改提示词，AI 会根据工具返回的场景 ID、必要字段、示例 SQL 进行判断
+- 🧾 **输出要求**：System/Text Prompt 均强调在 reason 中引用工具依据，只有在工具无返回时才允许输出 `matchedScenarioId = "NEW"`
+
+### 🧾 UID 识别规则扩展 (2025-11-26)
+- ✅ **新增格式**：`optimized-ai-scenario-matching-prompt.md` 的 System Message 现明确 `纯数字_纯数字`（如 `133115353524863000_1698217737323`）同样视为有效 UID
+- 🧠 **谁要素判定更精准**：AI 场景匹配节点在识别查数三要素时将不再误判此类 UID 缺失，可直接进入 SQL 场景匹配流程
+- 🧪 **已完成回归**：通过该示例验证“谁”要素满足后可准确生成场景/SQL 请求
+
+### 📨 上下文过滤节点 ID 透传修复 (2025-11-27)
+- ✅ **任务完成**：`filter-context-messages.js` 已停止拼接自定义唯一 ID，直接透传上游 `id` 字段
+- 🧪 **验证范围**：参考 Telegram / Lark 历史消息样例回归，确认 `id` 有值即展示，缺失时保持空字符串
+- 📝 **详情记录**：修复步骤与验证结论已同步至 `task.md`（2025-11-27 临时任务）
+
+### 🧵 多意图子请求 ID 输出 (2025-11-27)
+- 🧩 **实现方式**：`split-request.js` 现在会在拆分子请求时依据主请求 `id` 生成独立标识（`主ID-序号`），保证“一条 SQL → 一个 item”仍能被唯一追踪
+- ⚙️ **兼容策略**：当主请求缺少 `id`，子请求保持空字符串，避免产生虚构 ID；同时保留原有 `requestIndex` / `isSubRequest` 逻辑
+- 📒 **更多信息**：详见 `task.md` 中 2025-11-27 任务记录
+
+### ⚠️ 空文件检测提醒 (2025-11-27)
+- 🧪 **问题背景**：`Extract from File` 可能解析出空表（仅有文件、无数据行），之前会被误判为“已有结果”
+- ✅ **已处理**：`process-query-result-by-count.js` 新增检测逻辑，只要没有解析到 `gameRecords`，就直接返回“未查询到相关数据”提示，并阻止后续节点发送无意义文件
+- 📎 **适用场景**：针对“多商户累计投注”等统计类查询，若 S3 返回空 CSV，Lark/Telegram 现在会收到明确的无数据回复
+
+### 📁 Telegram 文件命名优化 (2025-11-27)
+- 🎯 **目标**：让客户收到的文件名包含商户、日期和查询类型，例如 `1716179958-20251001-投注记录.csv`
+- 🧠 **实现**：`prepare-telegram-message.js` 解析原始文字提取商户 / 时间 / 关键词，并在多文件场景自动追加序号
+- 📬 **效果**：Telegram 发送的 caption 与文件名同步更新，更易辨识；如需压缩发送，压缩后的文件名也会沿用该命名
+
+### 📊 日度报告AI分析系统 (2025-12-22 新增)
+- 🎯 **功能目标**：完整的日度报告生成系统，从数据处理到AI分析的端到端解决方案
+- 🧩 **核心功能**：
+  1. **数据处理脚本**：`daily-report-data-structure.js` - 实现今日vs昨日的精细化数据分析
+     - 平台层贡献分解分析：ΔNGR = ΔTurnover + ΔHold（细分到Active/Freq/Size）
+     - 商户维度贡献分析：每个商户对ΔNGR的贡献度计算和排序
+     - 游戏TOP20排行榜：按GGR和用户数的双维度排行
+     - Hold变化归因分析：Mix效应（曝光占比变化）+ Within效应（自身表现变化）
+  2. **AI提示词系统**：`AI_DAILY_REPORT_PROMPT.md` - 完整的AI分析师提示词
+     - 角色定位：游戏运营日报分析师
+     - 输入处理：结构化JSON数据自动解析
+     - 输出规范：格式统一的Markdown日报（6个分析维度）
+     - 数字格式化：日期、百分比、金额的标准化显示
+- 🔧 **技术实现**：
+  - 支持n8n环境和直接调用的兼容性处理
+  - 严格的表格格式要求和备注列填写规范
+  - 智能数据映射和异常处理机制
+- ✅ **当前状态**：数据处理脚本和AI提示词文档已完成，形成完整的日报生成解决方案
+
+### 📁 留存文件命名与输出格式优化 (2025-11-26)
+- 🧠 **指标识别**：`process-query-result-by-count.js` 增加 `detectMetricLabelForRecord`，可自动区分“新用户留存”“活跃用户留存”等类型并写入文件名
+- 🗃️ **多文件友好命名**：引入 `buildMetaFileName` / `buildFallbackFileName` 与去重逻辑，仅在发生重名时追加序号，保持“gp_arcade_82-2025/11-新用户留存.csv”这类语义化命名
+- 🔁 **文件名提前写回**：即便 n8n item 暂无 binary，也会先把友好文件名写入 `fileInfo.fileName`，确保 Telegram/HTTP 节点能读取到更新后的名字
+
 ### 已完成功能 (第一阶段)
 - ✅ **前端界面系统**：基于React + Ant Design的现代化Web界面
 - ✅ **自然语言查询引擎**：支持中文自然语言到SQL的智能转换
@@ -20,6 +213,18 @@
 - ✅ **认证权限系统**：完整的用户认证、角色管理、权限控制和操作审计功能
 - ✅ **核心功能需求分析**：完成6大核心功能模块的技术方案设计
 - ✅ **AI API集成方案**：确定讯飞星火Spark-lite + DeepSeek-V3免费方案
+- 🔄 **PDF 报告样式优化**：2025-11-10 持续迭代AI评级报告首屏布局（紧凑化 + 新视觉风格）
+- ✅ **Merge2 行级数据调试**：加强 `prepare-ai-rating-from-monthly.js` 月份映射与聚合回退逻辑，避免目标月份缺失导致的报错
+- ✅ **JSON 格式脚本交付**：新增 `docs/prepare-ai-rating-from-monthly.json`，以 Base64 形式封装完整脚本，方便在 n8n 等环境中直接引用
+- ✅ **JSON Base64 修复**：清理 `docs/prepare-ai-rating-from-monthly.json` 中的控制字符，确保可被标准 JSON 解析器正确读取
+- ✅ **表格清洗脚本**：新增 `normalize-new-game-sheet.js`，解析表名、清洗空值并输出列名映射，便于 AI 直接消费新游戏周度表格数据
+- ✅ **Merge2(1).json 新版适配**：完成 valueRange 结构解析与评级脚本更新，输出覆盖新/全游戏的完整指标
+- ✅ **Lark 写入节点兼容留存数据**：重构 `backend/fixed-lark-game-writer.js`，支持 D0/D1/D3/D7 留存指标写入 Lark 表格
+- ✅ **n8n 游戏数据映射兼容性**：升级 `backend/game-data-mapper-with-null.js`，递归解析 Merge2(1).json，统一输出 `game_id` ↔ `game` 映射状态
+- ✅ **游戏表格名称生成器更新**：重构 `backend/game-table-name-generator.js`，适配中文字段、新日期格式与嵌套结构，自动生成活跃用户表名
+- ✅ **AI 评级输入准备**：梳理 Lark 行级留存指标文本数据，输出标准化 JSON 供 AI 分析
+- ✅ **平台多币种汇总**：`backend/game-rating-fact-table-generator.js` 基于 `metrics.global` 聚合同一平台不同币种投注/派奖，支持币种列表展示
+- 🔄 **游戏指标汇总汇率换算**：`backend/game-metrics-lark-preparer.js` 支持解析币种 ↔ USDT 汇率，统一输出投注/派奖 USDT 金额
 
 ### 核心功能规划 (6大模块)
 
@@ -57,6 +262,11 @@
 - ⏳ **数据转换**：类型转换、格式转换、精度控制
 - ⏳ **数据计算**：字段聚合计算（求和、平均值、最值等）
 - ⏳ **规则配置**：用户自定义数据处理规则
+
+### 集成功能
+- ✅ **n8n 工作流集成**：提供 Webhook API 支持外部工作流自动化
+- ✅ **API Key 认证**：安全的 API 访问控制机制
+- ✅ **多查询模式**：支持 SQL 查询和自然语言查询
 
 ### 待开发功能 (第二、三阶段)
 - ⏳ **定时查询系统**：支持定时任务配置和自动执行
@@ -174,13 +384,25 @@
 - **监控**: Prometheus + Grafana
 - **日志**: ELK Stack
 
-## 快速开始
+## 🚀 快速开始 V1.0
+
+### 最快 30 分钟完成部署！
+
+**V1.0 三大核心功能** (全部基于 n8n 工作流):
+1. ✅ **智能查询** - 自然语言转 SQL，一键查询导出
+2. ✅ **定时报表** - 自动生成报表并发送到邮箱
+3. ✅ **游戏评级** - 输入游戏名，自动生成评级报告
+
+**立即开始** 👉 [30分钟快速部署指南](./QUICK_DEPLOY_V1.md)
+
+---
 
 ### 环境要求
-- Java 11+
-- Node.js 16+
-- MySQL 8.0+
-- Redis 6.0+
+- Node.js 18+
+- AWS Athena 配置 (用于云端查询)
+- n8n 实例 (Cloud 或自建)
+- 飞书账号 (可选)
+- MySQL 8.0+ (可选，用于 Python 查询)
 - Docker (可选)
 
 ### 安装部署
@@ -209,8 +431,58 @@ npm run dev
 
 ### 访问地址
 - 前端界面: http://localhost:3000
-- 后端API: http://localhost:8080
-- API文档: http://localhost:8080/swagger-ui.html
+- 后端API: http://localhost:8000
+- Webhook API: http://localhost:8000/api/webhook
+
+## 🔗 n8n 集成
+
+本系统提供专门的 Webhook API，可以轻松与 n8n 等工作流自动化工具集成。
+
+### 快速配置（5分钟）
+
+1. **生成 API 密钥**
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+   ```
+
+2. **配置后端**
+   在 `backend/.env` 文件中添加：
+   ```bash
+   API_KEYS=你生成的密钥
+   ```
+
+3. **重启服务**
+   ```bash
+   cd backend && npm start
+   ```
+
+4. **在 n8n 中使用**
+   - URL: `http://your-server:8000/api/webhook/query/sql`
+   - Method: `POST`
+   - Header: `X-API-Key: 你的密钥`
+
+### 可用的 Webhook API
+
+| 端点 | 方法 | 用途 |
+|------|------|------|
+| `/api/webhook/query/sql` | POST | 执行 SQL 查询 |
+| `/api/webhook/query/natural` | POST | 自然语言查询 |
+| `/api/webhook/query/quick` | GET | 快速查询 |
+| `/api/webhook/health` | GET | 健康检查 |
+
+### 详细文档
+
+- 📖 [快速开始指南](./QUICK_START.md)
+- 📚 [完整集成文档](./N8N_INTEGRATION_GUIDE.md)
+- 📋 [n8n 工作流示例](./n8n-workflow-examples.json)
+- 📮 [Postman 测试集合](./Athena-Webhook-API.postman_collection.json)
+
+### 测试 API
+
+```bash
+cd backend
+npm run test:webhook
+```
 
 ## 📖 使用指南
 

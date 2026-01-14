@@ -1,0 +1,41 @@
+{
+  "name": "Data Splitter Switch",
+  "type": "n8n-nodes-base.switch",
+  "typeVersion": 1,
+  "position": [400, 300],
+  "parameters": {
+    "rules": {
+      "rules": [
+        {
+          "operation": "equal",
+          "value1": "={{ $json.dataType }}",
+          "value2": "merchant_daily"
+        },
+        {
+          "operation": "equal", 
+          "value1": "={{ $json.dataType }}",
+          "value2": "game_daily"
+        },
+        {
+          "operation": "equal",
+          "value1": "={{ $json.dataType }}",
+          "value2": "merchant_weekly"
+        },
+        {
+          "operation": "equal",
+          "value1": "={{ $json.dataType }}",
+          "value2": "game_weekly"
+        }
+      ]
+    },
+    "options": {}
+  },
+  "continueOnFail": false,
+  "alwaysOutputData": false,
+  "executeOnce": false,
+  "retryOnFail": false,
+  "maxTries": 3,
+  "waitBetweenTries": 1000,
+  "webhookId": "",
+  "notes": "根据dataType字段分流数据到4个不同的处理分支"
+}

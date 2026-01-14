@@ -1,0 +1,165 @@
+{
+  "name": "Complete Knowledge Base Setup",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://docs.google.com/document/d/YOUR_DOCUMENT_ID/export?format=txt",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "fetch-google-doc",
+      "name": "Fetch Google Doc",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理从Google Docs获取的内容\nconst content = $json.body || $json.data || '';\n\n// 解析Markdown内容为文档数组\nconst sections = content.split(/(?=^### \\*\\*)/m);\nconst documents = [];\n\nsections.forEach((section, index) => {\n  if (section.trim()) {\n    // 提取标题\n    const titleMatch = section.match(/^### \\*\\*(\\d+\\.\\s*[^*]+)\\*\\*/m);\n    const title = titleMatch ? titleMatch[1] : `Section ${index + 1}`;\n    \n    // 清理内容，保留关键信息\n    let content = section\n      .replace(/^### \\*\\*.*?\\*\\*/gm, '') // 移除标题标记\n      .replace(/^```[\\s\\S]*?```/gm, (match) => {\n        // 保留SQL代码块内容，但移除格式标记\n        return match.replace(/^```sql?\\s*/gm, '').replace(/```$/gm, '');\n      })\n      .replace(/^#+ /gm, '') // 移除其他标题\n      .trim();\n    \n    if (content.length > 50) {\n      documents.push({\n        content: content,\n        metadata: {\n          title: title,\n          type: 'knowledge-base',\n          source: 'google-docs',\n          section: index + 1\n        }\n      });\n    }\n  }\n});\n\nreturn { json: { documents, total: documents.length, source: 'google-docs' } };"
+      },
+      "id": "parse-content",
+      "name": "Parse Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "documents": "={{ $json.documents }}"
+      },
+      "id": "insert-documents",
+      "name": "Insert Documents",
+      "type": "n8n-nodes-base.vectorStore",
+      "typeVersion": 1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-ada-002",
+        "options": {
+          "dimensions": 1536
+        }
+      },
+      "id": "embedding-model",
+      "name": "Embedding Model",
+      "type": "n8n-nodes-base.openAiEmbedding",
+      "typeVersion": 1,
+      "position": [460, 500]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "知识库设置完成！已成功从Google Docs获取并插入以下文档：\n\n总文档数：{{ $json.total }}\n来源：{{ $json.source }}\n\n文档列表：\n{{ $json.documents.map(doc => `- ${doc.metadata.title}`).join('\\n') }}\n\n现在AI Agent可以检索这些相关文档来生成准确的SQL查询了！",
+        "options": {
+          "systemMessage": "你是一个系统管理员，负责确认知识库设置完成。"
+        }
+      },
+      "id": "confirmation",
+      "name": "Confirmation",
+      "type": "n8n-nodes-base.agent",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "options": {
+          "temperature": 0.1,
+          "maxTokens": 500
+        }
+      },
+      "id": "chat-model",
+      "name": "Chat Model",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [900, 500]
+    }
+  ],
+  "connections": {
+    "Fetch Google Doc": {
+      "main": [
+        [
+          {
+            "node": "Parse Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Content": {
+      "main": [
+        [
+          {
+            "node": "Insert Documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Documents": {
+      "main": [
+        [
+          {
+            "node": "Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embedding Model": {
+      "main": [
+        [
+          {
+            "node": "Insert Documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirmation": {
+      "main": [
+        [
+          {
+            "node": "Chat Model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-11T04:00:00.000Z",
+      "updatedAt": "2025-10-11T04:00:00.000Z",
+      "id": "complete-kb-setup",
+      "name": "Complete KB Setup"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-11T04:00:00.000Z",
+  "versionId": "1"
+}
+
+
+
+
+
+
+
+
+
+
+
+

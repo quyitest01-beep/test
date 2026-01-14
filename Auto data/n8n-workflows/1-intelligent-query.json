@@ -1,0 +1,241 @@
+{
+  "name": "智能查询 - 自然语言转SQL",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "intelligent-query",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook 触发",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "intelligent-query"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://your-server:8000/api/webhook/query/natural",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": []
+        },
+        "jsonParameters": true,
+        "options": {
+          "timeout": 120000
+        },
+        "bodyParametersJson": "={\n  \"query\": \"{{ $json.body.query }}\",\n  \"maxRows\": {{ $json.body.maxRows || 10000 }},\n  \"timeout\": 120000\n}"
+      },
+      "id": "call-query-api",
+      "name": "调用查询API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "athena-api-key",
+          "name": "Athena API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理查询结果\nconst response = $input.item.json;\n\nif (!response.success) {\n  throw new Error('查询失败: ' + (response.message || response.error));\n}\n\n// 提取数据\nconst rows = response.data.rows || [];\nconst columns = response.data.columns || [];\nconst rowCount = response.data.rowCount || 0;\nconst generatedSQL = response.data.generatedSQL || '';\nconst executionTime = response.data.executionTime || 0;\n\n// 获取原始请求信息\nconst originalQuery = $node['Webhook 触发'].json.body.query;\nconst userId = $node['Webhook 触发'].json.body.user_id || 'unknown';\nconst channel = $node['Webhook 触发'].json.body.channel || 'web';\n\nreturn {\n  json: {\n    success: true,\n    query: originalQuery,\n    userId: userId,\n    channel: channel,\n    result: {\n      rows: rows,\n      columns: columns,\n      rowCount: rowCount,\n      generatedSQL: generatedSQL,\n      executionTime: executionTime\n    },\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "process-result",
+      "name": "处理查询结果",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "channel-check",
+              "leftValue": "={{ $json.channel }}",
+              "rightValue": "lark",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-channel",
+      "name": "判断来源渠道",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "mode": "jsonToCsv",
+        "options": {
+          "fileName": "=query_result_{{ $now.format('YYYY-MM-DD_HHmmss') }}.xlsx",
+          "includeHeaders": true
+        }
+      },
+      "id": "generate-excel",
+      "name": "生成Excel",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1,
+      "position": [1120, 180]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"查询完成\",\n  \"data\": {\n    \"query\": \"{{ $node['处理查询结果'].json.query }}\",\n    \"generatedSQL\": \"{{ $node['处理查询结果'].json.result.generatedSQL }}\",\n    \"rowCount\": {{ $node['处理查询结果'].json.result.rowCount }},\n    \"executionTime\": {{ $node['处理查询结果'].json.result.executionTime }},\n    \"rows\": {{ $json.result.rows }}\n  }\n}",
+        "options": {}
+      },
+      "id": "respond-web",
+      "name": "Web响应",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 420]
+    },
+    {
+      "parameters": {
+        "content": "=✅ **查询完成**\n\n**查询内容**: {{ $node['处理查询结果'].json.query }}\n\n**生成的SQL**:\n```sql\n{{ $node['处理查询结果'].json.result.generatedSQL }}\n```\n\n**结果统计**:\n- 返回行数: {{ $node['处理查询结果'].json.result.rowCount }}\n- 执行时间: {{ $node['处理查询结果'].json.result.executionTime }}ms\n\n查询时间: {{ $now.format('YYYY-MM-DD HH:mm:ss') }}",
+        "options": {}
+      },
+      "id": "send-lark",
+      "name": "发送Lark消息",
+      "type": "n8n-nodes-base.lark",
+      "typeVersion": 1,
+      "position": [1340, 180],
+      "notesInFlow": true,
+      "notes": "需要配置Lark凭证"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 捕获错误并格式化\nconst error = $input.item;\nconst errorMessage = error.message || '未知错误';\nconst originalQuery = $node['Webhook 触发'].json.body.query || '无';\n\nreturn {\n  json: {\n    success: false,\n    error: errorMessage,\n    query: originalQuery,\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "error-handler",
+      "name": "错误处理",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 500],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": false,\n  \"error\": \"{{ $json.error }}\",\n  \"query\": \"{{ $json.query }}\",\n  \"message\": \"查询执行失败，请检查查询条件或联系管理员\"\n}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "id": "error-response",
+      "name": "错误响应",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 500]
+    }
+  ],
+  "connections": {
+    "Webhook 触发": {
+      "main": [
+        [
+          {
+            "node": "调用查询API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "调用查询API": {
+      "main": [
+        [
+          {
+            "node": "处理查询结果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理查询结果": {
+      "main": [
+        [
+          {
+            "node": "判断来源渠道",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "判断来源渠道": {
+      "main": [
+        [
+          {
+            "node": "生成Excel",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "发送Lark消息",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Web响应",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "name": "查数工具",
+      "id": "data-query"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-10-10T00:00:00.000Z",
+  "versionId": "1.0"
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,399 @@
+{
+  "name": "Telegram Natural Language Query",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "id": "telegram-trigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/query/generate-sql",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"naturalLanguage\": \"{{ $json.message.text }}\",\n  \"database\": \"gmp\",\n  \"options\": {\n    \"maxRows\": 1000,\n    \"includeExplanation\": true\n  }\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "generate-sql",
+      "name": "Generate SQL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-1",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-sql-generation",
+      "name": "Check SQL Generation",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/start",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"sql\": \"{{ $json.sql }}\",\n  \"database\": \"gmp\"\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "start-query",
+      "name": "Start Query",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "id": "wait-30-seconds",
+      "name": "Wait 30 Seconds",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "url": "=https://organ-execute-contract-coaches.trycloudflare.com/api/async/status/{{ $json.queryId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "check-status",
+      "name": "Check Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-1",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "completed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-completed",
+      "name": "Check Completed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1560, 200]
+    },
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "id": "wait-1-minute",
+      "name": "Wait 1 Minute",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1780, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://organ-execute-contract-coaches.trycloudflare.com/api/async/status/{{ $('Start Query').item.json.queryId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "check-status-2",
+      "name": "Check Status (2)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2000, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理查询结果并格式化回复\nconst data = $json;\nconst originalMessage = $('Telegram Trigger').item.json.message;\n\nif (data.success && data.result && data.result.data) {\n  const queryData = data.result.data;\n  const rows = queryData.data || [];\n  \n  // 构建回复消息\n  let replyMessage = `🎯 *查询结果*\\n\\n`;\n  replyMessage += `📊 找到 ${rows.length} 条记录\\n`;\n  replyMessage += `⏱️ 执行时间: ${Math.round(data.result.executionTime / 1000)}秒\\n`;\n  replyMessage += `💾 数据扫描: ${data.result.dataScanned}MB\\n\\n`;\n  \n  // 显示前5条记录\n  if (rows.length > 0) {\n    replyMessage += `📋 *数据预览* (前${Math.min(5, rows.length)}条):\\n\\n`;\n    \n    rows.slice(0, 5).forEach((row, index) => {\n      replyMessage += `${index + 1}. `;\n      \n      // 根据数据内容智能格式化\n      if (row.id && row.game_code) {\n        replyMessage += `ID: ${row.id}\\n`;\n        replyMessage += `   游戏: ${row.game_code}\\n`;\n        if (row.amount) replyMessage += `   金额: ${row.amount}\\n`;\n        if (row.result) replyMessage += `   结果: ${row.result}\\n`;\n        if (row.created_at) replyMessage += `   时间: ${row.created_at}\\n`;\n      } else {\n        // 通用格式\n        const keys = Object.keys(row).slice(0, 3);\n        keys.forEach(key => {\n          replyMessage += `${key}: ${row[key]} `;\n        });\n      }\n      replyMessage += `\\n`;\n    });\n    \n    if (rows.length > 5) {\n      replyMessage += `\\n... 还有 ${rows.length - 5} 条记录`;\n    }\n  }\n  \n  return {\n    json: {\n      chatId: originalMessage.chat.id,\n      messageId: originalMessage.message_id,\n      replyText: replyMessage,\n      success: true,\n      rowCount: rows.length\n    }\n  };\n} else {\n  // 查询失败\n  let errorMessage = `❌ *查询失败*\\n\\n`;\n  errorMessage += `错误: ${data.error || '未知错误'}\\n`;\n  errorMessage += `状态: ${data.status || 'failed'}`;\n  \n  return {\n    json: {\n      chatId: originalMessage.chat.id,\n      messageId: originalMessage.message_id,\n      replyText: errorMessage,\n      success: false,\n      error: data.error\n    }\n  };\n}"
+      },
+      "id": "format-result",
+      "name": "Format Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理SQL生成失败的情况\nconst originalMessage = $('Telegram Trigger').item.json.message;\nconst errorData = $json;\n\nlet errorMessage = `❌ *SQL生成失败*\\n\\n`;\nerrorMessage += `原始问题: ${originalMessage.text}\\n\\n`;\nerrorMessage += `错误信息: ${errorData.error || '无法将自然语言转换为SQL'}\\n\\n`;\nerrorMessage += `💡 *建议*:\\n`;\nerrorMessage += `• 请使用更具体的查询条件\\n`;\nerrorMessage += `• 例如: \"查询用户ID为123的游戏记录\"\\n`;\nerrorMessage += `• 或者: \"显示最近7天的交易数据\"`;\n\nreturn {\n  json: {\n    chatId: originalMessage.chat.id,\n    messageId: originalMessage.message_id,\n    replyText: errorMessage,\n    success: false,\n    error: errorData.error\n  }\n};"
+      },
+      "id": "handle-sql-error",
+      "name": "Handle SQL Error",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 400]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "={{ $json.replyText }}",
+        "additionalFields": {
+          "replyToMessageId": "={{ $json.messageId }}",
+          "parseMode": "Markdown"
+        }
+      },
+      "id": "send-reply",
+      "name": "Send Reply",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [2000, 100]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate SQL": {
+      "main": [
+        [
+          {
+            "node": "Check SQL Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check SQL Generation": {
+      "main": [
+        [
+          {
+            "node": "Start Query",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Handle SQL Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Query": {
+      "main": [
+        [
+          {
+            "node": "Wait 30 Seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30 Seconds": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status": {
+      "main": [
+        [
+          {
+            "node": "Check Completed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Completed": {
+      "main": [
+        [
+          {
+            "node": "Format Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 1 Minute",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1 Minute": {
+      "main": [
+        [
+          {
+            "node": "Check Status (2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status (2)": {
+      "main": [
+        [
+          {
+            "node": "Format Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Result": {
+      "main": [
+        [
+          {
+            "node": "Send Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Handle SQL Error": {
+      "main": [
+        [
+          {
+            "node": "Send Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-11T03:10:00.000Z",
+      "updatedAt": "2025-10-11T03:10:00.000Z",
+      "id": "telegram-natural",
+      "name": "Telegram Natural"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-11T03:10:00.000Z",
+  "versionId": "1"
+}
+
+
+
+
+
+
+
+
+
+
+
+

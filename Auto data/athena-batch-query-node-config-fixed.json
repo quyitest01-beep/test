@@ -1,0 +1,92 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// 准备Athena批量查询请求\n// n8n Code节点：准备批量查询请求数据\n\nconst queryId = $json.queryId || $json.query_execution_id || $json.queryExecutionId || '';\n\nif (!queryId) {\n  throw new Error('缺少查询执行ID');\n}\n\n// 确保 QueryExecutionIds 是数组格式\nlet queryIds = [];\n\nif (Array.isArray(queryId)) {\n  queryIds = queryId.filter(id => id && id.trim() !== '');\n} else if (typeof queryId === 'string') {\n  if (queryId.includes(',')) {\n    queryIds = queryId.split(',').map(id => id.trim()).filter(id => id !== '');\n  } else {\n    queryIds = [queryId.trim()];\n  }\n} else {\n  queryIds = [String(queryId)];\n}\n\nif (queryIds.length === 0) {\n  throw new Error('没有有效的查询执行ID');\n}\n\n// 构建请求体\nconst requestBody = {\n  QueryExecutionIds: queryIds\n};\n\nreturn {\n  json: {\n    requestBody: requestBody,\n    queryIds: queryIds,\n    queryIdCount: queryIds.length,\n    ...$json\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [300, 176],
+      "id": "prepare-request",
+      "name": "准备查询请求"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://athena.us-west-2.amazonaws.com/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-amz-json-1.1"
+            },
+            {
+              "name": "X-Amz-Target",
+              "value": "AmazonAthena.BatchGetQueryExecution"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.requestBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [496, 176],
+      "id": "1d2c10f9-c6eb-450d-8bad-3777872e1d2a",
+      "name": "查询ID状态",
+      "credentials": {
+        "aws": {
+          "id": "your-aws-credentials-id",
+          "name": "AWS Credentials"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理Athena批量查询状态响应\n// n8n Code节点：解析批量查询状态\n\nconst queryExecutions = $json.QueryExecutions || [];\nconst unprocessedIds = $json.UnprocessedQueryExecutionIds || [];\n\n// 处理每个查询执行的结果\nconst results = queryExecutions.map(execution => {\n  const status = execution.Status || {};\n  const state = status.State || 'UNKNOWN';\n  const statistics = execution.Statistics || {};\n  \n  const isRunning = state === 'RUNNING' || state === 'QUEUED';\n  const isCompleted = state === 'SUCCEEDED' || state === 'FAILED' || state === 'CANCELLED';\n  \n  const submissionTime = status.SubmissionDateTime ? new Date(status.SubmissionDateTime).getTime() : null;\n  const completionTime = status.CompletionDateTime ? new Date(status.CompletionDateTime).getTime() : null;\n  const runTimeMs = completionTime && submissionTime ? completionTime - submissionTime : statistics.EngineExecutionTimeInMillis || 0;\n  \n  return {\n    queryExecutionId: execution.QueryExecutionId || '',\n    query: execution.Query || '',\n    state: state,\n    isRunning: isRunning,\n    isCompleted: isCompleted,\n    isSuccess: state === 'SUCCEEDED',\n    isFailed: state === 'FAILED',\n    submissionTime: status.SubmissionDateTime || '',\n    completionTime: status.CompletionDateTime || null,\n    stateChangeReason: status.StateChangeReason || '',\n    statistics: {\n      engineExecutionTimeMs: statistics.EngineExecutionTimeInMillis || 0,\n      dataScannedBytes: statistics.DataScannedInBytes || 0,\n      runTimeMs: runTimeMs\n    }\n  };\n});\n\nconst stats = {\n  totalCount: queryExecutions.length,\n  runningCount: results.filter(r => r.isRunning).length,\n  completedCount: results.filter(r => r.isCompleted).length,\n  successCount: results.filter(r => r.isSuccess).length,\n  failedCount: results.filter(r => r.isFailed).length,\n  unprocessedCount: unprocessedIds.length\n};\n\nreturn {\n  json: {\n    results: results,\n    stats: stats,\n    unprocessedIds: unprocessedIds,\n    ...(results.length === 1 ? {\n      queryExecutionId: results[0].queryExecutionId,\n      state: results[0].state,\n      isRunning: results[0].isRunning,\n      isCompleted: results[0].isCompleted\n    } : {})\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [692, 176],
+      "id": "parse-response",
+      "name": "解析查询状态"
+    }
+  ],
+  "connections": {
+    "准备查询请求": {
+      "main": [
+        [
+          {
+            "node": "查询ID状态",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "查询ID状态": {
+      "main": [
+        [
+          {
+            "node": "解析查询状态",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "62d009a67fe5901697153ecb2e26ec4404d739c9e5b61b72ca043aa4cd52bd0d"
+  }
+}
+
+
+
+
+

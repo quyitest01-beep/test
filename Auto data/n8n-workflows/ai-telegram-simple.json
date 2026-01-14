@@ -1,0 +1,246 @@
+{
+  "name": "AI Telegram Query (Simple)",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "id": "telegram-trigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "model": "gpt-3.5-turbo",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "你是一个专业的SQL查询助手，专门为AWS Athena数据库生成SQL查询语句。\n\n数据库信息：\n- 数据库名：gmp\n- 主要表：game_records\n- 表结构：id, uid, merchant_id, game_id, game_code, result, currency, amount, pay_out, multiplier, balance, detail, created_at, updated_at, provider, merchant\n\n重要规则：\n1. 只返回SQL语句，不要包含任何解释\n2. 时间字段需要转换：FROM_UNIXTIME(created_at / 1000)\n3. 金额字段需要四舍五入：ROUND(CAST(amount AS DOUBLE), 2)\n4. 限制结果数量，使用 LIMIT 100\n5. 使用适当的WHERE条件避免全表扫描\n\n示例：\n- \"查询用户ID为123的记录\" → SELECT * FROM game_records WHERE uid = '123' LIMIT 100\n- \"显示最近7天的数据\" → SELECT * FROM game_records WHERE updated_at BETWEEN TO_UNIXTIME(CURRENT_DATE - INTERVAL 7 DAY) * 1000 AND TO_UNIXTIME(CURRENT_DATE) * 1000 LIMIT 100"
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.message.text }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.1,
+          "maxTokens": 500
+        }
+      },
+      "id": "generate-sql-ai",
+      "name": "Generate SQL (AI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/start",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"sql\": \"{{ $json.choices[0].message.content }}\",\n  \"database\": \"gmp\"\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "start-query",
+      "name": "Start Query",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "id": "wait-1-minute",
+      "name": "Wait 1 Minute",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://organ-execute-contract-coaches.trycloudflare.com/api/async/status/{{ $json.queryId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "check-status",
+      "name": "Check Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "resource": "chat",
+        "operation": "create",
+        "model": "gpt-3.5-turbo",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "你是一个数据分析助手，专门格式化查询结果并生成用户友好的报告。\n\n任务：将查询结果转换为清晰、易读的格式，适合在Telegram中显示。\n\n格式要求：\n1. 使用Markdown格式\n2. 包含查询统计信息（记录数、执行时间等）\n3. 以表格或列表形式展示数据\n4. 限制显示前10条记录\n5. 使用emoji增强可读性\n6. 如果记录太多，提供摘要信息\n\n示例格式：\n🎯 **查询结果**\n\n📊 找到 X 条记录\n⏱️ 执行时间: X秒\n💾 数据扫描: XMB\n\n📋 **数据预览** (前X条):\n\n1. **记录1**\n   - 字段1: 值1\n   - 字段2: 值2\n\n2. **记录2**\n   - 字段1: 值1\n   - 字段2: 值2\n\n如果记录超过10条，在末尾添加：\n\n... 还有 X 条记录"
+            },
+            {
+              "role": "user",
+              "content": "请格式化以下查询结果：\n\n查询状态：{{ $json.status }}\n执行时间：{{ $json.elapsed }}秒\n记录数：{{ $json.result?.row_count || 0 }}\n\n数据：\n{{ JSON.stringify($json.result?.data || [], null, 2) }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.3,
+          "maxTokens": 1000
+        }
+      },
+      "id": "format-result-ai",
+      "name": "Format Result (AI)",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.choices[0].message.content }}",
+        "additionalFields": {
+          "replyToMessageId": "={{ $('Telegram Trigger').item.json.message.message_id }}",
+          "parseMode": "Markdown"
+        }
+      },
+      "id": "send-result",
+      "name": "Send Result",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [1560, 300]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate SQL (AI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate SQL (AI)": {
+      "main": [
+        [
+          {
+            "node": "Start Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Query": {
+      "main": [
+        [
+          {
+            "node": "Wait 1 Minute",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1 Minute": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status": {
+      "main": [
+        [
+          {
+            "node": "Format Result (AI)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Result (AI)": {
+      "main": [
+        [
+          {
+            "node": "Send Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-11T03:25:00.000Z",
+      "updatedAt": "2025-10-11T03:25:00.000Z",
+      "id": "ai-telegram-simple",
+      "name": "AI Telegram Simple"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-11T03:25:00.000Z",
+  "versionId": "1"
+}
+
+
+
+
+
+
+
+
+
+
+
+

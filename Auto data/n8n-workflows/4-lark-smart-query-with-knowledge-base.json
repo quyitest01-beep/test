@@ -1,0 +1,649 @@
+{
+  "name": "Lark群消息智能查数（知识库版）",
+  "nodes": [
+    {
+      "parameters": {
+        "event": "im.message.receive_v1",
+        "options": {}
+      },
+      "id": "lark-webhook-trigger",
+      "name": "Lark Webhook 触发",
+      "type": "n8n-nodes-base.larkTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "lark-smart-query",
+      "credentials": {
+        "larkApi": {
+          "id": "lark-bot-credentials",
+          "name": "Lark Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lark/Telegram 消息内容提取和Challenge验证\n// n8n Code节点：提取消息内容\n\nconst input = $input.first().json;\n\n// 获取请求体（可能是body字段或直接是对象）\nconst body = input.body || input;\n\nconsole.log('📥 收到请求，body:', JSON.stringify(body, null, 2));\n\n// 🔐 处理Lark Challenge验证请求\nif (body.type === 'url_verification' && body.challenge) {\n  console.log('🔐 收到Lark Challenge验证请求，challenge:', body.challenge);\n  \n  // 返回challenge值，完成验证\n  return {\n    json: {\n      isChallenge: true,\n      challenge: body.challenge,\n      type: 'url_verification',\n      source: 'lark'\n    }\n  };\n}\n\n// 📨 判断消息来源并处理\n\n// 检查是否是Telegram消息\nif (body.update_id !== undefined || body.message) {\n  // Telegram消息格式\n  console.log('📱 识别为Telegram消息');\n  \n  const tgMessage = body.message || {};\n  const tgFrom = tgMessage.from || {};\n  const tgChat = tgMessage.chat || {};\n  \n  // 提取Telegram消息内容\n  const messageText = tgMessage.text || tgMessage.caption || '';\n  const messageId = tgMessage.message_id || '';\n  const chatId = tgChat.id ? String(tgChat.id) : '';\n  const chatTitle = tgChat.title || '';\n  const senderId = tgFrom.id ? String(tgFrom.id) : '';\n  const senderName = tgFrom.first_name || tgFrom.username || '未知用户';\n  const senderUsername = tgFrom.username || '';\n  const timestamp = tgMessage.date || Math.floor(Date.now() / 1000);\n  \n  // 格式化时间\n  const messageTime = new Date(parseInt(timestamp) * 1000).toISOString();\n  \n  console.log('📱 收到Telegram消息:', {\n    messageId,\n    chatId,\n    chatTitle,\n    senderId,\n    senderName,\n    senderUsername,\n    messageText,\n    messageTime\n  });\n  \n  return {\n    json: {\n      isChallenge: false,\n      source: 'telegram',\n      messageId: String(messageId),\n      chatId: chatId,\n      chatTitle: chatTitle,\n      chatType: tgChat.type || '',\n      senderId: senderId,\n      senderName: senderName,\n      senderUsername: senderUsername,\n      messageText: messageText.trim(),\n      messageTime,\n      timestamp: parseInt(timestamp),\n      rawEvent: body\n    }\n  };\n}\n\n// 📨 处理Lark消息事件\n// 解析Lark Webhook事件\nconst event = body.event || {};\nconst message = event.message || {};\nconst sender = event.sender || {};\n\n// 提取消息内容\nlet messageText = '';\nif (message.message_type === 'text') {\n  messageText = message.content || '';\n  // 解析JSON格式的content\n  try {\n    const contentObj = JSON.parse(messageText);\n    messageText = contentObj.text || messageText;\n  } catch (e) {\n    // 如果不是JSON，直接使用\n  }\n}\n\n// 提取关键信息\nconst chatId = message.chat_id || '';\nconst messageId = message.message_id || '';\nconst senderId = sender.sender_id?.user_id || sender.sender_id || '';\nconst senderName = sender.sender_name || '未知用户';\nconst timestamp = message.create_time || Date.now();\n\n// 格式化时间\nconst messageTime = new Date(parseInt(timestamp) * 1000).toISOString();\n\nconsole.log('📨 收到Lark消息:', {\n  messageId,\n  chatId,\n  senderId,\n  senderName,\n  messageText,\n  messageTime\n});\n\nreturn {\n  json: {\n    isChallenge: false,\n    source: 'lark',\n    messageId,\n    chatId,\n    senderId,\n    senderName,\n    messageText: messageText.trim(),\n    messageTime,\n    timestamp: parseInt(timestamp),\n    rawEvent: body\n  }\n};"
+      },
+      "id": "extract-message",
+      "name": "提取消息内容",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-challenge",
+              "leftValue": "={{ $json.isChallenge || ($json.body && $json.body.type === 'url_verification') }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-is-challenge",
+      "name": "判断是否是Challenge验证",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 构建Lark Challenge验证响应 / 处理正常消息并格式化数据\n// n8n Code节点：构建Challenge响应\n\n// 检查是否是正常消息事件（不是challenge验证）\nconst isNormalMessage = \n  $json.isChallenge === false ||  // 明确标记为非challenge\n  ($json.body && $json.body.event_type) ||  // 有event_type说明是正常消息\n  ($json.body && $json.body.event);  // 有event说明是正常消息\n\nif (isNormalMessage) {\n  // 处理正常消息，格式化数据供下游使用\n  console.log('📨 处理正常消息，格式化数据');\n  \n  // 格式化时间：YYMMDD hhmmss\n  let formattedTime = '';\n  if ($json.messageTime) {\n    // 如果已有messageTime（ISO格式），转换为YYMMDD hhmmss\n    const date = new Date($json.messageTime);\n    const year = date.getFullYear().toString().slice(-2); // 后两位年份\n    const month = String(date.getMonth() + 1).padStart(2, '0');\n    const day = String(date.getDate()).padStart(2, '0');\n    const hours = String(date.getHours()).padStart(2, '0');\n    const minutes = String(date.getMinutes()).padStart(2, '0');\n    const seconds = String(date.getSeconds()).padStart(2, '0');\n    formattedTime = `${year}${month}${day} ${hours}${minutes}${seconds}`;\n  } else if ($json.timestamp) {\n    // 如果有timestamp，转换为YYMMDD hhmmss\n    const date = new Date(parseInt($json.timestamp) * 1000);\n    const year = date.getFullYear().toString().slice(-2);\n    const month = String(date.getMonth() + 1).padStart(2, '0');\n    const day = String(date.getDate()).padStart(2, '0');\n    const hours = String(date.getHours()).padStart(2, '0');\n    const minutes = String(date.getMinutes()).padStart(2, '0');\n    const seconds = String(date.getSeconds()).padStart(2, '0');\n    formattedTime = `${year}${month}${day} ${hours}${minutes}${seconds}`;\n  } else {\n    // 使用当前时间\n    const date = new Date();\n    const year = date.getFullYear().toString().slice(-2);\n    const month = String(date.getMonth() + 1).padStart(2, '0');\n    const day = String(date.getDate()).padStart(2, '0');\n    const hours = String(date.getHours()).padStart(2, '0');\n    const minutes = String(date.getMinutes()).padStart(2, '0');\n    const seconds = String(date.getSeconds()).padStart(2, '0');\n    formattedTime = `${year}${month}${day} ${hours}${minutes}${seconds}`;\n  }\n  \n  // 返回格式化后的数据\n  return {\n    json: {\n      ...$json,  // 保留原有字段\n      formattedTime: formattedTime,  // 添加格式化后的时间\n      timeFormat: 'YYMMDD hhmmss'  // 时间格式说明\n    }\n  };\n}\n\n// 处理challenge验证请求\n// 兼容两种数据格式：\n// 1. 来自\"提取消息内容\"节点：{ isChallenge: true, challenge: \"xxx\" }\n// 2. 直接来自Webhook：{ body: { challenge: \"xxx\", type: \"url_verification\" } }\nconst challenge = $json.challenge || $json.body?.challenge || '';\n\nif (!challenge) {\n  console.error('❌ 未找到challenge值，当前数据:', JSON.stringify($json, null, 2));\n  throw new Error('未找到challenge值');\n}\n\nconsole.log('🔐 构建Challenge响应，challenge:', challenge);\n\n// 返回包含challenge的JSON对象（n8n会自动序列化）\n// 确保返回格式：{ challenge: \"xxx\" }\nreturn {\n  json: {\n    challenge: challenge\n  }\n};"
+      },
+      "id": "build-challenge-response",
+      "name": "构建Challenge响应",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { challenge: $json.challenge } }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "options": {}
+          }
+        }
+      },
+      "id": "respond-to-challenge",
+      "name": "返回Challenge响应",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "=YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "消息记录",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "时间": "={{ $json.messageTime }}",
+            "消息ID": "={{ $json.messageId }}",
+            "群ID": "={{ $json.chatId }}",
+            "发送者ID": "={{ $json.senderId }}",
+            "发送者名称": "={{ $json.senderName }}",
+            "消息内容": "={{ $json.messageText }}",
+            "处理状态": "待处理"
+          }
+        },
+        "options": {}
+      },
+      "id": "write-to-google-sheets",
+      "name": "写入Google表格",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [680, 300],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "google-sheets-credentials",
+          "name": "Google Sheets"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "options": {
+          "temperature": 0.3,
+          "maxTokens": 200
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "你是一个专业的查数意图识别助手。你的任务是判断用户消息是否是查数请求。\n\n查数请求的特征：\n- 包含查询、统计、数据、记录等关键词\n- 涉及ID、用户、时间、金额、游戏等业务数据\n- 需要从数据库中获取信息\n\n非查数请求的特征：\n- 问候语、闲聊、系统指令\n- 不涉及数据查询的需求\n\n重要：你必须只返回纯JSON格式，不要包含任何markdown代码块（不要用```json包裹）。\n\n请返回JSON数组格式（必须用数组包裹）：\n[\n  {\n    \"isQueryRequest\": \"true\"或\"false\"（字符串格式）,\n    \"type\": \"消息来源类型（telegram或lark）\",\n    \"senderid\": 发送者ID（数字）,\n    \"messagid\": 消息ID（数字）,\n    \"chatid\": 聊天ID（数字或字符串）,\n    \"text\": 消息文本内容（字符串或数字）,\n    \"reason\": \"判断理由（字符串）\"\n  }\n]\n\n关键要求：\n1. 你必须使用用户提供的输入数据中的字段值，不要自己编造\n2. type字段必须使用输入数据中的type值（telegram或lark）\n3. senderid、messagid、chatid、text字段必须完全使用输入数据中的对应值\n4. 只有isQueryRequest和reason字段需要你根据消息内容判断\n5. 如果输入数据中没有某个字段，才可以使用默认值（如0或\"unknown\"）\n\n注意：所有字段值必须与输入数据保持一致，isQueryRequest必须是字符串\"true\"或\"false\"。"
+            },
+            {
+              "role": "user",
+              "content": "={{ `请根据以下消息信息判断是否是查数请求。\n\n输入数据（必须使用这些值）：\n- type（消息来源）：${$json.source || $json.type || 'unknown'}\n- senderid（发送者ID）：${$json.senderId || $json.senderid || 0}\n- messagid（消息ID）：${$json.messageId || $json.messagid || 0}\n- chatid（聊天ID）：${$json.chatId || $json.chatid || ''}\n- text（消息文本）：${$json.messageText || $json.text || ''}\n\n请严格按照以下要求返回JSON数组：\n1. 使用上面提供的type、senderid、messagid、chatid、text值，不要修改\n2. 根据text内容判断isQueryRequest（\"true\"或\"false\"）\n3. 提供reason说明判断理由\n\n返回格式：\n[{\"isQueryRequest\":\"true\"或\"false\",\"type\":\"使用上面的type值\",\"senderid\":使用上面的senderid值,\"messagid\":使用上面的messagid值,\"chatid\":使用上面的chatid值,\"text\":\"使用上面的text值\",\"reason\":\"判断理由\"}]` }}"
+            }
+          ]
+        }
+      },
+      "id": "ai-intent-recognition",
+      "name": "AI识别查数意图",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [900, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析AI识别结果\nconst aiResponse = $input.first().json;\nconst originalMessage = $node['提取消息内容'].json;\n\nlet intentResult;\ntry {\n  // 获取AI返回的内容\n  const content = aiResponse.choices?.[0]?.message?.content || aiResponse.message?.content || '';\n  \n  console.log('📥 AI原始响应:', content);\n  \n  // 尝试提取JSON数组（优先）\n  let jsonMatch = content.match(/\\[[\\s\\S]*\\]/);\n  if (!jsonMatch) {\n    // 如果没有数组，尝试提取JSON对象\n    jsonMatch = content.match(/\\{[\\s\\S]*\\}/);\n  }\n  \n  if (jsonMatch) {\n    const jsonStr = jsonMatch[0];\n    const parsed = JSON.parse(jsonStr);\n    \n    // 如果是数组，取第一个元素\n    if (Array.isArray(parsed) && parsed.length > 0) {\n      intentResult = parsed[0];\n    } else if (typeof parsed === 'object') {\n      intentResult = parsed;\n    }\n  } else {\n    // 如果没有JSON，尝试从文本中提取\n    intentResult = {\n      isQueryRequest: content.toLowerCase().includes('true') || content.toLowerCase().includes('是'),\n      reason: content\n    };\n  }\n  \n  // 确保字段完整，使用原始消息数据填充\n  intentResult = {\n    isQueryRequest: String(intentResult.isQueryRequest || 'false'),\n    type: intentResult.type || originalMessage.source || 'unknown',\n    senderid: intentResult.senderid || (originalMessage.senderId ? parseInt(originalMessage.senderId) : 0),\n    messagid: intentResult.messagid || (originalMessage.messageId ? parseInt(originalMessage.messageId) : 0),\n    chatid: intentResult.chatid || originalMessage.chatId || '',\n    text: intentResult.text !== undefined ? intentResult.text : originalMessage.messageText || '',\n    reason: intentResult.reason || ''\n  };\n  \n} catch (e) {\n  console.error('❌ 解析AI响应失败:', e);\n  console.error('原始内容:', content);\n  \n  // 使用原始消息数据作为fallback\n  intentResult = {\n    isQueryRequest: 'false',\n    type: originalMessage.source || 'unknown',\n    senderid: originalMessage.senderId ? parseInt(originalMessage.senderId) : 0,\n    messagid: originalMessage.messageId ? parseInt(originalMessage.messageId) : 0,\n    chatid: originalMessage.chatId || '',\n    text: originalMessage.messageText || '',\n    reason: '解析失败: ' + e.message\n  };\n}\n\nconsole.log('🎯 意图识别结果:', intentResult);\n\n// 返回用户需要的格式（数组格式）\nreturn {\n  json: [intentResult]\n};"
+      },
+      "id": "parse-intent-result",
+      "name": "解析意图识别结果",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-query-request",
+              "leftValue": "={{ $json.isQueryRequest }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-is-query",
+      "name": "判断是否查数请求",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://api.getnote.com/v1/knowledge-base/query",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ $json.messageText }}"
+            },
+            {
+              "name": "limit",
+              "value": "5"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "get-knowledge-base",
+      "name": "获取知识库内容",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1560, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "getnote-api-credentials",
+          "name": "GetNote API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理知识库查询结果\nconst kbResponse = $input.first().json;\nconst originalMessage = $node['解析意图识别结果'].json;\n\n// 解析知识库返回的数据\nlet knowledgeBaseItems = [];\nlet matchedSQL = null;\nlet matchScore = 0;\n\nif (kbResponse.success && kbResponse.data) {\n  knowledgeBaseItems = kbResponse.data.items || kbResponse.data || [];\n  \n  // 查找最匹配的SQL（按相似度排序）\n  if (knowledgeBaseItems.length > 0) {\n    // 假设知识库返回的数据格式：{ query: \"原始查询\", sql: \"SQL语句\", similarity: 0.95 }\n    const sortedItems = knowledgeBaseItems.sort((a, b) => (b.similarity || b.score || 0) - (a.similarity || a.score || 0));\n    const bestMatch = sortedItems[0];\n    \n    // 如果相似度 > 0.8，使用匹配的SQL\n    if ((bestMatch.similarity || bestMatch.score || 0) > 0.8) {\n      matchedSQL = bestMatch.sql || bestMatch.query_sql || bestMatch.content;\n      matchScore = bestMatch.similarity || bestMatch.score || 0;\n      console.log('✅ 找到匹配的SQL:', matchedSQL);\n    } else {\n      console.log('⚠️ 相似度不足，需要生成新SQL');\n    }\n  }\n}\n\nconsole.log('📚 知识库查询结果:', {\n  itemsCount: knowledgeBaseItems.length,\n  matchedSQL: matchedSQL ? '已找到' : '未找到',\n  matchScore\n});\n\nreturn {\n  json: {\n    ...originalMessage,\n    knowledgeBase: {\n      items: knowledgeBaseItems,\n      matchedSQL,\n      matchScore,\n      hasMatch: !!matchedSQL\n    }\n  }\n};"
+      },
+      "id": "process-knowledge-base",
+      "name": "处理知识库结果",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "has-matched-sql",
+              "leftValue": "={{ $json.knowledgeBase.hasMatch }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-has-match",
+      "name": "判断是否有匹配SQL",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2000, 200]
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "options": {
+          "temperature": 0.2,
+          "maxTokens": 500
+        },
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "你是一个专业的SQL生成助手。根据用户的自然语言查询，生成准确的SQL语句。\n\n数据库信息：\n- 数据库名：gmp\n- 主要表：game_records\n- 表结构：\n  - id (varchar): 记录ID\n  - uid (varchar): 用户ID\n  - merchant_id (varchar): 商户ID\n  - game_id (bigint): 游戏ID\n  - game_code (varchar): 游戏代码\n  - result (integer): 游戏结果\n  - currency (varchar): 货币类型\n  - amount (double): 金额\n  - pay_out (double): 支付金额\n  - created_at (bigint): 创建时间戳\n  - updated_at (bigint): 更新时间戳\n  - provider (varchar): 提供商\n\n重要规则：\n1. 只返回SQL语句，不要包含任何解释\n2. 时间字段需要转换：FROM_UNIXTIME(created_at / 1000)\n3. 金额字段需要四舍五入：ROUND(CAST(amount AS DOUBLE), 2)\n4. 日期格式：DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s')\n5. 限制结果数量，使用 LIMIT 100\n6. 使用适当的WHERE条件避免全表扫描"
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.messageText }}"
+            }
+          ]
+        }
+      },
+      "id": "generate-new-sql",
+      "name": "生成新SQL",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [2220, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 提取生成的SQL\nconst aiResponse = $input.first().json;\nconst originalData = $node['处理知识库结果'].json;\n\nlet generatedSQL = '';\ntry {\n  const content = aiResponse.choices?.[0]?.message?.content || aiResponse.message?.content || '';\n  \n  // 提取SQL语句（去除markdown代码块标记）\n  generatedSQL = content\n    .replace(/```sql\\s*/gi, '')\n    .replace(/```\\s*/g, '')\n    .trim();\n  \n  // 如果包含SELECT，提取SELECT到分号或结尾的部分\n  const selectMatch = generatedSQL.match(/(SELECT[\\s\\S]*?)(?:;|$)/i);\n  if (selectMatch) {\n    generatedSQL = selectMatch[1].trim();\n  }\n} catch (e) {\n  console.error('提取SQL失败:', e);\n  generatedSQL = '';\n}\n\nconsole.log('🔧 生成的SQL:', generatedSQL);\n\nreturn {\n  json: {\n    ...originalData,\n    generatedSQL,\n    sqlSource: 'new'\n  }\n};"
+      },
+      "id": "extract-sql",
+      "name": "提取SQL语句",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2440, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 使用匹配的SQL或新生成的SQL\nconst data = $input.first().json;\n\nconst finalSQL = data.knowledgeBase?.matchedSQL || data.generatedSQL || '';\nconst sqlSource = data.knowledgeBase?.hasMatch ? 'knowledge_base' : 'new';\n\nif (!finalSQL) {\n  throw new Error('无法生成SQL语句');\n}\n\nconsole.log('✅ 最终使用的SQL:', finalSQL);\nconsole.log('📝 SQL来源:', sqlSource);\n\nreturn {\n  json: {\n    ...data,\n    finalSQL,\n    sqlSource\n  }\n};"
+      },
+      "id": "merge-sql",
+      "name": "合并SQL（使用匹配或新生成）",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2000, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.getnote.com/v1/knowledge-base/add",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"query\": \"{{ $json.messageText }}\",\n  \"sql\": \"{{ $json.finalSQL }}\",\n  \"source\": \"lark_group\",\n  \"metadata\": {\n    \"chatId\": \"{{ $json.chatId }}\",\n    \"senderId\": \"{{ $json.senderId }}\",\n    \"senderName\": \"{{ $json.senderName }}\",\n    \"timestamp\": {{ $json.timestamp }}\n  }\n}",
+        "options": {}
+      },
+      "id": "save-to-knowledge-base",
+      "name": "保存到知识库",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2220, 100],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "getnote-api-credentials",
+          "name": "GetNote API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "is-new-sql",
+              "leftValue": "={{ $json.sqlSource }}",
+              "rightValue": "new",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-is-new-sql",
+      "name": "判断是否新SQL",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2440, 100]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "chatId": "={{ $json.chatId }}",
+        "messageType": "text",
+        "text": "=✅ 已识别为查数请求\n\n📝 查询内容：{{ $json.messageText }}\n\n🔍 SQL来源：{{ $json.sqlSource === 'knowledge_base' ? '知识库匹配' : 'AI新生成' }}\n\n💾 {{ $json.sqlSource === 'new' ? '已保存到知识库' : '使用已有SQL' }}\n\n正在执行查询..."
+      },
+      "id": "send-lark-response",
+      "name": "发送Lark回复",
+      "type": "n8n-nodes-base.lark",
+      "typeVersion": 1,
+      "position": [2660, 200],
+      "credentials": {
+        "larkApi": {
+          "id": "lark-bot-credentials",
+          "name": "Lark Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "chatId": "={{ $json.chatId }}",
+        "messageType": "text",
+        "text": "=❌ 这不是查数请求\n\n{{ $json.intentRecognition.reason }}"
+      },
+      "id": "send-not-query-response",
+      "name": "发送非查数回复",
+      "type": "n8n-nodes-base.lark",
+      "typeVersion": 1,
+      "position": [1560, 400],
+      "credentials": {
+        "larkApi": {
+          "id": "lark-bot-credentials",
+          "name": "Lark Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Lark Webhook 触发": {
+      "main": [
+        [
+          {
+            "node": "提取消息内容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "提取消息内容": {
+      "main": [
+        [
+          {
+            "node": "判断是否是Challenge验证",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "判断是否是Challenge验证": {
+      "main": [
+        [
+          {
+            "node": "构建Challenge响应",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "写入Google表格",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI识别查数意图",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "构建Challenge响应": {
+      "main": [
+        [
+          {
+            "node": "返回Challenge响应",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI识别查数意图": {
+      "main": [
+        [
+          {
+            "node": "解析意图识别结果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析意图识别结果": {
+      "main": [
+        [
+          {
+            "node": "判断是否查数请求",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "判断是否查数请求": {
+      "main": [
+        [
+          {
+            "node": "获取知识库内容",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "发送非查数回复",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "获取知识库内容": {
+      "main": [
+        [
+          {
+            "node": "处理知识库结果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理知识库结果": {
+      "main": [
+        [
+          {
+            "node": "判断是否有匹配SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "判断是否有匹配SQL": {
+      "main": [
+        [
+          {
+            "node": "合并SQL（使用匹配或新生成）",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "生成新SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "生成新SQL": {
+      "main": [
+        [
+          {
+            "node": "提取SQL语句",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "提取SQL语句": {
+      "main": [
+        [
+          {
+            "node": "合并SQL（使用匹配或新生成）",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "合并SQL（使用匹配或新生成）": {
+      "main": [
+        [
+          {
+            "node": "判断是否新SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "判断是否新SQL": {
+      "main": [
+        [
+          {
+            "node": "保存到知识库",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "发送Lark回复",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "保存到知识库": {
+      "main": [
+        [
+          {
+            "node": "发送Lark回复",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-11-19T00:00:00.000Z",
+  "versionId": "1"
+}
+

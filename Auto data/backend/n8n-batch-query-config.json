@@ -1,0 +1,37 @@
+{
+  "nodeType": "HTTP Request",
+  "name": "执行查询",
+  "parameters": {
+    "method": "POST",
+    "url": "https://ebooks-life-point-interactions.trycloudflare.com/api/batch/start",
+    "authentication": "none",
+    "sendQuery": false,
+    "sendHeaders": true,
+    "headerParameters": {
+      "parameters": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "X-API-Key",
+          "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2"
+        }
+      ]
+    },
+    "sendBody": true,
+    "bodyContentType": "json",
+    "specifyBody": "json",
+    "jsonBody": "{\n  \"queries\": {{ $json.queries }},\n  \"database\": \"gmp\"\n}",
+    "options": {}
+  }
+}
+
+
+
+
+
+
+
+
+

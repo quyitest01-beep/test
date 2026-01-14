@@ -1,24 +1,33 @@
 const { AthenaClient, StartQueryExecutionCommand, GetQueryExecutionCommand, StopQueryExecutionCommand, GetQueryResultsCommand } = require('@aws-sdk/client-athena')
-const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3')
+const { S3Client, GetObjectCommand, ListObjectsV2Command, HeadObjectCommand } = require('@aws-sdk/client-s3')
 const { v4: uuidv4 } = require('uuid')
 const logger = require('../utils/logger')
 const memoryManager = require('./memoryManager')
 
-// 初始化AWS客户端
-const athenaClient = new AthenaClient({
-  region: process.env.AWS_REGION || 'us-east-1',
-  credentials: {
+// 构建 AWS 凭证配置（支持临时凭证）
+const buildCredentials = () => {
+  const credentials = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
   }
+  
+  // 如果提供了 SESSION_TOKEN（临时凭证），则添加它
+  if (process.env.AWS_SESSION_TOKEN) {
+    credentials.sessionToken = process.env.AWS_SESSION_TOKEN
+  }
+  
+  return credentials
+}
+
+// 初始化AWS客户端
+const athenaClient = new AthenaClient({
+  region: process.env.AWS_REGION || 'us-east-1',
+  credentials: buildCredentials()
 })
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION || 'us-east-1',
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-  }
+  credentials: buildCredentials()
 })
 
 class AthenaService {
@@ -52,7 +61,7 @@ class AthenaService {
       
       const {
         database,
-        timeout = 60000,
+        timeout = 300000,
         maxCost = 10
       } = options
 
@@ -160,7 +169,7 @@ class AthenaService {
   /**
    * 等待查询完成
    */
-  async waitForQueryCompletion(queryId, timeout = 60000) {
+  async waitForQueryCompletion(queryId, timeout = 300000) {
     const startTime = Date.now()
     const pollInterval = 1000 // 1秒轮询间隔
 
@@ -194,44 +203,66 @@ class AthenaService {
   }
 
   /**
-   * 获取查询结果
+   * 获取查询结果 - 分页获取所有数据
    */
   async getQueryResults(queryId, maxResults = 1000) {
     try {
-      const command = new GetQueryResultsCommand({
-        QueryExecutionId: queryId,
-        MaxResults: maxResults
-      })
-      
-      const response = await athenaClient.send(command)
-      const resultSet = response.ResultSet
+      let allData = []
+      let nextToken = null
+      let totalRecords = 0
+      let columns = null
+      let isFirstPage = true
 
-      if (!resultSet || !resultSet.Rows || resultSet.Rows.length === 0) {
-        return { data: [], recordCount: 0 }
-      }
-
-      // 解析列信息
-      const columns = resultSet.ResultSetMetadata.ColumnInfo.map(col => ({
-        name: col.Name,
-        type: col.Type
-      }))
-
-      // 解析数据行（跳过第一行标题）
-      const dataRows = resultSet.Rows.slice(1)
-      const data = dataRows.map(row => {
-        const record = {}
-        row.Data.forEach((cell, index) => {
-          const columnName = columns[index].name
-          record[columnName] = cell.VarCharValue || null
+      do {
+        const command = new GetQueryResultsCommand({
+          QueryExecutionId: queryId,
+          MaxResults: maxResults,
+          NextToken: nextToken
         })
-        return record
-      })
+        
+        const response = await athenaClient.send(command)
+        const resultSet = response.ResultSet
+
+        if (!resultSet || !resultSet.Rows || resultSet.Rows.length === 0) {
+          break
+        }
+
+        // 只在第一页解析列信息
+        if (isFirstPage) {
+          columns = resultSet.ResultSetMetadata.ColumnInfo.map(col => ({
+            name: col.Name,
+            type: col.Type
+          }))
+        }
+
+        // 解析数据行（第一页跳过标题行，后续页面直接处理）
+        const dataRows = isFirstPage ? resultSet.Rows.slice(1) : resultSet.Rows
+        const pageData = dataRows.map(row => {
+          const record = {}
+          row.Data.forEach((cell, index) => {
+            const columnName = columns[index].name
+            record[columnName] = cell.VarCharValue || null
+          })
+          return record
+        })
+
+        allData = allData.concat(pageData)
+        totalRecords += pageData.length
+        nextToken = response.NextToken
+        isFirstPage = false
+
+        // 添加延迟避免API限制
+        if (nextToken) {
+          await new Promise(resolve => setTimeout(resolve, 100))
+        }
+
+      } while (nextToken)
 
       return {
-        data,
-        recordCount: data.length,
+        data: allData,
+        recordCount: totalRecords,
         columns,
-        hasMoreResults: !!response.NextToken
+        hasMoreResults: false
       }
 
     } catch (error) {
@@ -280,7 +311,7 @@ class AthenaService {
 
       // 这里实现查询拆分逻辑
       // 目前返回模拟结果，实际实现需要根据strategy拆分SQL
-      const results = await this.executeQuery(sql + ` LIMIT ${Math.min(recordCount, 1000)}`, {
+      const results = await this.executeQuery(sql, {
         requestId
       })
 
@@ -303,6 +334,217 @@ class AthenaService {
   }
 
   /**
+   * 使用 HeadObject 获取单个文件大小（不需要 ListObjects 权限）
+   */
+  async getResultFileSizeByHeadObject(bucket, fileKey) {
+    try {
+      if (!bucket || !fileKey) {
+        logger.warn('Bucket or fileKey is empty', { bucket, fileKey })
+        return null
+      }
+
+      logger.info('Getting S3 file size using HeadObject', { bucket, fileKey })
+
+      const command = new HeadObjectCommand({
+        Bucket: bucket,
+        Key: fileKey
+      })
+
+      const response = await s3Client.send(command)
+      
+      if (!response.ContentLength) {
+        logger.warn('No ContentLength in response', { bucket, fileKey })
+        return null
+      }
+
+      const fileSize = response.ContentLength
+
+      logger.info('S3 file size retrieved', { 
+        bucket, 
+        fileKey, 
+        sizeBytes: fileSize,
+        sizeMB: Math.round((fileSize / (1024 * 1024)) * 100) / 100
+      })
+
+      return {
+        totalSizeBytes: fileSize,
+        totalSizeMB: Math.round((fileSize / (1024 * 1024)) * 10000) / 10000, // 保留4位小数，避免小文件显示为0
+        totalSizeGB: Math.round((fileSize / (1024 * 1024 * 1024)) * 10000) / 10000,
+        fileCount: 1,
+        formattedSize: this.formatFileSize(fileSize),
+        contentType: response.ContentType || null,
+        lastModified: response.LastModified || null
+      }
+    } catch (error) {
+      // 如果是 404，文件不存在
+      if (error.name === 'NotFound' || error.$metadata?.httpStatusCode === 404) {
+        logger.warn('File not found in S3', { bucket, fileKey })
+        return null
+      }
+      
+      logger.error('Failed to get file size using HeadObject', { 
+        error: error.message, 
+        errorName: error.name,
+        bucket,
+        fileKey
+      })
+      return null
+    }
+  }
+
+  /**
+   * 根据 queryId 构建可能的文件路径
+   */
+  buildPossibleFilePaths(queryId) {
+    // Athena 结果文件的常见路径格式
+    return [
+      `${queryId}/${queryId}.csv`,           // 最常见：queryId/queryId.csv
+      `${queryId}.csv`,                      // 直接在根目录
+      `${queryId}/000000_0`,                 // Parquet 格式
+      `${queryId}/000000_0.csv`,             // CSV 格式
+      `${queryId}/part-00000.csv`,           // Spark 格式
+      `${queryId}/data.csv`                  // 通用名称
+    ]
+  }
+
+  /**
+   * 尝试获取查询结果文件大小（使用 HeadObject，不需要 ListObjects）
+   */
+  async getResultFileSizeByQueryId(queryId, bucket = null) {
+    try {
+      // 如果没有提供 bucket，从环境变量获取
+      if (!bucket) {
+        const outputLocation = this.outputLocation || process.env.ATHENA_OUTPUT_LOCATION
+        if (outputLocation) {
+          const match = outputLocation.match(/^s3:\/\/([^\/]+)/)
+          if (match) {
+            bucket = match[1]
+          }
+        }
+      }
+
+      if (!bucket) {
+        logger.warn('Cannot determine S3 bucket', { queryId })
+        return null
+      }
+
+      // 尝试多个可能的文件路径
+      const possiblePaths = this.buildPossibleFilePaths(queryId)
+      
+      for (const fileKey of possiblePaths) {
+        const fileSize = await this.getResultFileSizeByHeadObject(bucket, fileKey)
+        if (fileSize) {
+          logger.info('Found result file', { queryId, bucket, fileKey, size: fileSize.formattedSize })
+          return {
+            ...fileSize,
+            fileKey: fileKey,
+            bucket: bucket
+          }
+        }
+      }
+
+      logger.warn('Could not find result file for query', { queryId, bucket, triedPaths: possiblePaths })
+      return null
+    } catch (error) {
+      logger.error('Failed to get result file size by queryId', { 
+        error: error.message, 
+        queryId 
+      })
+      return null
+    }
+  }
+
+  /**
+   * 获取 S3 结果文件大小（旧方法，需要 ListObjects 权限）
+   */
+  async getResultFileSize(resultLocation) {
+    try {
+      if (!resultLocation) {
+        logger.warn('Result location is empty')
+        return null
+      }
+
+      // 解析 S3 路径: s3://bucket-name/path/to/file/
+      const s3PathMatch = resultLocation.match(/^s3:\/\/([^\/]+)\/(.+)$/)
+      if (!s3PathMatch) {
+        logger.warn('Invalid S3 path format', { resultLocation })
+        return null
+      }
+
+      const bucket = s3PathMatch[1]
+      let prefix = s3PathMatch[2]
+      
+      // 移除末尾斜杠，但保留路径
+      prefix = prefix.replace(/\/$/, '')
+      
+      // 如果 prefix 为空，说明是 bucket 根目录
+      if (!prefix) {
+        logger.warn('S3 prefix is empty', { bucket, resultLocation })
+        return null
+      }
+
+      logger.info('Getting S3 file size', { bucket, prefix })
+
+      // 列出该查询的所有结果文件
+      const command = new ListObjectsV2Command({
+        Bucket: bucket,
+        Prefix: prefix
+      })
+
+      const response = await s3Client.send(command)
+      
+      if (!response.Contents || response.Contents.length === 0) {
+        logger.warn('No files found in S3', { bucket, prefix })
+        return null
+      }
+
+      // 计算所有文件的总大小
+      let totalSize = 0
+      let fileCount = 0
+      
+      for (const object of response.Contents) {
+        if (object.Size) {
+          totalSize += object.Size
+          fileCount++
+        }
+      }
+
+      logger.info('S3 file size calculated', { 
+        bucket, 
+        prefix, 
+        fileCount, 
+        totalSizeMB: Math.round((totalSize / (1024 * 1024)) * 100) / 100 
+      })
+
+      return {
+        totalSizeBytes: totalSize,
+        totalSizeMB: Math.round((totalSize / (1024 * 1024)) * 100) / 100,
+        totalSizeGB: Math.round((totalSize / (1024 * 1024 * 1024)) * 100) / 100,
+        fileCount: fileCount,
+        formattedSize: this.formatFileSize(totalSize)
+      }
+    } catch (error) {
+      logger.error('Failed to get result file size', { 
+        error: error.message, 
+        stack: error.stack,
+        resultLocation 
+      })
+      return null
+    }
+  }
+
+  /**
+   * 格式化文件大小
+   */
+  formatFileSize(bytes) {
+    if (bytes === 0) return '0 B'
+    const k = 1024
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i]
+  }
+
+  /**
    * 获取查询状态
    */
   async getQueryStatus(queryId) {
@@ -311,16 +553,102 @@ class AthenaService {
       const response = await athenaClient.send(command)
       const queryExecution = response.QueryExecution
 
+      const status = queryExecution.Status.State
+      const statistics = this.calculateQueryStats(queryExecution)
+      
+      // 获取结果文件大小（仅当查询完成时）
+      // 优先使用 HeadObject 方法（不需要 ListObjects 权限）
+      let resultFileSize = null
+      if (status === 'SUCCEEDED') {
+        // 方法1: 使用 HeadObject（推荐，不需要 ListObjects 权限）
+        resultFileSize = await this.getResultFileSizeByQueryId(queryId)
+        
+        // 方法2: 如果方法1失败，尝试使用 ListObjects（需要权限）
+        if (!resultFileSize && queryExecution.ResultConfiguration?.OutputLocation) {
+          resultFileSize = await this.getResultFileSize(queryExecution.ResultConfiguration.OutputLocation)
+        }
+      }
+
       return {
         queryId,
-        status: queryExecution.Status.State,
+        status: status,
+        statusText: this.getStatusText(status),
         submissionDateTime: queryExecution.Status.SubmissionDateTime,
         completionDateTime: queryExecution.Status.CompletionDateTime,
         stateChangeReason: queryExecution.Status.StateChangeReason,
-        statistics: this.calculateQueryStats(queryExecution)
+        statistics: statistics,
+        resultLocation: queryExecution.ResultConfiguration?.OutputLocation || null,
+        resultFileSize: resultFileSize
       }
     } catch (error) {
       throw new Error(`Failed to get query status: ${error.message}`)
+    }
+  }
+
+  /**
+   * 获取状态文本（中文）
+   */
+  getStatusText(status) {
+    if (!status) return '未知状态'
+    const statusMap = {
+      'QUEUED': '排队中',
+      'RUNNING': '正在查询',
+      'SUCCEEDED': '已完成',
+      'FAILED': '失败',
+      'CANCELLED': '已取消'
+    }
+    return statusMap[status.toUpperCase()] || status
+  }
+
+  /**
+   * 根据文件大小给出处理建议
+   */
+  getProcessingRecommendation(fileSizeMB) {
+    // 处理 null、undefined 或无效值
+    if (fileSizeMB === null || fileSizeMB === undefined || isNaN(fileSizeMB)) {
+      return {
+        action: 'unknown',
+        message: '无法确定文件大小',
+        reason: '文件大小未知'
+      }
+    }
+
+    // 即使小于 1 MB 也显示为小文件（使用更精确的比较）
+    // 小文件：< 10 MB - 直接处理
+    if (fileSizeMB < 10) {
+      // 格式化显示：如果小于 1 MB，显示 KB；否则显示 MB
+      const sizeDisplay = fileSizeMB < 1 
+        ? `${(fileSizeMB * 1024).toFixed(2)} KB`
+        : `${fileSizeMB.toFixed(2)} MB`;
+      
+      return {
+        action: 'direct_process',
+        message: '文件较小，建议直接处理',
+        reason: `文件大小 ${sizeDisplay}，可以直接下载并处理`,
+        threshold: 'small',
+        maxSize: 10
+      }
+    }
+
+    // 中等文件：10-500 MB - 导出文件处理
+    if (fileSizeMB <= 500) {
+      return {
+        action: 'export_or_batch',
+        message: '文件中等，建议导出文件处理',
+        reason: `文件大小 ${fileSizeMB.toFixed(2)} MB，建议导出为文件处理`,
+        threshold: 'medium',
+        minSize: 10,
+        maxSize: 500
+      }
+    }
+
+    // 超大文件：> 500 MB - 必须拆分处理
+    return {
+      action: 'split_process',
+      message: '文件超大，必须拆分处理',
+      reason: `文件大小 ${fileSizeMB.toFixed(2)} MB，超过 500 MB 限制，必须拆分处理`,
+      threshold: 'xlarge',
+      minSize: 500
     }
   }
 

@@ -1,0 +1,15 @@
+{
+  "sql": "SELECT COUNT(*) FROM game_records WHERE provider = 'gp' AND merchant = '1737978166' LIMIT 1"
+}
+
+
+
+
+
+
+
+
+
+
+
+

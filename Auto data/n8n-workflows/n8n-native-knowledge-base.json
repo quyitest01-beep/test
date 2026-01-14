@@ -1,0 +1,126 @@
+{
+  "name": "N8N Native Knowledge Base Setup",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// 直接在n8n中定义知识库内容\nconst knowledgeBase = {\n  documents: [\n    {\n      content: \"ID查询场景：用户提供具体的记录ID，需要查询详细信息。常见格式：1976423513265401856, PANDA-1976422629802373120, 1976437176340557824。SQL模板：SELECT id, uid, merchant_id, game_id, game_code, result, currency, ROUND(CAST(amount AS DOUBLE), 2) AS amount, ROUND(CAST(pay_out AS DOUBLE), 2) AS pay_out, multiplier, balance, detail, DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s') AS created_at, DATE_FORMAT(FROM_UNIXTIME(updated_at / 1000), '%Y-%m-%d %H:%i:%s') AS updated_at FROM game_records WHERE id IN ('ID1', 'ID2', 'ID3') AND provider IN ('gp', 'popular') LIMIT 100;\",\n      metadata: {\n        type: \"ID查询\",\n        category: \"基础查询\",\n        priority: \"high\"\n      }\n    },\n    {\n      content: \"用户查询场景：根据用户ID查询该用户的所有游戏记录。常见格式：li-57ebcc16aa1240a4bc9114578a4646ce, User9911684466, 用户ID：li-xxxxx。SQL模板：SELECT id, uid, merchant_id, game_id, game_code, result, currency, ROUND(CAST(amount AS DOUBLE), 2) AS amount, ROUND(CAST(pay_out AS DOUBLE), 2) AS pay_out, multiplier, balance, detail, DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s') AS created_at, DATE_FORMAT(FROM_UNIXTIME(updated_at / 1000), '%Y-%m-%d %H:%i:%s') AS updated_at FROM game_records WHERE uid = 'USER_ID' AND provider IN ('gp', 'popular') AND updated_at BETWEEN TO_UNIXTIME(PARSE_DATETIME('START_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 AND TO_UNIXTIME(PARSE_DATETIME('END_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 ORDER BY updated_at DESC LIMIT 100;\",\n      metadata: {\n        type: \"用户查询\",\n        category: \"基础查询\",\n        priority: \"high\"\n      }\n    },\n    {\n      content: \"时间范围查询场景：查询特定时间段内的游戏记录。常见格式：查询最近7天的数据，查询昨天的交易，查询10月1日到10月30日的数据。SQL模板：SELECT id, uid, merchant_id, game_id, game_code, result, currency, ROUND(CAST(amount AS DOUBLE), 2) AS amount, ROUND(CAST(pay_out AS DOUBLE), 2) AS pay_out, multiplier, balance, detail, DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s') AS created_at, DATE_FORMAT(FROM_UNIXTIME(updated_at / 1000), '%Y-%m-%d %H:%i:%s') AS updated_at FROM game_records WHERE provider IN ('gp', 'popular') AND updated_at BETWEEN TO_UNIXTIME(PARSE_DATETIME('START_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 AND TO_UNIXTIME(PARSE_DATETIME('END_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 ORDER BY updated_at DESC LIMIT 100;\",\n      metadata: {\n        type: \"时间查询\",\n        category: \"基础查询\",\n        priority: \"high\"\n      }\n    },\n    {\n      content: \"统计查询场景：统计特定条件下的数据汇总。常见格式：统计今天的交易数量，统计某个用户的投注总额，统计某个游戏的胜率。SQL模板：SELECT COUNT(*) as total_records, SUM(CAST(amount AS DOUBLE)) as total_amount, SUM(CAST(pay_out AS DOUBLE)) as total_pay_out, AVG(CAST(amount AS DOUBLE)) as avg_amount, COUNT(CASE WHEN result = 1 THEN 1 END) as win_count, COUNT(CASE WHEN result = 0 THEN 1 END) as lose_count, ROUND(COUNT(CASE WHEN result = 1 THEN 1 END) * 100.0 / COUNT(*), 2) as win_rate FROM game_records WHERE provider IN ('gp', 'popular') AND updated_at BETWEEN TO_UNIXTIME(PARSE_DATETIME('START_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 AND TO_UNIXTIME(PARSE_DATETIME('END_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000;\",\n      metadata: {\n        type: \"统计查询\",\n        category: \"高级查询\",\n        priority: \"medium\"\n      }\n    },\n    {\n      content: \"游戏查询场景：查询特定游戏的记录。常见格式：查询gp_crash游戏记录，查询gp_mines游戏数据，查询某个游戏类型的记录。SQL模板：SELECT id, uid, merchant_id, game_id, game_code, result, currency, ROUND(CAST(amount AS DOUBLE), 2) AS amount, ROUND(CAST(pay_out AS DOUBLE), 2) AS pay_out, multiplier, balance, detail, DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s') AS created_at, DATE_FORMAT(FROM_UNIXTIME(updated_at / 1000), '%Y-%m-%d %H:%i:%s') AS updated_at FROM game_records WHERE game_code = 'GAME_CODE' AND provider IN ('gp', 'popular') AND updated_at BETWEEN TO_UNIXTIME(PARSE_DATETIME('START_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 AND TO_UNIXTIME(PARSE_DATETIME('END_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 ORDER BY updated_at DESC LIMIT 100;\",\n      metadata: {\n        type: \"游戏查询\",\n        category: \"基础查询\",\n        priority: \"medium\"\n      }\n    },\n    {\n      content: \"商户查询场景：查询特定商户的数据。常见格式：查询商户1737978166的记录，查询某个商户的交易数据。SQL模板：SELECT id, uid, merchant_id, game_id, game_code, result, currency, ROUND(CAST(amount AS DOUBLE), 2) AS amount, ROUND(CAST(pay_out AS DOUBLE), 2) AS pay_out, multiplier, balance, detail, DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s') AS created_at, DATE_FORMAT(FROM_UNIXTIME(updated_at / 1000), '%Y-%m-%d %H:%i:%s') AS updated_at FROM game_records WHERE merchant = 'MERCHANT_ID' AND provider IN ('gp', 'popular') AND updated_at BETWEEN TO_UNIXTIME(PARSE_DATETIME('START_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 AND TO_UNIXTIME(PARSE_DATETIME('END_DATE', 'yyyy-MM-dd HH:mm:ss')) * 1000 ORDER BY updated_at DESC LIMIT 100;\",\n      metadata: {\n        type: \"商户查询\",\n        category: \"基础查询\",\n        priority: \"medium\"\n      }\n    },\n    {\n      content: \"数据库字段说明：id(记录ID，通常为16位以上数字), uid(用户ID，格式如'li-xxxxx'或'Userxxxxxxxx'), merchant_id(商户ID), game_id(游戏ID), game_code(游戏代码，如'gp_crash','gp_mines'), result(游戏结果，1表示赢，0表示输), currency(货币类型，如'USDT'), amount(投注金额), pay_out(支付金额), multiplier(倍数), balance(余额), detail(详细信息), created_at(创建时间戳，毫秒), updated_at(更新时间戳，毫秒), provider(提供商，常见值：'gp','popular'), merchant(商户标识)。\",\n      metadata: {\n        type: \"字段说明\",\n        category: \"数据库结构\",\n        priority: \"high\"\n      }\n    },\n    {\n      content: \"时间字段处理：时间戳转换FROM_UNIXTIME(timestamp / 1000)，日期格式DATE_FORMAT(FROM_UNIXTIME(timestamp / 1000), '%Y-%m-%d %H:%i:%s')，时间范围BETWEEN TO_UNIXTIME(PARSE_DATETIME('date', 'yyyy-MM-dd HH:mm:ss')) * 1000。金额字段处理：四舍五入ROUND(CAST(amount AS DOUBLE), 2)，类型转换CAST(amount AS DOUBLE)。\",\n      metadata: {\n        type: \"字段处理\",\n        category: \"数据处理\",\n        priority: \"high\"\n      }\n    },\n    {\n      content: \"常用查询模式：默认条件provider IN ('gp', 'popular')，限制结果数量LIMIT 100，按时间排序ORDER BY updated_at DESC。时间范围默认：如果未指定时间范围，默认查询最近7天，时间格式'yyyy-MM-dd HH:mm:ss'。常见游戏代码：gp_crash(崩溃游戏), gp_mines(扫雷游戏), gp_plinko(弹球游戏), gp_roulette(轮盘游戏)。\",\n      metadata: {\n        type: \"查询模式\",\n        category: \"最佳实践\",\n        priority: \"medium\"\n      }\n    },\n    {\n      content: \"查询优化建议：性能优化使用适当的WHERE条件避免全表扫描，优先使用updated_at字段进行时间过滤，限制结果数量使用LIMIT。成本控制避免SELECT *，只选择需要的字段，使用适当的时间范围限制，避免复杂的JOIN操作。结果格式化金额字段保留2位小数，时间字段格式化为可读格式，限制显示记录数量。\",\n      metadata: {\n        type: \"优化建议\",\n        category: \"最佳实践\",\n        priority: \"medium\"\n      }\n    }\n  ]\n};\n\nreturn { json: knowledgeBase };"
+      },
+      "id": "define-knowledge-base",
+      "name": "Define Knowledge Base",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "documents": "={{ $json.documents }}"
+      },
+      "id": "insert-documents",
+      "name": "Insert Documents",
+      "type": "n8n-nodes-base.vectorStore",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "model": "text-embedding-ada-002"
+      },
+      "id": "embedding-model",
+      "name": "Embedding Model",
+      "type": "n8n-nodes-base.openAiEmbedding",
+      "typeVersion": 1,
+      "position": [240, 500]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "知识库设置完成！已成功插入以下文档：\n\n总文档数：{{ $json.documents.length }}\n来源：n8n原生配置\n\n文档列表：\n{{ $json.documents.map(doc => `- ${doc.metadata.type} (${doc.metadata.category})`).join('\\n') }}\n\n现在AI Agent可以检索这些相关文档来生成准确的SQL查询了！",
+        "options": {
+          "systemMessage": "你是一个系统管理员，负责确认知识库设置完成。"
+        }
+      },
+      "id": "confirmation",
+      "name": "Confirmation",
+      "type": "n8n-nodes-base.agent",
+      "typeVersion": 1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "options": {
+          "temperature": 0.1,
+          "maxTokens": 500
+        }
+      },
+      "id": "chat-model",
+      "name": "Chat Model",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [680, 500]
+    }
+  ],
+  "connections": {
+    "Define Knowledge Base": {
+      "main": [
+        [
+          {
+            "node": "Insert Documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Documents": {
+      "main": [
+        [
+          {
+            "node": "Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embedding Model": {
+      "main": [
+        [
+          {
+            "node": "Insert Documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirmation": {
+      "main": [
+        [
+          {
+            "node": "Chat Model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-11T04:00:00.000Z",
+      "updatedAt": "2025-10-11T04:00:00.000Z",
+      "id": "n8n-native-kb",
+      "name": "N8N Native KB"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-11T04:00:00.000Z",
+  "versionId": "1"
+}

@@ -1,0 +1,15 @@
+{
+  "sql": "SHOW PARTITIONS game_records LIMIT 5"
+}
+
+
+
+
+
+
+
+
+
+
+
+

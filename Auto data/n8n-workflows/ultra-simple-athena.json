@@ -1,0 +1,482 @@
+{
+  "name": "Ultra Simple Athena Query",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "start-node",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/start",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "{\n  \"sql\": \"SELECT id, uid, merchant_id, game_id, game_code, result, currency, ROUND(CAST(amount AS DOUBLE), 2) AS amount, ROUND(CAST(pay_out AS DOUBLE), 2) AS pay_out, multiplier, balance, detail, DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s') AS created_at, DATE_FORMAT(FROM_UNIXTIME(updated_at / 1000), '%Y-%m-%d %H:%i:%s') AS updated_at FROM game_records WHERE provider = 'gp' AND merchant = '1737978166' AND id in ('1976423513265401856','1976422629802373120','1976437176340557824') AND updated_at BETWEEN TO_UNIXTIME(PARSE_DATETIME('2025-10-01 00:00:00', 'yyyy-MM-dd HH:mm:ss')) * 1000 AND TO_UNIXTIME(PARSE_DATETIME('2025-10-30 23:59:59', 'yyyy-MM-dd HH:mm:ss')) * 1000\",\n  \"database\": \"gmp\"\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "start-query",
+      "name": "Start Query",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "amount": 20,
+        "unit": "seconds"
+      },
+      "id": "wait-20-seconds",
+      "name": "Wait 20 Seconds",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/status/={{ $json.queryId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "check-status-1",
+      "name": "Check Status (1)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-1",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "completed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-completed-1",
+      "name": "Check Completed (1)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "id": "wait-30-seconds",
+      "name": "Wait 30 Seconds",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1340, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/status/={{ $('Start Query').item.json.queryId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "check-status-2",
+      "name": "Check Status (2)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1560, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-1",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "completed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-completed-2",
+      "name": "Check Completed (2)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1780, 400]
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "id": "wait-30-seconds-2",
+      "name": "Wait 30 Seconds (2)",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [2000, 500]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/status/={{ $('Start Query').item.json.queryId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "check-status-3",
+      "name": "Check Status (3)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2220, 500]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-1",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "completed",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-completed-3",
+      "name": "Check Completed (3)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2440, 500]
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "minutes"
+      },
+      "id": "wait-2-minutes",
+      "name": "Wait 2 Minutes",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [2660, 600]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/status/={{ $('Start Query').item.json.queryId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "check-status-final",
+      "name": "Check Status (Final)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2880, 600]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理最终结果\nconst data = $json;\n\nif (data.success && data.result && data.result.data) {\n  const queryData = data.result.data;\n  \n  return {\n    json: {\n      success: true,\n      queryId: data.queryId,\n      status: data.status,\n      rowCount: queryData.rowCount || 0,\n      totalRows: queryData.totalRows || 0,\n      executionTime: data.result.executionTime,\n      data: queryData,\n      message: `查询成功！返回 ${queryData.rowCount || 0} 条记录`,\n      timestamp: new Date().toISOString()\n    }\n  };\n} else {\n  return {\n    json: {\n      success: false,\n      queryId: data.queryId,\n      status: data.status,\n      error: data.error || '查询失败',\n      message: data.message || '查询执行失败',\n      timestamp: new Date().toISOString()\n    }\n  };\n}"
+      },
+      "id": "process-result",
+      "name": "Process Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3100, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 超时处理\nreturn {\n  json: {\n    success: false,\n    status: 'timeout',\n    error: '查询超时',\n    message: '查询执行超过5分钟，请检查查询条件或联系管理员',\n    timestamp: new Date().toISOString()\n  }\n};"
+      },
+      "id": "timeout-handler",
+      "name": "Timeout Handler",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3100, 600]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Start Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Query": {
+      "main": [
+        [
+          {
+            "node": "Wait 20 Seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 20 Seconds": {
+      "main": [
+        [
+          {
+            "node": "Check Status (1)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status (1)": {
+      "main": [
+        [
+          {
+            "node": "Check Completed (1)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Completed (1)": {
+      "main": [
+        [
+          {
+            "node": "Process Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 30 Seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30 Seconds": {
+      "main": [
+        [
+          {
+            "node": "Check Status (2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status (2)": {
+      "main": [
+        [
+          {
+            "node": "Check Completed (2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Completed (2)": {
+      "main": [
+        [
+          {
+            "node": "Process Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 30 Seconds (2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30 Seconds (2)": {
+      "main": [
+        [
+          {
+            "node": "Check Status (3)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status (3)": {
+      "main": [
+        [
+          {
+            "node": "Check Completed (3)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Completed (3)": {
+      "main": [
+        [
+          {
+            "node": "Process Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 2 Minutes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 2 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Check Status (Final)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status (Final)": {
+      "main": [
+        [
+          {
+            "node": "Process Result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Timeout Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-11T02:50:00.000Z",
+      "updatedAt": "2025-10-11T02:50:00.000Z",
+      "id": "ultra-simple",
+      "name": "Ultra Simple"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-11T02:50:00.000Z",
+  "versionId": "1"
+}
+
+
+
+
+
+
+
+
+
+
+
+

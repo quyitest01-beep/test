@@ -1,0 +1,208 @@
+{
+  "name": "Simple Telegram Query",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "id": "telegram-trigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/query/generate-sql",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"naturalLanguage\": \"{{ $json.message.text }}\",\n  \"database\": \"gmp\"\n}",
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "generate-sql",
+      "name": "Generate SQL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/start",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"sql\": \"{{ $json.sql }}\",\n  \"database\": \"gmp\"\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "start-query",
+      "name": "Start Query",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "id": "wait-1-minute",
+      "name": "Wait 1 Minute",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "url": "=https://organ-execute-contract-coaches.trycloudflare.com/api/async/status/{{ $json.queryId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "check-status",
+      "name": "Check Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=🎯 *查询结果*\\n\\n📊 状态: {{ $json.status }}\\n⏱️ 耗时: {{ $json.elapsed }}秒\\n\\n{{ $json.message }}",
+        "additionalFields": {
+          "replyToMessageId": "={{ $('Telegram Trigger').item.json.message.message_id }}",
+          "parseMode": "Markdown"
+        }
+      },
+      "id": "send-reply",
+      "name": "Send Reply",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [1340, 300]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate SQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate SQL": {
+      "main": [
+        [
+          {
+            "node": "Start Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Query": {
+      "main": [
+        [
+          {
+            "node": "Wait 1 Minute",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1 Minute": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status": {
+      "main": [
+        [
+          {
+            "node": "Send Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-11T03:15:00.000Z",
+      "updatedAt": "2025-10-11T03:15:00.000Z",
+      "id": "simple-telegram",
+      "name": "Simple Telegram"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-11T03:15:00.000Z",
+  "versionId": "1"
+}
+
+
+
+
+
+
+
+
+
+
+
+

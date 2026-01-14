@@ -1,0 +1,372 @@
+{
+  "name": "Complete RAG Query System",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "id": "telegram-trigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "telegram-webhook"
+    },
+    {
+      "parameters": {
+        "url": "https://docs.google.com/document/d/187GD-WKLn_EzyO_eEGp-jP0HgKJlQ53_QOrvbdrk1e0/export?format=txt",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "fetch-knowledge-base",
+      "name": "获取知识库内容",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析 Google Docs 知识库内容\nconst content = $json.data || $json;\n\n// 解析 Markdown 内容为文档数组\nconst sections = content.split(/(?=^### \\*\\*)/m);\nconst documents = [];\n\nsections.forEach((section, index) => {\n  if (section.trim()) {\n    const titleMatch = section.match(/^### \\*\\*(\\d+\\.\\s*[^*]+)\\*\\*/m);\n    const title = titleMatch ? titleMatch[1] : `Section ${index + 1}`;\n    \n    let cleanContent = section\n      .replace(/^### \\*\\*.*?\\*\\*/gm, '')\n      .replace(/^```[\\s\\S]*?```/gm, (match) => {\n        return match.replace(/^```sql?\\s*/gm, '').replace(/```$/gm, '');\n      })\n      .replace(/^#+ /gm, '')\n      .trim();\n    \n    if (cleanContent.length > 50) {\n      documents.push({\n        content: cleanContent,\n        metadata: {\n          title: title,\n          type: 'knowledge-base',\n          source: 'google-docs',\n          section: index + 1\n        }\n      });\n    }\n  }\n});\n\n// 合并所有内容为单个知识库字符串\nconst knowledgeBaseContent = documents.map(doc => \n  `## ${doc.metadata.title}\\n${doc.content}`\n).join('\\n\\n');\n\nreturn {\n  json: {\n    documents: documents,\n    knowledgeBaseContent: knowledgeBaseContent,\n    documentCount: documents.length,\n    originalMessage: $('Telegram Trigger').item.json.message.text || 'Unknown message',\n    chatId: $('Telegram Trigger').item.json.message.chat.id || '',\n    messageId: $('Telegram Trigger').item.json.message.message_id || ''\n  }\n};"
+      },
+      "id": "parse-knowledge-base",
+      "name": "解析知识库",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.originalMessage }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "你是一个专业的SQL查询助手，专门为AWS Athena数据库生成准确的SQL查询。\n\n数据库信息：\n- 数据库名：gmp\n- 主要表：game_records\n\n表结构：\n- id (varchar): 记录ID，通常为16位以上数字\n- uid (varchar): 用户ID，格式如 'li-xxxxx' 或 'Userxxxxxxxx'\n- merchant_id (varchar): 商户ID\n- game_id (bigint): 游戏ID\n- game_code (varchar): 游戏代码，如 'gp_crash', 'gp_mines'\n- result (integer): 游戏结果，1表示赢，0表示输\n- currency (varchar): 货币类型，如 'USDT'\n- amount (double): 投注金额\n- pay_out (double): 支付金额\n- multiplier (varchar): 倍数\n- balance (varchar): 余额\n- detail (varchar): 详细信息\n- created_at (bigint): 创建时间戳（毫秒）\n- updated_at (bigint): 更新时间戳（毫秒）\n- provider (varchar): 提供商，常见值：'gp', 'popular'\n- merchant (varchar): 商户标识\n\n重要规则：\n1. 时间字段转换：FROM_UNIXTIME(created_at / 1000) 和 FROM_UNIXTIME(updated_at / 1000)\n2. 金额字段四舍五入：ROUND(CAST(amount AS DOUBLE), 2)\n3. 日期格式：DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s')\n4. 限制结果数量：使用 LIMIT 100\n5. 默认包含条件：provider IN ('gp', 'popular')\n6. 时间范围查询：使用 BETWEEN 和 TO_UNIXTIME 函数\n\n**知识库案例参考：**\n{{ $json.knowledgeBaseContent }}\n\n请基于以上信息、数据库结构和知识库中的相关案例，分析用户查询并生成准确的SQL查询语句。\n\n**重要语言要求：所有输出必须使用中文！**\n\n请严格按照以下JSON格式返回结果（所有字段值必须用中文）：\n{\n  \"queryType\": \"场景类型（中文）\",\n  \"confidence\": \"高/中/低\",\n  \"extractedInfo\": {\n    \"ids\": [\"提取的ID列表\"],\n    \"userInfo\": \"用户相关信息（中文）\",\n    \"timeRange\": \"时间范围信息（中文）\",\n    \"gameInfo\": \"游戏相关信息（中文）\",\n    \"merchantInfo\": \"商户相关信息（中文）\"\n  },\n  \"missingInfo\": [\"缺失的关键信息（中文）\"],\n  \"suggestedQuestions\": [\"建议的澄清问题（中文）\"],\n  \"canExecute\": true/false,\n  \"reason\": \"判断理由（中文）\",\n  \"generatedSQL\": \"生成的SQL查询语句\"\n}\n\n重要：\n1. 只返回JSON，不要包含任何解释文字\n2. 所有描述性字段值必须使用中文\n3. SQL语句保持英文不变\n4. 优先参考知识库中的相似案例"
+        }
+      },
+      "id": "ai-agent-with-knowledge",
+      "name": "AI Agent (带知识库)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        900,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理AI Agent输出，提取SQL并执行查询\nconst inputData = $json;\n\n// 检查AI Agent的输出结构\nlet aiOutput;\nif (inputData.output) {\n  aiOutput = inputData.output;\n} else if (inputData.text) {\n  try {\n    const jsonMatch = inputData.text.match(/\\{[\\s\\S]*\\}/);\n    if (jsonMatch) {\n      aiOutput = JSON.parse(jsonMatch[0]);\n    }\n  } catch (error) {\n    aiOutput = { error: 'JSON解析失败: ' + error.message };\n  }\n} else {\n  aiOutput = { error: 'AI Agent输出不完整' };\n}\n\n// 提取关键信息\nconst queryType = aiOutput.queryType || '未知场景';\nconst confidence = aiOutput.confidence || '低';\nconst extractedInfo = aiOutput.extractedInfo || {};\nconst generatedSQL = aiOutput.generatedSQL || '';\nconst canExecute = aiOutput.canExecute || false;\n\n// 返回结果\nreturn {\n  json: {\n    queryType: queryType,\n    confidence: confidence,\n    extractedInfo: extractedInfo,\n    generatedSQL: generatedSQL,\n    canExecute: canExecute,\n    originalMessage: $('Telegram Trigger').item.json.message.text || 'Unknown message',\n    chatId: $('Telegram Trigger').item.json.message.chat.id || '',\n    messageId: $('Telegram Trigger').item.json.message.message_id || '',\n    // 调试信息\n    debug: {\n      hasOutput: !!inputData.output,\n      hasText: !!inputData.text,\n      parsedOutput: aiOutput,\n      knowledgeBaseUsed: !!inputData.knowledgeBaseContent\n    }\n  }\n};"
+      },
+      "id": "process-ai-output",
+      "name": "处理AI输出",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-1",
+              "leftValue": "={{ $json.canExecute }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            },
+            {
+              "id": "condition-2",
+              "leftValue": "={{ $json.generatedSQL }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "check-sql-generation",
+      "name": "Check SQL Generation",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/start",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"sql\": {{ $json.generatedSQL | json }},\n  \"database\": \"gmp\"\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "start-query",
+      "name": "Start Query",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1560,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 5,
+        "unit": "seconds"
+      },
+      "id": "wait-for-completion",
+      "name": "Wait for Completion",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1780,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/status/={{ $json.queryId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "check-status",
+      "name": "Check Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2000,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 处理查询结果\nconst data = $json;\n\nif (data.success && data.result && data.result.data) {\n  const queryData = data.result.data;\n  \n  return {\n    json: {\n      success: true,\n      queryId: data.queryId,\n      status: data.status,\n      rowCount: queryData.rowCount || 0,\n      totalRows: queryData.totalRows || 0,\n      executionTime: data.result.executionTime,\n      data: queryData,\n      message: `查询成功！返回 ${queryData.rowCount || 0} 条记录`,\n      timestamp: new Date().toISOString()\n    }\n  };\n} else {\n  return {\n    json: {\n      success: false,\n      queryId: data.queryId,\n      status: data.status,\n      error: data.error || '查询失败',\n      message: data.message || '查询执行失败',\n      timestamp: new Date().toISOString()\n    }\n  };\n}"
+      },
+      "id": "process-result",
+      "name": "Process Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2220,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "=查询结果：\n\n📊 **场景类型**: {{ $json.queryType }}\n🎯 **置信度**: {{ $json.confidence }}\n\n🔍 **查询信息**:\n{{ $json.extractedInfo.userInfo ? '- 用户信息: ' + $json.extractedInfo.userInfo + '\\n' : '' }}{{ $json.extractedInfo.merchantInfo ? '- 商户信息: ' + $json.extractedInfo.merchantInfo + '\\n' : '' }}{{ $json.extractedInfo.timeRange ? '- 时间范围: ' + $json.extractedInfo.timeRange + '\\n' : '' }}\n\n📝 **生成的SQL**:\n```sql\n{{ $json.generatedSQL }}\n```\n\n✅ **执行结果**:\n{{ $json.success ? '查询成功！返回 ' + $json.rowCount + ' 条记录' : '查询失败: ' + $json.error }}\n\n⏱️ **执行时间**: {{ $json.executionTime || 'N/A' }}ms\n\n💡 **知识库使用**: {{ $json.debug.knowledgeBaseUsed ? '已使用知识库案例' : '未使用知识库' }}"
+      },
+      "id": "send-telegram-result",
+      "name": "Send Telegram Result",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2440,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.chatId }}",
+        "text": "=❌ **查询失败**\n\n📊 **场景类型**: {{ $json.queryType }}\n🎯 **置信度**: {{ $json.confidence }}\n\n❓ **原因**: {{ $json.reason || '无法生成有效的SQL查询' }}\n\n💡 **建议**: {{ $json.suggestedQuestions ? $json.suggestedQuestions.join('\\n') : '请提供更明确的查询信息' }}\n\n🔍 **缺失信息**: {{ $json.missingInfo ? $json.missingInfo.join(', ') : '无' }}\n\n💡 **知识库使用**: {{ $json.debug.knowledgeBaseUsed ? '已使用知识库案例' : '未使用知识库' }}"
+      },
+      "id": "send-telegram-error",
+      "name": "Send Telegram Error",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1560,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "获取知识库内容",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "获取知识库内容": {
+      "main": [
+        [
+          {
+            "node": "解析知识库",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析知识库": {
+      "main": [
+        [
+          {
+            "node": "AI Agent (带知识库)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent (带知识库)": {
+      "main": [
+        [
+          {
+            "node": "处理AI输出",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "处理AI输出": {
+      "main": [
+        [
+          {
+            "node": "Check SQL Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check SQL Generation": {
+      "main": [
+        [
+          {
+            "node": "Start Query",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Telegram Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Query": {
+      "main": [
+        [
+          {
+            "node": "Wait for Completion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Completion": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status": {
+      "main": [
+        [
+          {
+            "node": "Process Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Result": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2024-10-11T03:00:00.000Z",
+  "versionId": "1"
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "// 简化的动态SQL生成器\n// 专门为n8n工作流生成4个核心查询\n\nconst inputData = $input.all();\nconst timeData = inputData[0].json;\n\n// 提取时间参数\nconst { lastWeekStart, lastWeekEnd, lastWeekRange } = timeData;\n\nconsole.log(`生成SQL查询，时间范围: ${lastWeekRange}`);\n\n// 生成4个核心查询\nconst queries = {\n  merchantDailyLastWeek: `\nSELECT \n    date_str,\n    merchant,\n    unique_users AS daily_unique_users\nFROM merchant_game_analytics\nWHERE stat_type = 'merchant_daily'\n    AND date_str >= '${lastWeekStart}'\n    AND date_str <= '${lastWeekEnd}'\nORDER BY date_str, merchant;`,\n\n  gameDailyLastWeek: `\nSELECT \n    date_str,\n    merchant,\n    game_id,\n    unique_users AS daily_unique_users\nFROM merchant_game_analytics\nWHERE stat_type = 'game_daily'\n    AND date_str >= '${lastWeekStart}'\n    AND date_str <= '${lastWeekEnd}'\nORDER BY date_str, merchant, game_id;`,\n\n  merchantWeeklyTotal: `\nSELECT \n    '${lastWeekRange}' AS period_range,\n    merchant,\n    SUM(unique_users) AS weekly_unique_users,\n    COUNT(DISTINCT date_str) AS active_days\nFROM merchant_game_analytics\nWHERE stat_type = 'merchant_daily'\n    AND date_str >= '${lastWeekStart}'\n    AND date_str <= '${lastWeekEnd}'\nGROUP BY merchant\nORDER BY weekly_unique_users DESC;`,\n\n  gameWeeklyTotal: `\nSELECT \n    '${lastWeekRange}' AS period_range,\n    merchant,\n    game_id,\n    SUM(unique_users) AS weekly_unique_users,\n    COUNT(DISTINCT date_str) AS active_days\nFROM merchant_game_analytics\nWHERE stat_type = 'game_daily'\n    AND date_str >= '${lastWeekStart}'\n    AND date_str <= '${lastWeekEnd}'\nGROUP BY merchant, game_id\nORDER BY weekly_unique_users DESC;`\n};\n\n// 返回结果\nreturn {\n  json: {\n    success: true,\n    period: lastWeekRange,\n    queries: queries,\n    queryCount: 4\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        160
+      ],
+      "id": "sql-generator-node-id",
+      "name": "SQL生成器"
+    }
+  ],
+  "connections": {},
+  "pinData": {},
+  "meta": {
+    "instanceId": "62d009a67fe5901697153ecb2e26ec4404d739c9e5b61b72ca043aa4cd52bd0d"
+  }
+}
+
+
+
+
+
+

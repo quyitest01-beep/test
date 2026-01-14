@@ -1,0 +1,380 @@
+{
+  "name": "月度数据报告生成",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "id": "trigger-1",
+      "name": "手动触发"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 环境变量设置（月度模式）\nconst today = new Date();\nconst lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);\nconst year = lastMonth.getFullYear();\nconst month = String(lastMonth.getMonth() + 1).padStart(2, '0');\n\nconst targetPeriod = `${year}年${month}月`;\nconst targetYYYYMM = `${year}${month}`;\n\nreturn [{\n  json: {\n    report_type: 'monthly',\n    target_period: targetPeriod,\n    target_yyyy_mm: targetYYYYMM,\n    year: year,\n    month: month,\n    step: 1,\n    step_name: \"环境变量设置（月度）\",\n    status: \"completed\",\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300],
+      "id": "env-setup",
+      "name": "环境变量设置"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.larksuite.com/open-apis/auth/v3/tenant_access_token/internal",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "app_id",
+              "value": "cli_a8104e7d7c39902f"
+            },
+            {
+              "name": "app_secret",
+              "value": "eXNg5PAy52RAz03QCtCWqcSn2M8bld1B"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300],
+      "id": "get-token",
+      "name": "获取Lark Access Token"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [900, 200],
+      "id": "merge-1",
+      "name": "Merge-营收"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [900, 400],
+      "id": "merge-2",
+      "name": "Merge-用户"
+    },
+    {
+      "parameters": {
+        "url": "=https://open.larksuite.com/open-apis/mail/v1/user_mailboxes/poon@gaming-panda.com/messages?folder_id=INBOX&page_size=20",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.tenant_access_token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 200],
+      "id": "list-emails-revenue",
+      "name": "列出邮件-营收"
+    },
+    {
+      "parameters": {
+        "url": "=https://open.larksuite.com/open-apis/mail/v1/user_mailboxes/poon@gaming-panda.com/messages?folder_id=SENT&page_size=20",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.tenant_access_token }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 400],
+      "id": "list-emails-user",
+      "name": "列出邮件-用户"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 筛选目标邮件（营收数据）- 月度\nconst inputs = $input.all();\n\n// 计算上个月\nconst today = new Date();\nconst lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);\nconst year = lastMonth.getFullYear();\nconst month = String(lastMonth.getMonth() + 1).padStart(2, '0');\nconst monthLabel = `${year}年${month}月`;\n\nconst targetSubject = `【即时】月度详细汇总报表 - ${monthLabel}`;\nconst targetAttachment = `${year}${month}_merchant_currency_game.xlsx`;\nconst targetSender = \"billing@gaming-panda.com\";\n\n// 筛选逻辑\nconst targetEmails = [];\n\ninputs.forEach((input) => {\n  const emailData = input.json;\n  const subject = emailData.data?.message?.subject || emailData.subject || \"\";\n  const sender = emailData.data?.message?.head_from?.mail_address || emailData.head_from?.mail_address || \"\";\n  \n  if (subject === targetSubject && sender === targetSender) {\n    const attachments = emailData.data?.message?.attachments || emailData.attachments || [];\n    const targetAttachmentFile = attachments.find(att => \n      att.filename && att.filename === targetAttachment\n    );\n    \n    if (targetAttachmentFile) {\n      const messageId = emailData.data?.message?.message_id || emailData.message_id;\n      targetEmails.push({\n        message_id: messageId,\n        subject,\n        sender,\n        target_attachment: targetAttachmentFile,\n        report_type: 'monthly',\n        target_period: monthLabel,\n      });\n    }\n  }\n});\n\nreturn targetEmails.map(email => ({ json: email }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 200],
+      "id": "filter-email-revenue",
+      "name": "筛选目标邮件-营收"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 筛选目标邮件（用户数据）- 月度\nconst inputs = $input.all();\n\n// 计算上个月\nconst today = new Date();\nconst lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);\nconst year = lastMonth.getFullYear();\nconst month = String(lastMonth.getMonth() + 1).padStart(2, '0');\nconst monthLabel = `${year}年${month}月`;\n\nconst targetSubjectVariants = [\n  `【${monthLabel}】月度用户数据报表`,\n  `【${month}月】月度用户数据报表`,\n  `月度用户数据报表 - ${year}${month}`,\n];\nconst targetSender = \"poon@gaming-panda.com\";\nconst targetAttachments = [\"游戏新用户留存数据.xlsx\"];\n\n// 筛选逻辑\nconst targetEmails = [];\n\ninputs.forEach((input) => {\n  const emailData = input.json;\n  const subject = emailData.data?.message?.subject || emailData.subject || \"\";\n  const sender = emailData.data?.message?.head_from?.mail_address || emailData.head_from?.mail_address || \"\";\n  \n  const subjectMatches = targetSubjectVariants.some(targetSubj => subject === targetSubj);\n  const senderMatches = sender.toLowerCase().trim() === targetSender.toLowerCase();\n  \n  if (subjectMatches && senderMatches) {\n    const attachments = emailData.data?.message?.attachments || emailData.attachments || [];\n    const matchedAttachments = attachments.filter(att =>\n      att.filename && targetAttachments.includes(att.filename)\n    );\n    \n    if (matchedAttachments.length > 0) {\n      const messageId = emailData.data?.message?.message_id || emailData.message_id;\n      targetEmails.push({\n        message_id: messageId,\n        subject,\n        sender,\n        target_attachment: matchedAttachments[0],\n        target_attachments: matchedAttachments,\n        report_type: 'monthly',\n        target_period: monthLabel,\n      });\n    }\n  }\n});\n\nreturn targetEmails.map(email => ({ json: email }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1340, 400],
+      "id": "filter-email-user",
+      "name": "筛选目标邮件-用户"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 数据聚合器（月度）- 引用 weekly-monthly-data-aggregator.js\nconst inputs = $input.all();\n\n// 设置报告类型为月度\nconst reportType = 'monthly';\n\n// 工具函数\nfunction toNum(v) {\n  if (v === null || v === undefined || v === '') return 0;\n  const n = Number(v);\n  return Number.isFinite(n) ? n : 0;\n}\n\nfunction parsePercent(v) {\n  if (v === null || v === undefined || v === '') return null;\n  const str = String(v).replace(/%/g, '').trim();\n  const num = parseFloat(str);\n  return isNaN(num) ? null : num / 100;\n}\n\n// 计算上个月\nconst today = new Date();\nconst lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);\nconst year = lastMonth.getFullYear();\nconst month = String(lastMonth.getMonth() + 1).padStart(2, '0');\nconst period = `${year}年${month}月`;\n\n// 实际实现请参考 weekly-monthly-data-aggregator.js 的完整代码\n// 这里返回示例结构\nreturn [{\n  json: {\n    report_type: reportType,\n    period: period,\n    global_summary: {\n      total_new_users: 0,\n      total_bet_usd: 0,\n      total_payout_usd: 0,\n      total_ggr_usd: 0,\n      avg_d1_retention: null,\n      avg_d7_retention: null,\n      avg_ggr_per_user: 0,\n    },\n    games: [],\n    merchants: [],\n    meta: {\n      generated_at: new Date().toISOString(),\n      game_count: 0,\n      merchant_count: 0,\n    },\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 300],
+      "id": "aggregate-data",
+      "name": "数据聚合"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 趋势计算器（月度）- 引用 weekly-monthly-trend-calculator.js\nconst inputs = $input.all();\n\n// 实际实现请参考 weekly-monthly-trend-calculator.js 的完整代码\nreturn inputs;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 300],
+      "id": "calculate-trends",
+      "name": "计算趋势"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [2000, 300],
+      "id": "ai-model",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{$input.first().json}}",
+        "options": {
+          "systemMessage": "={{ $('读取AI提示词').json.content }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [2220, 300],
+      "id": "ai-generate-report",
+      "name": "AI生成报告"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Markdown → HTML 转换器（月度）\nconst input = $input.first();\nconst markdownText = input.json.output || input.json.content || input.json.text || '';\n\nconst reportType = 'monthly';\n\n// 生成HTML（参考游戏评级工作流的完整HTML模板）\nconst fullHtml = `<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>月度数据报告</title>\n  <style>\n    /* 参考游戏评级工作流的CSS样式 */\n  </style>\n</head>\n<body>\n  <div class=\"report-container\">\n    ${markdownText}\n  </div>\n</body>\n</html>`;\n\nreturn [{\n  json: {\n    html: fullHtml,\n    report_type: reportType,\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2440, 300],
+      "id": "generate-html",
+      "name": "生成HTML"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://sticky-dubai-gazette-towns.trycloudflare.com/render",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "html",
+              "value": "={{ $json.html }}"
+            },
+            {
+              "name": "filename",
+              "value": "月度数据报告"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "pdf"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2660, 300],
+      "id": "generate-pdf",
+      "name": "生成PDF"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.larksuite.com/open-apis/drive/v1/medias/upload_all",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.tenant_access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "file_name",
+              "value": "月度数据报告.pdf"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "pdf"
+            },
+            {
+              "name": "parent_type",
+              "value": "bitable_file"
+            },
+            {
+              "name": "parent_node",
+              "value": "LUxuboAUwagjVqsd97Clf1IMgJF"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [2880, 300],
+      "id": "upload-pdf",
+      "name": "上传PDF"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 整合Lark卡片消息（月度）\nconst items = $input.all();\nconst reportData = items.find(i => i.json?.global_summary)?.json || {};\nconst period = reportData.period || '';\n\n// 构建卡片消息\nconst card = {\n  config: { wide_screen_mode: true },\n  header: {\n    title: { tag: 'plain_text', content: `月度数据报告（${period}）` },\n    template: 'turquoise',\n  },\n  elements: [\n    {\n      tag: 'div',\n      text: {\n        tag: 'lark_md',\n        content: `**核心指标**\\n新用户数: ${reportData.global_summary?.total_new_users || 0}\\n总GGR: ${reportData.global_summary?.total_ggr_usd || 0} USD`,\n      },\n    },\n  ],\n};\n\nreturn [{\n  json: {\n    card_payload: { card },\n    tenant_access_token: items.find(i => i.json?.tenant_access_token)?.json?.tenant_access_token,\n  },\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3100, 300],
+      "id": "build-card",
+      "name": "整合Lark卡片"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.larksuite.com/open-apis/im/v1/messages?receive_id_type=chat_id",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "=application/json; charset=utf-8"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.tenant_access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"receive_id\": \"oc_f138be619fd7e6ef75c45ce167a3bf24\",\n  \"msg_type\": \"interactive\",\n  \"content\": JSON.stringify($json.card_payload.card)\n} }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [3320, 300],
+      "id": "send-notification",
+      "name": "发送Lark通知"
+    }
+  ],
+  "connections": {
+    "手动触发": {
+      "main": [[{ "node": "环境变量设置", "type": "main", "index": 0 }]]
+    },
+    "环境变量设置": {
+      "main": [[{ "node": "获取Lark Access Token", "type": "main", "index": 0 }]]
+    },
+    "获取Lark Access Token": {
+      "main": [[
+        { "node": "Merge-营收", "type": "main", "index": 0 },
+        { "node": "Merge-用户", "type": "main", "index": 0 }
+      ]]
+    },
+    "Merge-营收": {
+      "main": [[{ "node": "列出邮件-营收", "type": "main", "index": 0 }]]
+    },
+    "Merge-用户": {
+      "main": [[{ "node": "列出邮件-用户", "type": "main", "index": 0 }]]
+    },
+    "列出邮件-营收": {
+      "main": [[{ "node": "筛选目标邮件-营收", "type": "main", "index": 0 }]]
+    },
+    "列出邮件-用户": {
+      "main": [[{ "node": "筛选目标邮件-用户", "type": "main", "index": 0 }]]
+    },
+    "筛选目标邮件-营收": {
+      "main": [[{ "node": "数据聚合", "type": "main", "index": 0 }]]
+    },
+    "筛选目标邮件-用户": {
+      "main": [[{ "node": "数据聚合", "type": "main", "index": 1 }]]
+    },
+    "数据聚合": {
+      "main": [[{ "node": "计算趋势", "type": "main", "index": 0 }]]
+    },
+    "计算趋势": {
+      "main": [[{ "node": "AI生成报告", "type": "main", "index": 0 }]]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [[{ "node": "AI生成报告", "type": "ai_languageModel", "index": 0 }]]
+    },
+    "AI生成报告": {
+      "main": [[{ "node": "生成HTML", "type": "main", "index": 0 }]]
+    },
+    "生成HTML": {
+      "main": [[{ "node": "生成PDF", "type": "main", "index": 0 }]]
+    },
+    "生成PDF": {
+      "main": [[{ "node": "上传PDF", "type": "main", "index": 0 }]]
+    },
+    "上传PDF": {
+      "main": [[{ "node": "整合Lark卡片", "type": "main", "index": 0 }]]
+    },
+    "整合Lark卡片": {
+      "main": [[{ "node": "发送Lark通知", "type": "main", "index": 0 }]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-01T00:00:00.000Z",
+  "versionId": "1"
+}
+
+
+
+
+
+

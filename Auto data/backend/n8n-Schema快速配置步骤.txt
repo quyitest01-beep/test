@@ -1,0 +1,56 @@
+n8n AI Agent Schema 快速配置步骤
+====================================
+
+1. 打开 n8n AI Agent 节点配置
+
+2. 在 "Output Parser" 选项中选择：
+   ✓ Structured Output Parser
+
+3. 在 "Schema" 或 "JSON Schema" 字段中粘贴以下内容：
+   （复制 ai-output-schema-markdown.json 文件的全部内容）
+
+4. 在 "System Message" 字段中粘贴：
+   （复制 business-report-ai-agent-prompt-json.txt 文件的全部内容）
+
+5. 在 "Prompt" 字段中配置：
+   - 分析以下业务数据：{{ $json.content }}
+   或
+   - 使用 Code 节点预处理数据后传入
+
+6. 测试运行：
+   - 点击 "Execute Workflow"
+   - 检查输出是否为 JSON 格式
+   - 验证 markdown 字段是否包含完整报告
+
+7. 后续节点处理：
+   - 使用 Code 节点提取 markdown 字段
+   - 传递给 HTML 生成节点
+
+常见问题：
+---------
+Q: Schema 格式错误？
+A: 确保 JSON 格式正确，使用 JSON 验证工具检查
+
+Q: AI 输出不符合 Schema？
+A: 
+  1. 检查 System Message 是否要求输出 JSON
+  2. 确保 Schema 描述清晰
+  3. 在提示词中强调遵循 Schema
+
+Q: 如何调试？
+A:
+  1. 先不使用 Schema，测试 AI 输出
+  2. 逐步添加 Schema 字段测试
+  3. 查看错误日志
+
+
+
+
+
+
+
+
+
+
+
+

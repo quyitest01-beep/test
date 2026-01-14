@@ -1,0 +1,395 @@
+{
+  "name": "Intelligent Query Router",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "id": "telegram-trigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=请分析以下查询消息，判断查询类型和支持程度：\n\n原始消息：{{ $json.message.text }}\n消息时间：{{ new Date($json.message.date * 1000).toISOString() }}\n\n支持的查询类型：\n1. ID查询 - 包含16位以上数字ID\n2. 用户查询 - 包含uid、用户ID等用户标识\n3. 时间范围查询 - 包含日期、时间相关词汇\n4. 统计查询 - 包含数量、金额、统计等词汇\n5. 游戏查询 - 包含游戏代码、游戏类型等\n6. 商户查询 - 包含merchant、商户等\n\n请按以下格式返回JSON：\n{\n  \"queryType\": \"ID查询|用户查询|时间查询|统计查询|游戏查询|商户查询|混合查询|无法识别\",\n  \"confidence\": 0.0-1.0,\n  \"extractedInfo\": {\n    \"ids\": [\"提取的ID列表\"],\n    \"userInfo\": \"用户相关信息\",\n    \"timeRange\": \"时间范围信息\",\n    \"gameInfo\": \"游戏相关信息\",\n    \"merchantInfo\": \"商户相关信息\"\n  },\n  \"missingInfo\": [\"缺失的关键信息\"],\n  \"suggestedQuestions\": [\"建议的澄清问题\"],\n  \"canExecute\": true/false,\n  \"reason\": \"判断理由\"\n}",
+        "options": {
+          "systemMessage": "你是一个专业的查询分析助手，专门分析用户的消息并判断查询的可执行性。\n\n任务：\n1. 分析用户消息中的查询意图\n2. 提取关键信息（ID、用户、时间、游戏等）\n3. 判断查询的完整性和可执行性\n4. 识别缺失的关键信息\n5. 生成澄清问题\n\n支持的查询字段：\n- id: 记录ID\n- uid: 用户ID\n- merchant_id: 商户ID\n- game_id: 游戏ID\n- game_code: 游戏代码\n- result: 游戏结果\n- currency: 货币类型\n- amount: 金额\n- pay_out: 支付金额\n- multiplier: 倍数\n- balance: 余额\n- provider: 提供商\n- merchant: 商户\n- created_at: 创建时间\n- updated_at: 更新时间\n\n分析规则：\n1. 如果消息包含明确的ID（16位以上数字），标记为ID查询\n2. 如果包含用户相关信息，标记为用户查询\n3. 如果包含时间词汇，标记为时间查询\n4. 如果包含统计词汇（数量、金额、总计等），标记为统计查询\n5. 如果包含游戏相关词汇，标记为游戏查询\n6. 如果包含商户相关词汇，标记为商户查询\n7. 如果包含多种信息，标记为混合查询\n8. 如果无法识别，标记为无法识别\n\n置信度评分：\n- 0.9-1.0: 信息完整，可以直接执行\n- 0.7-0.8: 信息基本完整，可以尝试执行\n- 0.5-0.6: 信息不完整，需要澄清\n- 0.3-0.4: 信息模糊，需要更多细节\n- 0.0-0.2: 无法理解，需要人工协助\n\n请严格按照JSON格式返回结果。"
+        }
+      },
+      "id": "query-analyzer",
+      "name": "Query Analyzer",
+      "type": "n8n-nodes-base.agent",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 解析 AI 分析结果\nconst aiResponse = $json.output;\nlet analysis;\n\ntry {\n  // 尝试解析 JSON\n  analysis = JSON.parse(aiResponse);\n} catch (error) {\n  // 如果解析失败，使用默认分析\n  analysis = {\n    queryType: \"无法识别\",\n    confidence: 0.0,\n    extractedInfo: {},\n    missingInfo: [\"消息格式无法识别\"],\n    suggestedQuestions: [\"请提供更明确的查询信息\"],\n    canExecute: false,\n    reason: \"AI分析结果格式错误\"\n  };\n}\n\n// 添加原始消息信息\nanalysis.originalMessage = $('Telegram Trigger').item.json.message.text;\nanalysis.chatId = $('Telegram Trigger').item.json.message.chat.id;\nanalysis.messageId = $('Telegram Trigger').item.json.message.message_id;\nanalysis.timestamp = new Date().toISOString();\n\nreturn {\n  json: analysis\n};"
+      },
+      "id": "parse-analysis",
+      "name": "Parse Analysis",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-1",
+              "leftValue": "={{ $json.canExecute }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equal"
+              }
+            },
+            {
+              "id": "condition-2",
+              "leftValue": "={{ $json.confidence }}",
+              "rightValue": 0.7,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "can-execute-check",
+      "name": "Can Execute Check",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=根据分析结果生成SQL查询：\n\n查询类型：{{ $json.queryType }}\n置信度：{{ $json.confidence }}\n提取信息：{{ JSON.stringify($json.extractedInfo) }}\n原始消息：{{ $json.originalMessage }}\n消息时间：{{ new Date($('Telegram Trigger').item.json.message.date * 1000).toISOString() }}\n\n请生成对应的SQL查询语句。",
+        "options": {
+          "systemMessage": "你是一个专业的SQL查询助手，专门为AWS Athena数据库生成SQL查询语句。\n\n数据库信息：\n- 数据库名：gmp\n- 主要表：game_records\n- 表结构：\n  - id (varchar): 记录ID\n  - uid (varchar): 用户ID\n  - merchant_id (varchar): 商户ID\n  - game_id (bigint): 游戏ID\n  - game_code (varchar): 游戏代码\n  - result (integer): 游戏结果\n  - currency (varchar): 货币类型\n  - amount (double): 金额\n  - pay_out (double): 支付金额\n  - multiplier (varchar): 倍数\n  - balance (varchar): 余额\n  - detail (varchar): 详细信息\n  - created_at (bigint): 创建时间戳\n  - updated_at (bigint): 更新时间戳\n  - provider (varchar): 提供商\n  - merchant (varchar): 商户\n\n重要规则：\n1. 只返回SQL语句，不要包含任何解释\n2. 时间字段需要转换：FROM_UNIXTIME(created_at / 1000) 和 FROM_UNIXTIME(updated_at / 1000)\n3. 金额字段需要四舍五入：ROUND(CAST(amount AS DOUBLE), 2)\n4. 日期格式：DATE_FORMAT(FROM_UNIXTIME(created_at / 1000), '%Y-%m-%d %H:%i:%s')\n5. 限制结果数量，使用 LIMIT 100\n6. 使用适当的WHERE条件避免全表扫描\n7. 如果涉及时间范围，使用BETWEEN和TO_UNIXTIME函数\n8. 默认包含 provider IN ('gp', 'popular')\n\n查询生成规则：\n- ID查询：WHERE id IN ('id1', 'id2', ...)\n- 用户查询：WHERE uid = 'user_id'\n- 时间查询：WHERE updated_at BETWEEN start_time AND end_time\n- 统计查询：使用 COUNT, SUM, AVG 等聚合函数\n- 游戏查询：WHERE game_code = 'game_code'\n- 商户查询：WHERE merchant_id = 'merchant_id'\n- 混合查询：组合多个条件\n\n时间范围默认：从消息时间往前推7天"
+        }
+      },
+      "id": "generate-sql",
+      "name": "Generate SQL",
+      "type": "n8n-nodes-base.agent",
+      "typeVersion": 1,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://organ-execute-contract-coaches.trycloudflare.com/api/async/start",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={\n  \"sql\": \"{{ $json.output }}\",\n  \"database\": \"gmp\"\n}",
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "execute-query",
+      "name": "Execute Query",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1340, 200]
+    },
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "id": "wait-execution",
+      "name": "Wait Execution",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1560, 200]
+    },
+    {
+      "parameters": {
+        "url": "=https://organ-execute-contract-coaches.trycloudflare.com/api/async/status/{{ $json.queryId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "f6cd456a61fa81efce5bbf2f4b6e649ac8430f7e17f2e46a3414f18c03d0b83d"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "check-results",
+      "name": "Check Results",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1780, 200]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=请将查询结果格式化为Telegram消息：\n\n原始消息：{{ $('Parse Analysis').item.json.originalMessage }}\n查询类型：{{ $('Parse Analysis').item.json.queryType }}\n置信度：{{ $('Parse Analysis').item.json.confidence }}\n\n查询结果：\n状态：{{ $json.status }}\n执行时间：{{ $json.elapsed }}秒\n记录数：{{ $json.result?.row_count || 0 }}\n\n数据：\n{{ JSON.stringify($json.result?.data || [], null, 2) }}",
+        "options": {
+          "systemMessage": "你是一个数据分析助手，专门格式化查询结果并生成用户友好的报告。\n\n格式要求：\n1. 使用Markdown格式\n2. 显示查询类型和置信度\n3. 包含查询统计信息\n4. 以表格或列表形式展示数据\n5. 限制显示前10条记录\n6. 使用emoji增强可读性\n\n示例格式：\n🎯 **查询结果** ({{ $('Parse Analysis').item.json.queryType }}, 置信度: {{ $('Parse Analysis').item.json.confidence }})\n\n📊 **执行统计**\n- 找到 X 条记录\n- 执行时间: X秒\n- 数据扫描: XMB\n\n📋 **数据预览** (前X条):\n[显示数据]\n\n如果记录超过10条，在末尾添加：\n... 还有 X 条记录"
+        }
+      },
+      "id": "format-success-result",
+      "name": "Format Success Result",
+      "type": "n8n-nodes-base.agent",
+      "typeVersion": 1,
+      "position": [2000, 200]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=需要澄清查询信息：\n\n原始消息：{{ $json.originalMessage }}\n查询类型：{{ $json.queryType }}\n置信度：{{ $json.confidence }}\n缺失信息：{{ JSON.stringify($json.missingInfo) }}\n建议问题：{{ JSON.stringify($json.suggestedQuestions) }}\n\n请生成友好的澄清消息。",
+        "options": {
+          "systemMessage": "你是一个友好的查询助手，专门帮助用户澄清查询需求。\n\n任务：\n1. 礼貌地说明当前查询的问题\n2. 询问缺失的关键信息\n3. 提供具体的示例\n4. 保持积极和帮助性的语调\n\n格式要求：\n- 使用Markdown格式\n- 使用emoji增强可读性\n- 提供具体的改进建议\n- 给出示例查询\n\n示例格式：\n🤔 **查询需要澄清**\n\n我理解您想要查询：{{ $json.queryType }}\n\n但是缺少以下关键信息：\n[列出缺失信息]\n\n请提供以下信息：\n[列出建议问题]\n\n💡 **示例**\n[提供示例查询]\n\n请重新发送更详细的查询信息，我会立即为您执行查询！"
+        }
+      },
+      "id": "generate-clarification",
+      "name": "Generate Clarification",
+      "type": "n8n-nodes-base.agent",
+      "typeVersion": 1,
+      "position": [1120, 400]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=无法处理的查询：\n\n原始消息：{{ $json.originalMessage }}\n查询类型：{{ $json.queryType }}\n置信度：{{ $json.confidence }}\n原因：{{ $json.reason }}\n\n请生成转人工处理的消息。",
+        "options": {
+          "systemMessage": "你是一个专业的客服助手，专门处理复杂查询的人工转接。\n\n任务：\n1. 礼貌地说明查询的复杂性\n2. 解释为什么需要人工协助\n3. 提供替代方案或建议\n4. 保持专业和友好的语调\n\n格式要求：\n- 使用Markdown格式\n- 使用emoji增强可读性\n- 提供明确的下一步指导\n\n示例格式：\n🔧 **需要人工协助**\n\n您的查询比较复杂，我需要人工协助来处理：\n\n**查询类型**：{{ $json.queryType }}\n**复杂度原因**：{{ $json.reason }}\n\n💡 **建议**\n1. 联系技术支持团队\n2. 提供更详细的查询需求\n3. 或者尝试简化的查询方式\n\n📞 **联系方式**\n技术支持：[联系方式]\n工作时间：[工作时间]\n\n感谢您的理解！我们会尽快为您处理。"
+        }
+      },
+      "id": "generate-human-transfer",
+      "name": "Generate Human Transfer",
+      "type": "n8n-nodes-base.agent",
+      "typeVersion": 1,
+      "position": [1120, 600]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Parse Analysis').item.json.chatId }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "replyToMessageId": "={{ $('Parse Analysis').item.json.messageId }}",
+          "parseMode": "Markdown"
+        }
+      },
+      "id": "send-success-result",
+      "name": "Send Success Result",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [2220, 200]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Parse Analysis').item.json.chatId }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "replyToMessageId": "={{ $('Parse Analysis').item.json.messageId }}",
+          "parseMode": "Markdown"
+        }
+      },
+      "id": "send-clarification",
+      "name": "Send Clarification",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [1340, 400]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Parse Analysis').item.json.chatId }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "replyToMessageId": "={{ $('Parse Analysis').item.json.messageId }}",
+          "parseMode": "Markdown"
+        }
+      },
+      "id": "send-human-transfer",
+      "name": "Send Human Transfer",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.1,
+      "position": [1340, 600]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Query Analyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Query Analyzer": {
+      "main": [
+        [
+          {
+            "node": "Parse Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Analysis": {
+      "main": [
+        [
+          {
+            "node": "Can Execute Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Can Execute Check": {
+      "main": [
+        [
+          {
+            "node": "Generate SQL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Clarification",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate Human Transfer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate SQL": {
+      "main": [
+        [
+          {
+            "node": "Execute Query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Query": {
+      "main": [
+        [
+          {
+            "node": "Wait Execution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Execution": {
+      "main": [
+        [
+          {
+            "node": "Check Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Results": {
+      "main": [
+        [
+          {
+            "node": "Format Success Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Success Result": {
+      "main": [
+        [
+          {
+            "node": "Send Success Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Clarification": {
+      "main": [
+        [
+          {
+            "node": "Send Clarification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Human Transfer": {
+      "main": [
+        [
+          {
+            "node": "Send Human Transfer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2025-10-11T04:00:00.000Z",
+      "updatedAt": "2025-10-11T04:00:00.000Z",
+      "id": "intelligent-router",
+      "name": "Intelligent Router"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-11T04:00:00.000Z",
+  "versionId": "1"
+}
