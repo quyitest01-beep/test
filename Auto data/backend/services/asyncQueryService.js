@@ -120,9 +120,9 @@ class AsyncQueryService {
         success: true,
         requestId: internalQueryId,
         queryId: athenaQueryId,
-        executionTime: queryExecution.statistics.totalExecutionTimeInMillis || 0,
+        executionTime: stats.executionTime || 0,
         rowCount: results.recordCount || 0,
-        dataScanned: queryExecution.statistics.dataScannedInBytes || 0,
+        dataScanned: stats.dataScanned || 0,
         cost: stats.cost || 0,
         data: results.data || []
       };

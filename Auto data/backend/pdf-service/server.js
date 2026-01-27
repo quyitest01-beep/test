@@ -1,152 +1,192 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const cors = require('cors');
 const puppeteer = require('puppeteer-core');
+const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 8787;
-const HOST = process.env.HOST || '0.0.0.0';
-const API_KEY = process.env.API_KEY || process.env.PDF_SERVICE_API_KEY;
 
-app.use(morgan('tiny'));
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+// 中间件
 app.use(cors());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Simple API key guard (optional). Set API_KEY env to enable.
-app.use((req, res, next) => {
-  if (!API_KEY) return next();
-  const key = req.get('x-api-key');
-  if (key && key === API_KEY) return next();
-  if (req.path === '/health') return next();
-  return res.status(401).json({ error: 'unauthorized' });
-});
+// 查找Chrome浏览器路径
+function findChrome() {
+  const possiblePaths = [
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    process.env.CHROME_PATH
+  ];
 
-let browserPromise;
-async function getBrowser() {
-  if (!browserPromise) {
-    // 自动检测Chrome路径
-    let executablePath = process.env.CHROME_PATH;
-    
-    // Windows系统默认Chrome路径
-    if (!executablePath && process.platform === 'win32') {
-      const possiblePaths = [
-        'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-        'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
-        process.env.LOCALAPPDATA + '\\Google\\Chrome\\Application\\chrome.exe'
-      ];
-      
-      const fs = require('fs');
-      for (const path of possiblePaths) {
-        if (fs.existsSync(path)) {
-          executablePath = path;
-          console.log(`Found Chrome at: ${executablePath}`);
-          break;
-        }
-      }
+  for (const chromePath of possiblePaths) {
+    if (chromePath && fs.existsSync(chromePath)) {
+      return chromePath;
     }
-    
-    if (!executablePath) {
-      throw new Error('Chrome executable not found. Please install Chrome or set CHROME_PATH environment variable.');
-    }
-    
-    browserPromise = puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      headless: true,
-      executablePath: executablePath
-    });
   }
-  return browserPromise;
+
+  throw new Error('Chrome browser not found. Please install Google Chrome or set CHROME_PATH environment variable.');
 }
 
+const CHROME_PATH = findChrome();
+console.log(`Found Chrome at: ${CHROME_PATH}`);
+
+// 健康检查端点
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({
+    status: 'ok',
+    service: 'PDF Rendering Service',
+    port: PORT,
+    chromePath: CHROME_PATH
+  });
 });
 
-// POST /render  { html, filename?, pdfOptions? }
+// 渲染HTML为PDF
 app.post('/render', async (req, res) => {
+  let browser;
   try {
-    const { html, filename = 'document.pdf', pdfOptions = {} } = req.body || {};
-    if (!html || typeof html !== 'string') {
-      return res.status(400).json({ error: 'html is required (string)' });
+    const { html, filename = 'document.pdf', options = {} } = req.body;
+
+    if (!html) {
+      return res.status(400).json({
+        success: false,
+        error: 'HTML content is required'
+      });
     }
 
-    const browser = await getBrowser();
+    // 清理文件名：移除非ASCII字符，保留原始名称用于URL编码
+    const safeFilename = filename.replace(/[^\x20-\x7E]/g, '_');
+    const encodedFilename = encodeURIComponent(filename);
+
+    // 启动浏览器
+    browser = await puppeteer.launch({
+      executablePath: CHROME_PATH,
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
 
-    const defaultOpts = {
-      format: 'A4',
+    // PDF选项
+    const pdfOptions = {
+      format: options.format || 'A4',
       printBackground: true,
-      margin: { top: '12mm', right: '12mm', bottom: '12mm', left: '12mm' }
+      margin: options.margin || {
+        top: '20px',
+        right: '20px',
+        bottom: '20px',
+        left: '20px'
+      },
+      ...options
     };
-    const buffer = await page.pdf({ ...defaultOpts, ...pdfOptions });
-    await page.close();
 
-    // 清理filename，移除非法字符
-    // 首先移除所有非ASCII字符和特殊字符，只保留安全字符
-    let safeFilename = filename
-      .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')  // 替换非法字符
-      .replace(/[^\x20-\x7E]/g, '_')  // 替换所有非ASCII字符（包括中文）
-      .replace(/\s+/g, '_')  // 替换空格
-      .substring(0, 200);  // 限制长度
-    
-    // 对原始filename进行URL编码以支持中文和特殊字符
-    const encodedFilename = encodeURIComponent(filename.substring(0, 200));
+    const pdfBuffer = await page.pdf(pdfOptions);
 
+    await browser.close();
+
+    // 设置响应头（使用ASCII安全的文件名）
     res.setHeader('Content-Type', 'application/pdf');
-    // 使用ASCII安全的filename作为fallback，使用编码的filename*作为主要文件名
-    res.setHeader('Content-Disposition', `inline; filename="${safeFilename}"; filename*=UTF-8''${encodedFilename}`);
-    return res.send(buffer);
-  } catch (err) {
-    console.error('Render error:', err);
-    return res.status(500).json({ error: 'render_failed', message: err.message });
+    res.setHeader('Content-Disposition', `attachment; filename="${safeFilename}"; filename*=UTF-8''${encodedFilename}`);
+    res.setHeader('Content-Length', pdfBuffer.length);
+
+    res.send(pdfBuffer);
+
+  } catch (error) {
+    console.error('PDF generation error:', error);
+    
+    if (browser) {
+      await browser.close();
+    }
+
+    res.status(500).json({
+      success: false,
+      error: 'Failed to generate PDF',
+      message: error.message
+    });
   }
 });
 
-// POST /render-url { url, filename?, pdfOptions? }
+// 从URL渲染PDF
 app.post('/render-url', async (req, res) => {
+  let browser;
   try {
-    const { url, filename = 'document.pdf', pdfOptions = {} } = req.body || {};
-    if (!url || typeof url !== 'string') {
-      return res.status(400).json({ error: 'url is required (string)' });
+    const { url, filename = 'document.pdf', options = {} } = req.body;
+
+    if (!url) {
+      return res.status(400).json({
+        success: false,
+        error: 'URL is required'
+      });
     }
-    const browser = await getBrowser();
+
+    // 清理文件名：移除非ASCII字符，保留原始名称用于URL编码
+    const safeFilename = filename.replace(/[^\x20-\x7E]/g, '_');
+    const encodedFilename = encodeURIComponent(filename);
+
+    // 启动浏览器
+    browser = await puppeteer.launch({
+      executablePath: CHROME_PATH,
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
+
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle0' });
-    const defaultOpts = {
-      format: 'A4',
+
+    // PDF选项
+    const pdfOptions = {
+      format: options.format || 'A4',
       printBackground: true,
-      margin: { top: '12mm', right: '12mm', bottom: '12mm', left: '12mm' }
+      margin: options.margin || {
+        top: '20px',
+        right: '20px',
+        bottom: '20px',
+        left: '20px'
+      },
+      ...options
     };
-    const buffer = await page.pdf({ ...defaultOpts, ...pdfOptions });
-    await page.close();
-    
-    // 清理filename，移除非法字符
-    // 首先移除所有非ASCII字符和特殊字符，只保留安全字符
-    let safeFilename = filename
-      .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')  // 替换非法字符
-      .replace(/[^\x20-\x7E]/g, '_')  // 替换所有非ASCII字符（包括中文）
-      .replace(/\s+/g, '_')  // 替换空格
-      .substring(0, 200);  // 限制长度
-    
-    // 对原始filename进行URL编码以支持中文和特殊字符
-    const encodedFilename = encodeURIComponent(filename.substring(0, 200));
-    
+
+    const pdfBuffer = await page.pdf(pdfOptions);
+
+    await browser.close();
+
+    // 设置响应头（使用ASCII安全的文件名）
     res.setHeader('Content-Type', 'application/pdf');
-    // 使用ASCII安全的filename作为fallback，使用编码的filename*作为主要文件名
-    res.setHeader('Content-Disposition', `inline; filename="${safeFilename}"; filename*=UTF-8''${encodedFilename}`);
-    return res.send(buffer);
-  } catch (err) {
-    console.error('Render-url error:', err);
-    return res.status(500).json({ error: 'render_failed', message: err.message });
+    res.setHeader('Content-Disposition', `attachment; filename="${safeFilename}"; filename*=UTF-8''${encodedFilename}`);
+    res.setHeader('Content-Length', pdfBuffer.length);
+
+    res.send(pdfBuffer);
+
+  } catch (error) {
+    console.error('PDF generation error:', error);
+    
+    if (browser) {
+      await browser.close();
+    }
+
+    res.status(500).json({
+      success: false,
+      error: 'Failed to generate PDF from URL',
+      message: error.message
+    });
   }
 });
 
-app.listen(PORT, HOST, () => {
-  console.log(`HTML->PDF service listening on http://${HOST}:${PORT}`);
-  if (API_KEY) console.log('API key protection enabled');
+// 启动服务器
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`HTML->PDF service listening on http://0.0.0.0:${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/health`);
 });
 
+// 优雅关闭
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  process.exit(0);
+});
 
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully');
+  process.exit(0);
+});

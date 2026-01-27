@@ -1,6 +1,7 @@
 const { AthenaClient, StartQueryExecutionCommand, GetQueryExecutionCommand, StopQueryExecutionCommand, GetQueryResultsCommand } = require('@aws-sdk/client-athena')
 const { S3Client, GetObjectCommand, ListObjectsV2Command, HeadObjectCommand } = require('@aws-sdk/client-s3')
 const { v4: uuidv4 } = require('uuid')
+const https = require('https')
 const logger = require('../utils/logger')
 const memoryManager = require('./memoryManager')
 
@@ -19,15 +20,26 @@ const buildCredentials = () => {
   return credentials
 }
 
+// 创建自定义 HTTPS Agent（禁用 SSL 验证 - 仅用于开发环境）
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false
+})
+
 // 初始化AWS客户端
 const athenaClient = new AthenaClient({
   region: process.env.AWS_REGION || 'us-east-1',
-  credentials: buildCredentials()
+  credentials: buildCredentials(),
+  requestHandler: {
+    httpsAgent: httpsAgent
+  }
 })
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION || 'us-east-1',
-  credentials: buildCredentials()
+  credentials: buildCredentials(),
+  requestHandler: {
+    httpsAgent: httpsAgent
+  }
 })
 
 class AthenaService {

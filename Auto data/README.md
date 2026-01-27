@@ -1,732 +1,342 @@
-# 智能数据查询系统
+# Auto Data - 智能查数系统
 
-## 项目简介
-
-智能数据查询系统是一个基于云数据库的智能数据查询平台，通过Web界面为用户提供便捷的数据查询服务。用户可以通过自然语言描述查询需求，系统自动生成SQL语句并执行查询，支持大数据集自动拆分（>10万条记录），最终导出Excel等格式的数据文件。
-
-## 🚀 项目状态
-
-### 🔧 N8N留存数据映射器未知商户和游戏问题修复 (2026-01-14)
-- 🎯 **修复目标**：解决输出中大量"未知商户"和"未知游戏"的问题
-- 🐛 **问题分析**：
-  - 商户映射数据源错误：代码依赖外部shangy.json文件，但该文件格式不完整
-  - 忽略了xiayou.json中的商户信息：`metrics.global.users`数组包含完整的商户映射信息
-  - 映射逻辑不完整：只从shangy.json提取商户映射，没有从xiayou.json中提取
-- ✅ **修复方案**：
-  - 从xiayou.json的`metrics.global.users`数组中提取商户映射信息
-  - 每个user对象包含：`merchant_id`、`platform_name`、`main_merchant_name`
-  - 保持向后兼容，仍支持shangy.json作为补充数据源
-  - 游戏映射从`target_game`对象提取
-- 📁 **相关文件**：
-  - `backend/fixed-retention-data-mapper-n8n.js` - 修复后的映射器代码
-- 🔍 **修复效果**：
-  - 商户映射数据源：xiayou.json的`metrics.global.users`数组
-  - 游戏映射数据源：xiayou.json的`target_game`对象
-  - 预期效果：大幅减少"未知商户"和"未知游戏"的数量
-
-### 🔧 N8N留存数据映射器游戏映射支持增强 (2026-01-14)
-- 🎯 **增强目标**：支持输出游戏映射数据（当没有留存数据时）
-- 🐛 **问题分析**：
-  - 功能不完整：只支持输出商户映射数据，不支持游戏映射数据
-  - 数据利用不充分：游戏映射数据被收集但未被使用
-- ✅ **增强方案**：
-  - 添加游戏映射数据输出功能
-  - 优化输出优先级：留存数据 > 商户映射 > 游戏映射
-  - 保持向后兼容性
-- 📁 **相关文件**：
-  - `backend/fixed-retention-data-mapper-n8n.js` - 增强版映射器代码
-- 🔍 **增强效果**：
-  - 游戏映射数据正确输出：包含游戏名、游戏ID、数据类型等信息
-  - 输出优先级正确：留存数据 > 商户映射 > 游戏映射
-  - 向后兼容：保持原有留存数据和商户映射处理能力
-
-### 🔧 PDF服务和导出服务Content-Disposition编码修复完成 (2026-01-13)
-- 🎯 **修复目标**：解决Content-Disposition响应头包含非ASCII字符导致的`ERR_INVALID_CHAR`错误
-- 🐛 **问题分析**：
-  - 错误现象：`TypeError: [ERR_INVALID_CHAR]: Invalid character in header content ["Content-Disposition"]`
-  - 根本原因：HTTP响应头中的Content-Disposition字段包含中文等非ASCII字符
-  - 影响范围：PDF服务的`/render`和`/render-url`端点、导出服务的`/api/export/download/:filename`端点
-- ✅ **修复方案**：
-  - 将所有非ASCII字符替换为下划线，创建ASCII安全的fallback文件名
-  - 对原始文件名进行URL编码，保留完整的中文字符信息
-  - 使用RFC 5987格式：`filename="${safeFilename}"; filename*=UTF-8''${encodedFilename}`
-- 📁 **相关文件**：
-  - `backend/pdf-service/server.js` - PDF服务修复
-  - `backend/routes/export.js` - 导出服务修复
-  - `PDF_SERVICE_TROUBLESHOOTING.md` - 故障排查文档更新
-- 🔍 **验证方法**：
-  - 重启PDF服务和主后端服务
-  - 测试包含中文字符的PDF生成和文件下载
-  - 确认不再出现`ERR_INVALID_CHAR`错误
-
-### 🎯 任务状态同步更新 (2026-01-13)
-- 🔧 **PDF服务Header字符编码修复完成**：修复Content-Disposition header包含非ASCII字符导致的错误，支持中文文件名
-- 🔧 **PDF API服务修复完成**：Chrome路径配置问题已解决，服务在8787端口正常运行
-- 📊 **N8N留存数据映射器修复完成**：商户映射、币种信息、主商户名处理逻辑已优化，商户映射成功率100%
-- 📈 **日度报告系统完成**：AI提示词文档和数据聚合脚本已完成，支持完整的日报生成流程
-- 📝 **文档状态同步**：task.md和worklog.md已更新，确保项目状态文档的准确性和一致性
-
-### 🔧 N8N留存数据映射器修复完成 (2026-01-13)
-- 🎯 **修复目标**：解决商户、游戏映射名没有正确处理以及币种数据没有正确保留的问题
-- 🐛 **问题分析**：
-  - 商户映射不准确：没有优先使用shangy.json的商户映射数据
-  - 币种信息缺失：没有正确从xiayou.json的revenue.breakdown中提取币种
-  - 主商户名缺失：输出结果缺少主商户名字段
-  - 排序逻辑不合理：没有按业务逻辑排序
-- ✅ **修复方案**：
-  - 优先使用shangy.json的filtered_merchants进行商户映射
-  - 从xiayou.json的revenue.breakdown中正确提取币种信息
-  - 添加主商户名字段到输出结果
-  - 优化排序逻辑：按主商户名、商户名、游戏名、数据类型排序
-- 📁 **相关文件**：
-  - `backend/fixed-retention-data-mapper-n8n.js` - 修复后的映射器代码
-  - `backend/test-fixed-retention-mapper.js` - 测试脚本
-  - `backend/test-retention-mapper-output.json` - 测试结果
-- 🔍 **修复效果**：
-  - 商户映射成功率：100%（10/10）
-  - 币种信息正确提取：支持多币种显示（如"COP, PHP, CLP, MXN, BRL, ARS, PEN, USD"）
-  - 主商户名正确显示：如"RD1"、"sortebot"、"Game Plus"等
-  - 数据排序优化：按业务逻辑层次结构排序
-
-### 🎯 AI 智能查询项目交付目标 (2025-11-19)
-- 📋 **交付目标文档**：`AI_QUERY_DELIVERY_TARGET.md`
-- 🎯 **三大交付标准**：
-  1. 查数意图识别与交互能力（准确率≥95%、澄清机制、过滤处理）
-  2. 智能SQL生成能力（基础功能、知识库、拆分查询）
-  3. 数据返回与呈现能力（时效性、可读性）
-- 📊 **开发阶段**：Phase 1 核心功能完善（进行中）
-- 📝 **任务跟踪**：详见 `task.md` 中 "2025-11-19 AI 智能查询项目交付任务"
-
-### ✅ Lark群消息智能查数系统（知识库版）(2025-11-19)
-- 🔄 **完整工作流**：`n8n-workflows/4-lark-smart-query-with-knowledge-base.json`
-- 📚 **使用指南**：`LARK_SMART_QUERY_WITH_KB_GUIDE.md`
-- 🎯 **核心功能**：
-  1. 实时监听Lark群消息（Webhook触发）
-  2. 自动记录消息到Google表格
-  3. AI识别查数意图（OpenAI GPT-3.5-turbo）
-  4. 智能匹配知识库SQL（GetNote API）
-  5. 自动生成新SQL并保存到知识库
-  6. 向用户发送处理结果
-- 🔧 **技术栈**：Lark Webhook + Google Sheets + OpenAI + GetNote知识库
-
-### 🛠️ 游戏评分工具多游戏支持 (2025-11-21)
-- 🧩 **任务内容**：为 `backend/game-rating-calculator.js` 引入多游戏输入遍历逻辑，兼容数组/单对象两种来源
-- 📊 **目标结果**：每个游戏独立计算全局 + 平台得分，输出标准结构供 AI 报告节点逐条消费
-- 🗂️ **相关文档**：进度与实现细节同步记录在 `task.md`、`worklog.md`
-- ✅ **当前状态**：已实现多游戏评分、平台排序与进度日志，n8n 可一次性输出多条结果
-
-### 📦 n8n 拆分/批量查询文件追踪 (2025-11-24)
-- 🧠 **功能优化**：`n8n-workflows/process-query-results-with-file-size.js` 现可将「拆分触发查询」「批量子查询」与批量文件大小响应按 `queryId` 精准匹配
-- 📎 **输出规范**：保持“一条 SQL → 一条 item”的输出方式，同时附带 `relationSummary`、`queryRole`、`fileStatus` 及 `fileInfo`
-- 📂 **适用场景**：用于在 n8n 中自动识别需拆分的大文件查询，并为每个子查询补充文件大小与处理建议
-- 📤 **Telegram 文件发送**：新增 `prepare-telegram-file-send.js` 节点，整理拆分查询结果并生成说明文案，输出格式兼容 Telegram 发送文件节点
-- 📝 **使用指南**：详见 `N8N_TELEGRAM_FILE_SEND_GUIDE.md`
-
-### ✅ 周报聚合商户名归一化 (2025-12-08 完成)
-- 🎯 修复 `n8n-workflows/weekly-report-data-aggregator.js` 商户名 trim+lowercase 匹配，避免留存/新用户为 0
-- 📌 进度：已完成，详见 `task.md` 2025-12-08 临时任务
-
-### ✅ 周报终版输出新增 GGR 负值榜单 (2025-12-08 完成)
-- 🧩 `n8n-workflows/weekly-final-for-ai.js` 增加商户/游戏 GGR 负值榜单：`this_top.low_ggr`、`wow_top.ggr_low`
-- 📊 支持本期 GGR 负值 Top3 及本周 vs 上周环比，便于异常识别
-
-### 🧩 多意图查数请求拆分状态标记 (2025-11-26)
-- 🧾 **拆分逻辑**：`split-request.js`（n8n Code 节点）会先输出原始主请求，并将 `status/processingStatus` 设为 `"需依次查数"`
-- 🔁 **子请求串行**：每个拆分后 item 带有 `requestIndex`、`isSubRequest`、`subIntent`，并统一写入 `status = "需执行查数"`
-- 📬 **上下游兼容**：保留 `chatid/senderid/messagid/reason` 等字段，确保 Telegram 提醒与批量执行节点依旧按“一个 SQL → 一个 item”运行
-
-### 📬 查数上下文过滤串行化 (2025-11-26)
-- 🧠 **识别策略**：`filter-context-messages.js` 现同时识别 `status = "需依次查数"` 和 `status = "需执行查数"`，自动判断是否进入串行模式
-- 🔢 **顺序执行**：当存在主请求时，优先选取 `requestIndex` 最小的子请求作为输出，确保“依次查数”场景严格按顺序推进
-- 📝 **上下文信息**：输出新增 `requestIndex`、`isSubRequest` 字段并保留完整 `contextMessages`，方便 Google Sheet 记录与后续节点引用
-
-### 🕹️ 游戏维度查数要素判定 (2025-11-26)
-- 🧾 **提示词更新**：`n8n-workflows/optimized-ai-scenario-matching-prompt.md` 说明“谁”要素时新增 game_code 规则，明确 `gp_arcade_82` 等游戏ID即可视为查数对象
-- 🎯 **支持范围**：累计投注/派奖、活跃用户、新&活跃留存等游戏维度查询不再强制要求 `merchant_id`
-- 📌 **AI 提醒**：Text Prompt “特别提醒”同步加入该规则，避免 AI 误报“缺少 merchant_id”
-
-### 📚 AI 场景识别改为工具驱动 (2025-11-26)
-- 🛠️ **提示词精简**：`optimized-ai-scenario-matching-prompt.md` 不再硬编码 S1-S13 列表，改为强制调用“获取知识库场景”工具读取最新配置
-- 🔄 **自动跟进**：知识库更新后无需再改提示词，AI 会根据工具返回的场景 ID、必要字段、示例 SQL 进行判断
-- 🧾 **输出要求**：System/Text Prompt 均强调在 reason 中引用工具依据，只有在工具无返回时才允许输出 `matchedScenarioId = "NEW"`
-
-### 🧾 UID 识别规则扩展 (2025-11-26)
-- ✅ **新增格式**：`optimized-ai-scenario-matching-prompt.md` 的 System Message 现明确 `纯数字_纯数字`（如 `133115353524863000_1698217737323`）同样视为有效 UID
-- 🧠 **谁要素判定更精准**：AI 场景匹配节点在识别查数三要素时将不再误判此类 UID 缺失，可直接进入 SQL 场景匹配流程
-- 🧪 **已完成回归**：通过该示例验证“谁”要素满足后可准确生成场景/SQL 请求
-
-### 📨 上下文过滤节点 ID 透传修复 (2025-11-27)
-- ✅ **任务完成**：`filter-context-messages.js` 已停止拼接自定义唯一 ID，直接透传上游 `id` 字段
-- 🧪 **验证范围**：参考 Telegram / Lark 历史消息样例回归，确认 `id` 有值即展示，缺失时保持空字符串
-- 📝 **详情记录**：修复步骤与验证结论已同步至 `task.md`（2025-11-27 临时任务）
-
-### 🧵 多意图子请求 ID 输出 (2025-11-27)
-- 🧩 **实现方式**：`split-request.js` 现在会在拆分子请求时依据主请求 `id` 生成独立标识（`主ID-序号`），保证“一条 SQL → 一个 item”仍能被唯一追踪
-- ⚙️ **兼容策略**：当主请求缺少 `id`，子请求保持空字符串，避免产生虚构 ID；同时保留原有 `requestIndex` / `isSubRequest` 逻辑
-- 📒 **更多信息**：详见 `task.md` 中 2025-11-27 任务记录
-
-### ⚠️ 空文件检测提醒 (2025-11-27)
-- 🧪 **问题背景**：`Extract from File` 可能解析出空表（仅有文件、无数据行），之前会被误判为“已有结果”
-- ✅ **已处理**：`process-query-result-by-count.js` 新增检测逻辑，只要没有解析到 `gameRecords`，就直接返回“未查询到相关数据”提示，并阻止后续节点发送无意义文件
-- 📎 **适用场景**：针对“多商户累计投注”等统计类查询，若 S3 返回空 CSV，Lark/Telegram 现在会收到明确的无数据回复
-
-### 📁 Telegram 文件命名优化 (2025-11-27)
-- 🎯 **目标**：让客户收到的文件名包含商户、日期和查询类型，例如 `1716179958-20251001-投注记录.csv`
-- 🧠 **实现**：`prepare-telegram-message.js` 解析原始文字提取商户 / 时间 / 关键词，并在多文件场景自动追加序号
-- 📬 **效果**：Telegram 发送的 caption 与文件名同步更新，更易辨识；如需压缩发送，压缩后的文件名也会沿用该命名
-
-### 📊 日度报告AI分析系统 (2025-12-22 新增)
-- 🎯 **功能目标**：完整的日度报告生成系统，从数据处理到AI分析的端到端解决方案
-- 🧩 **核心功能**：
-  1. **数据处理脚本**：`daily-report-data-structure.js` - 实现今日vs昨日的精细化数据分析
-     - 平台层贡献分解分析：ΔNGR = ΔTurnover + ΔHold（细分到Active/Freq/Size）
-     - 商户维度贡献分析：每个商户对ΔNGR的贡献度计算和排序
-     - 游戏TOP20排行榜：按GGR和用户数的双维度排行
-     - Hold变化归因分析：Mix效应（曝光占比变化）+ Within效应（自身表现变化）
-  2. **AI提示词系统**：`AI_DAILY_REPORT_PROMPT.md` - 完整的AI分析师提示词
-     - 角色定位：游戏运营日报分析师
-     - 输入处理：结构化JSON数据自动解析
-     - 输出规范：格式统一的Markdown日报（6个分析维度）
-     - 数字格式化：日期、百分比、金额的标准化显示
-- 🔧 **技术实现**：
-  - 支持n8n环境和直接调用的兼容性处理
-  - 严格的表格格式要求和备注列填写规范
-  - 智能数据映射和异常处理机制
-- ✅ **当前状态**：数据处理脚本和AI提示词文档已完成，形成完整的日报生成解决方案
-
-### 📁 留存文件命名与输出格式优化 (2025-11-26)
-- 🧠 **指标识别**：`process-query-result-by-count.js` 增加 `detectMetricLabelForRecord`，可自动区分“新用户留存”“活跃用户留存”等类型并写入文件名
-- 🗃️ **多文件友好命名**：引入 `buildMetaFileName` / `buildFallbackFileName` 与去重逻辑，仅在发生重名时追加序号，保持“gp_arcade_82-2025/11-新用户留存.csv”这类语义化命名
-- 🔁 **文件名提前写回**：即便 n8n item 暂无 binary，也会先把友好文件名写入 `fileInfo.fileName`，确保 Telegram/HTTP 节点能读取到更新后的名字
-
-### 已完成功能 (第一阶段)
-- ✅ **前端界面系统**：基于React + Ant Design的现代化Web界面
-- ✅ **自然语言查询引擎**：支持中文自然语言到SQL的智能转换
-- ✅ **查询执行系统**：集成云数据库的查询执行引擎
-- ✅ **结果展示系统**：支持大数据集的分页展示和交互
-- ✅ **后端API服务**：Node.js + Express的RESTful API架构
-- ✅ **云服务集成**：云服务SDK集成，支持数据库和存储服务
-- ✅ **数据导出功能**：Excel/CSV格式导出，支持大数据集自动拆分
-- ✅ **导出策略优化**：智能多文件导出、多工作表导出和用户自定义导出方式
-- ✅ **技术挑战分析与解决方案**：完成核心技术难点分析和优化策略制定
-- ✅ **管理界面设计**：完成多平台后台管理系统的界面设计和功能规划
-- ✅ **认证权限系统**：完整的用户认证、角色管理、权限控制和操作审计功能
-- ✅ **核心功能需求分析**：完成6大核心功能模块的技术方案设计
-- ✅ **AI API集成方案**：确定讯飞星火Spark-lite + DeepSeek-V3免费方案
-- 🔄 **PDF 报告样式优化**：2025-11-10 持续迭代AI评级报告首屏布局（紧凑化 + 新视觉风格）
-- ✅ **Merge2 行级数据调试**：加强 `prepare-ai-rating-from-monthly.js` 月份映射与聚合回退逻辑，避免目标月份缺失导致的报错
-- ✅ **JSON 格式脚本交付**：新增 `docs/prepare-ai-rating-from-monthly.json`，以 Base64 形式封装完整脚本，方便在 n8n 等环境中直接引用
-- ✅ **JSON Base64 修复**：清理 `docs/prepare-ai-rating-from-monthly.json` 中的控制字符，确保可被标准 JSON 解析器正确读取
-- ✅ **表格清洗脚本**：新增 `normalize-new-game-sheet.js`，解析表名、清洗空值并输出列名映射，便于 AI 直接消费新游戏周度表格数据
-- ✅ **Merge2(1).json 新版适配**：完成 valueRange 结构解析与评级脚本更新，输出覆盖新/全游戏的完整指标
-- ✅ **Lark 写入节点兼容留存数据**：重构 `backend/fixed-lark-game-writer.js`，支持 D0/D1/D3/D7 留存指标写入 Lark 表格
-- ✅ **n8n 游戏数据映射兼容性**：升级 `backend/game-data-mapper-with-null.js`，递归解析 Merge2(1).json，统一输出 `game_id` ↔ `game` 映射状态
-- ✅ **游戏表格名称生成器更新**：重构 `backend/game-table-name-generator.js`，适配中文字段、新日期格式与嵌套结构，自动生成活跃用户表名
-- ✅ **AI 评级输入准备**：梳理 Lark 行级留存指标文本数据，输出标准化 JSON 供 AI 分析
-- ✅ **平台多币种汇总**：`backend/game-rating-fact-table-generator.js` 基于 `metrics.global` 聚合同一平台不同币种投注/派奖，支持币种列表展示
-- 🔄 **游戏指标汇总汇率换算**：`backend/game-metrics-lark-preparer.js` 支持解析币种 ↔ USDT 汇率，统一输出投注/派奖 USDT 金额
-
-### 核心功能规划 (6大模块)
-
-#### 2.1 数据源配置&对接
-- 🔄 **GMP MySQL数据库集成**：替换AWS Athena，专注MySQL GMP数据库
-- 🔄 **环境配置优化**：数据库连接信息统一管理在.env配置文件
-- 🔄 **连接池优化**：支持SSL连接、自动重连、连接监控
-
-#### 2.2 AI API集成
-- 🔄 **讯飞星火Spark-lite**：无使用期限限制，中文支持优秀
-- 🔄 **DeepSeek-V3**：强大代码生成能力，完全免费API
-- 🔄 **多服务负载均衡**：容错机制，自动切换备用服务
-- 🔄 **智能SQL生成**：基于AI的自然语言转SQL优化
-
-#### 2.3 数据字典配置
-- ⏳ **表字段映射**：技术字段名到业务术语的智能映射
-- ⏳ **智能提示系统**：基于数据字典的查询建议和自动补全
-- ⏳ **语义理解增强**：提升AI对业务场景的理解能力
-- ⏳ **索引优化建议**：基于字段类型和使用频率的索引建议
-
-#### 2.4 查询性能优化
-- ⏳ **执行计划分析**：自动生成查询执行计划和优化建议
-- ⏳ **Redis缓存机制**：查询结果缓存，支持自定义缓存时间
-- ⏳ **异步查询处理**：大数据量查询后台执行，完成后通知
-- ⏳ **超时控制**：可配置查询超时时间，默认300秒
-
-#### 2.5 查询结果展示与处理
-- ⏳ **高级分页排序**：支持多字段排序，可调整每页显示条数
-- ⏳ **多格式导出**：Excel、CSV格式，支持全部或当前页导出
-- ⏳ **导出到本地**：直接下载到用户本地文件夹
-- ⏳ **结果预览优化**：大数据集的快速预览和交互
-
-#### 2.6 数据处理规则引擎
-- ⏳ **数据清洗**：去除空值、重复数据、异常值处理
-- ⏳ **数据转换**：类型转换、格式转换、精度控制
-- ⏳ **数据计算**：字段聚合计算（求和、平均值、最值等）
-- ⏳ **规则配置**：用户自定义数据处理规则
-
-### 集成功能
-- ✅ **n8n 工作流集成**：提供 Webhook API 支持外部工作流自动化
-- ✅ **API Key 认证**：安全的 API 访问控制机制
-- ✅ **多查询模式**：支持 SQL 查询和自然语言查询
-
-### 待开发功能 (第二、三阶段)
-- ⏳ **定时查询系统**：支持定时任务配置和自动执行
-- ⏳ **自动报告生成**：预定查询自动执行并生成结果报告
-- ⏳ **通知推送服务**：邮件/Telegram等多渠道通知
-- ⏳ **智能客服集成**：Telegram机器人和飞书应用集成
-
-## 核心特性
-
-### 🤖 自然语言查询
-- **智能语言理解**：支持用户用自然语言描述数据查询需求
-- **自动SQL生成**：基于自然语言自动生成标准SQL查询语句
-- **查询优化**：自动优化SQL性能，减少查询成本和执行时间
-- **智能提示**：根据数据库schema提供查询建议和自动补全
-- **参数提取**：从自然语言中智能提取查询参数和条件
-- **意图识别**：准确理解用户查询意图，支持复杂的数据分析需求
-
-### 🔍 数据库集成查询
-- **云端查询**：基于云数据库的数据查询服务
-- **大数据支持**：支持PB级数据的快速查询和分析
-- **多数据源**：支持S3、数据湖、多种数据格式（Parquet、JSON、CSV等）
-- **成本控制**：实时监控查询成本，支持预算限制和成本优化
-- **查询监控**：实时跟踪查询执行状态和进度
-- **结果缓存**：智能缓存查询结果，提升重复查询性能
-
-### 📊 大数据处理
-- **自动数据拆分**：超过10万条记录自动拆分为多个查询任务
-- **并行处理**：支持多个查询任务并行执行，提升处理效率
-- **增量查询**：支持增量数据查询和实时数据更新
-- **数据聚合**：自动聚合拆分查询的结果数据
-- **内存优化**：智能内存管理，支持大数据集的高效处理
-
-### 📋 智能数据导出
-- **多格式支持**：支持Excel (.xlsx) 和 CSV 格式导出
-- **智能导出策略**：
-  - 单文件导出（≤10万行）
-  - 多工作表导出（≤100万行）
-  - 多文件导出（>100万行）
-- **高级Excel功能**：基于ExcelJS，支持样式设置、元数据添加
-- **自定义配置**：文件名、工作表名、行数限制等参数可配置
-- **实时进度显示**：导出过程进度实时反馈
-- **多文件管理**：支持多文件批量下载和管理
-- **文件清理**：自动清理过期导出文件
-- 提供预设场景规则模板（游戏数据、财务报表等）
-- 支持用户自定义场景规则创建和管理
-- 支持大数据量分批导出和流式处理
-- 提供自定义导出模板和数据格式化
-- 支持数据脱敏和字段映射功能
-
-### 📈 业务指标报表
-- **多指标支持**：MAU、DAU、留存率、净营收、ARPU、LTV等
-- **自动化报表**：支持日报、周报、月报的自动生成
-- **可视化图表**：趋势图、对比图、热力图等多种图表类型
-- **定期发送**：支持邮件自动发送和调度管理
-- **模板定制**：灵活的报表模板和样式配置
-
-### 📤 智能数据发送
-- 支持多种发送方式（邮件、FTP、SFTP、HTTP API、消息队列等）
-- 支持发送规则配置和条件触发
-- 提供发送状态跟踪和自动重试机制
-- 支持批量发送和定时任务调度
-
-### 🔄 智能流程配置
-- 支持完整流程配置（查数→导数→发送）
-- 支持部分流程配置（仅到导出阶段）
-- 提供可视化流程设计器
-- 支持流程节点自定义和参数配置
-- 支持流程条件判断和异常处理
-
-### 🚨 智能异常检测
-- **多维度检测**：金额、时间、状态、交易、频率等5个维度的异常识别
-- **异常等级分类**：轻微、中等、严重异常的分级处理
-- **原因分析**：提供可能的异常原因和处理建议
-- **可视化展示**：图表展示异常趋势和分布
-- **规则引擎**：支持自定义异常检测规则
-
-### ⚙️ 完善的管理功能
-- **认证权限系统**：JWT令牌认证、用户登录注销、会话管理
-- **用户管理**：用户增删改查、状态管理、角色分配、会话控制
-- **角色权限管理**：角色创建编辑、权限分配、用户角色管理
-- **操作审计**：用户行为记录、敏感操作追踪、日志查询分析
-- 场景规则模板版本控制和权限管理
-- 系统配置和环境管理
-- 性能监控和告警通知
-
-### 🛠️ 统一后台管理系统
-- **多平台群组管理**：统一管理Telegram群组和Lark应用的配置权限
-- **跨平台查询记录管理**：查看所有平台的查询历史，统计分析使用情况
-- **多平台场景配置管理**：可视化配置和管理各种跨平台查询场景模板
-- **统一用户权限控制**：灵活的多平台用户和群组权限管理
-- **多平台系统监控**：实时监控多平台系统性能和Bot运行状态
-- **跨平台统计分析**：提供详细的多平台使用统计和分析报告
-
-## 技术架构
-
-### 后端技术栈
-- **框架**: Node.js + Express
-- **认证**: JWT (JSON Web Token)
-- **安全**: bcrypt密码加密、CORS跨域处理
-- **数据库**: MySQL 8.0+ (主库) + Redis 6.0+ (缓存)
-- **消息队列**: RabbitMQ 3.9+
-- **任务调度**: node-cron
-- **文件存储**: 本地存储 + 云存储
-
-### 前端技术栈
-- **框架**: React 18 + JavaScript
-- **UI组件**: Ant Design
-- **路由**: React Router DOM
-- **HTTP客户端**: Axios
-- **构建工具**: Vite
-
-### 部署架构
-- **容器化**: Docker + Docker Compose
-- **反向代理**: Nginx
-- **监控**: Prometheus + Grafana
-- **日志**: ELK Stack
-
-## 🚀 快速开始 V1.0
-
-### 最快 30 分钟完成部署！
-
-**V1.0 三大核心功能** (全部基于 n8n 工作流):
-1. ✅ **智能查询** - 自然语言转 SQL，一键查询导出
-2. ✅ **定时报表** - 自动生成报表并发送到邮箱
-3. ✅ **游戏评级** - 输入游戏名，自动生成评级报告
-
-**立即开始** 👉 [30分钟快速部署指南](./QUICK_DEPLOY_V1.md)
-
----
-
-### 环境要求
-- Node.js 18+
-- AWS Athena 配置 (用于云端查询)
-- n8n 实例 (Cloud 或自建)
-- 飞书账号 (可选)
-- MySQL 8.0+ (可选，用于 Python 查询)
-- Docker (可选)
-
-### 安装部署
-
-#### 方式一：Docker部署（推荐）
-```bash
-# 克隆项目
-git clone <repository-url>
-cd auto-data-tool
-
-# 启动服务
-docker-compose up -d
-```
-
-#### 方式二：源码部署
-```bash
-# 后端启动
-cd backend
-./mvnw spring-boot:run
-
-# 前端启动
-cd frontend
-npm install
-npm run dev
-```
-
-### 访问地址
-- 前端界面: http://localhost:3000
-- 后端API: http://localhost:8000
-- Webhook API: http://localhost:8000/api/webhook
-
-## 🔗 n8n 集成
-
-本系统提供专门的 Webhook API，可以轻松与 n8n 等工作流自动化工具集成。
-
-### 快速配置（5分钟）
-
-1. **生成 API 密钥**
-   ```bash
-   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-   ```
-
-2. **配置后端**
-   在 `backend/.env` 文件中添加：
-   ```bash
-   API_KEYS=你生成的密钥
-   ```
-
-3. **重启服务**
-   ```bash
-   cd backend && npm start
-   ```
-
-4. **在 n8n 中使用**
-   - URL: `http://your-server:8000/api/webhook/query/sql`
-   - Method: `POST`
-   - Header: `X-API-Key: 你的密钥`
-
-### 可用的 Webhook API
-
-| 端点 | 方法 | 用途 |
-|------|------|------|
-| `/api/webhook/query/sql` | POST | 执行 SQL 查询 |
-| `/api/webhook/query/natural` | POST | 自然语言查询 |
-| `/api/webhook/query/quick` | GET | 快速查询 |
-| `/api/webhook/health` | GET | 健康检查 |
-
-### 详细文档
-
-- 📖 [快速开始指南](./QUICK_START.md)
-- 📚 [完整集成文档](./N8N_INTEGRATION_GUIDE.md)
-- 📋 [n8n 工作流示例](./n8n-workflow-examples.json)
-- 📮 [Postman 测试集合](./Athena-Webhook-API.postman_collection.json)
-
-### 测试 API
-
-```bash
-cd backend
-npm run test:webhook
-```
-
-## 📖 使用指南
-
-### 1. 智能文本查询（推荐）
-
-**步骤**：
-1. 在查询界面输入自然语言描述
-2. 系统自动解析参数和意图
-3. 确认解析结果或手动调整
-4. 执行查询并查看结果
-
-**示例1：游戏回合记录查询**
-```
-输入：能查看这个回合记录有异常吗？MerchantID：1755248023，biz_id：gp0001964961557724336128-4-2，round_id：1964961557724336128
-
-系统解析：
-- 查询意图：异常检测
-- 参数提取：MerchantID=1755248023, biz_id=gp0001964961557724336128-4-2, round_id=1964961557724336128
-- 匹配模板：游戏回合记录查询
-```
-
-**示例2：时间范围数据查询**
-```
-输入：我要1号到31号的PHP跟INR数据
-
-系统解析：
-- 查询意图：时间范围数据查询
-- 参数提取：start_date=2024-01-01, end_date=2024-01-31, currencies=["PHP", "INR"]
-- 匹配模板：时间范围数据查询
-```
-
-**示例3：业务指标报表生成**
-```
-输入：月活，日活，留存，净营收这几个指标可以做成月报发送吗
-
-系统解析：
-- 查询意图：报表生成
-- 参数提取：metrics=["MAU", "DAU", "retention", "net_revenue"], report_period="monthly", auto_send=true
-- 匹配模板：业务指标报表生成
-```
-
-### 2. 多平台Bot使用
-
-#### Telegram Bot使用
-
-**C端用户交互流程**
-1. **加入群组**：管理员将机器人添加到Telegram群组
-2. **发起查询**：用户在群组中@机器人并描述查询需求
-   ```
-   @DataQueryBot 查询最近30天的销售数据
-   ```
-3. **参数收集**：机器人智能识别并收集查询参数
-4. **确认执行**：用户确认查询参数后，机器人执行查询
-5. **结果展示**：机器人返回查询结果，支持图表和文件下载
-
-#### Lark应用使用
-
-**C端用户交互流程**
-1. **安装应用**：管理员在飞书管理后台安装数据查询应用
-2. **发起查询**：用户通过以下方式发起查询：
-   - 斜杠命令：`/query 销售数据分析`
-   - @机器人：`@数据查询助手 查询用户行为数据`
-   - 应用菜单：点击应用菜单中的查询功能
-3. **卡片交互**：机器人发送交互卡片，用户填写查询表单
-4. **参数确认**：系统显示参数确认卡片，用户确认后执行查询
-5. **结果展示**：以卡片形式展示结果，支持在线预览和文件下载
-
-#### 后台管理操作
-1. **多平台群组管理**：统一管理Telegram群组和Lark应用权限
-2. **跨平台场景配置**：创建适配多平台的查询场景模板
-3. **统一权限控制**：设置跨平台用户和群组的查询权限
-4. **多平台监控分析**：查看各平台查询统计和系统性能
-
-### 3. Telegram Bot使用（详细示例）
-
-#### C端用户交互流程
-```
-1. 用户在群组中@机器人
-   输入: "@DataBot 查询昨天的游戏收入数据"
-
-2. 机器人智能解析并确认信息
-   回复: "我理解您要查询昨天的游戏收入数据。请确认以下信息：
-         - 时间范围：2024-01-15 00:00:00 到 2024-01-15 23:59:59
-         - 数据类型：游戏收入
-         是否需要指定特定的MerchantID或货币类型？"
-
-3. 用户补充信息（如需要）
-   输入: "MerchantID是12345，只看PHP收入"
-
-4. 机器人执行查询并推送结果
-   回复: "查询完成！昨天MerchantID 12345的PHP收入数据：
-         总收入：125,000 PHP
-         交易笔数：1,250笔
-         详细报表已生成，请查收文件。"
-   [自动发送Excel文件]
-```
-
-#### 后台管理操作
-```
-1. 群组管理
-   - 添加新群组：输入群组ID和名称
-   - 配置权限：设置群组访问级别
-   - 监控状态：查看机器人在各群组的活跃情况
-
-2. 查询记录管理
-   - 查看历史：按时间、用户、群组筛选查询记录
-   - 统计分析：查询频次、热门场景、用户活跃度
-   - 导出报告：生成使用统计报告
-
-3. 场景配置管理
-   - 模板编辑：可视化编辑查询场景模板
-   - 规则配置：设置解析规则和响应模板
-   - 测试验证：在线测试场景配置效果
-```
-
-### 4. 场景模板配置
-
-在项目根目录下找到相应的模板文件：
-- `telegram_bot_template.json` - Telegram机器人场景配置
-- `lark_bot_template.json` - Lark应用机器人场景配置
-
-**步骤**：
-1. 选择预设场景模板
-2. 配置查询参数
-3. 设置导出规则
-4. 配置发送方式
-5. 执行或定时任务
-
-**场景模板示例**：
-- **游戏回合记录查询**：查询特定回合的游戏数据并检测异常
-- **时间范围数据查询**：查询指定时间范围内的货币交易数据
-- **业务指标报表生成**：生成包含多个KPI指标的定期报表
-- **用户行为分析**：分析用户活跃度和行为模式
-- **财务数据统计**：生成财务报表和收入分析
-
-### 5. 配置数据需求
-1. 在「任务执行」页面选择场景模板
-2. 填写模板所需参数（商户名称、月份等）
-3. 系统提供下拉选择、日期选择器等便捷输入方式
-
-### 6. 自定义流程配置
-1. 选择执行流程类型：完整流程（查数→导数→发送）或部分流程（仅到导出）
-2. 使用可视化设计器配置流程节点
-3. 设置各节点的参数和条件判断
-
-### 7. 执行和监控
-1. 点击「开始执行」启动自动化流程
-2. 实时查看执行进度和状态反馈
-3. 支持暂停、取消等流程控制操作
-
-### 8. 结果查看和管理
-1. 在「历史记录」页面查看执行结果
-2. 下载生成的导出文件
-3. 查看详细的执行日志和错误信息
-4. 保存常用配置以便快速调用
+基于 AWS Athena 的智能数据查询和分析系统，支持自然语言查询、批量查询、PDF 报告生成等功能。
 
 ## 项目结构
 
 ```
-auto-data-tool/
-├── .trae/                  # 项目规则配置
-│   └── rules/
-│       └── project_rules.md
-├── backend/                # 后端代码
-│   ├── routes/            # API路由
-│   ├── middleware/        # 中间件
-│   ├── models/            # 数据模型
-│   ├── controllers/       # 控制器
-│   ├── config/            # 配置文件
-│   ├── utils/             # 工具函数
-│   ├── app.js             # 应用入口
-│   └── package.json       # NPM配置
-├── frontend/              # 前端代码
-│   ├── src/               # React源码
-│   │   ├── components/    # 组件
-│   │   ├── pages/         # 页面
-│   │   ├── services/      # 服务层
-│   │   ├── utils/         # 工具函数
-│   │   └── App.jsx        # 应用入口
-│   ├── public/            # 静态资源
-│   └── package.json       # NPM配置
-├── templates/             # 场景模板（待创建）
-│   ├── game_record_query_template.json
-│   ├── time_range_query_template.json
-│   └── business_metrics_template.json
-├── docker/                # Docker配置（待创建）
-├── docs/                  # 项目文档
-├── scripts/               # 部署脚本（待创建）
-├── system_architecture.svg # 系统架构图
-├── user_workflow.svg      # 用户操作流程图
-├── game_record_query_template.json # 游戏回合记录查询模板
-├── time_range_query_template.json # 时间范围数据查询模板
-├── business_metrics_template.json # 业务指标报表生成模板
-├── telegram_bot_template.json # Telegram Bot交互场景模板
-├── lark_bot_template.json # Lark应用机器人场景模板
-├── lark_bot_design.json   # Lark应用机器人设计文档
-├── admin_panel_design.json # 多平台后台管理系统设计文档
-├── task.md                # 开发任务计划
-├── worklog.md             # 工作日志
-└── README.md              # 项目说明
+Auto data/
+├── backend/                    # 后端服务
+│   ├── routes/                # API 路由
+│   ├── services/              # 业务逻辑服务
+│   ├── middleware/            # 中间件
+│   ├── utils/                 # 工具函数
+│   ├── pdf-service/           # PDF 渲染服务
+│   └── server.js              # 主服务器入口
+├── frontend/                   # 前端应用（如果有）
+├── docs/                       # 文档
+├── n8n-workflows/             # n8n 工作流配置
+└── README.md                  # 项目说明
 ```
 
-## 开发计划
+## 核心功能
 
-详细的开发计划和任务进度请查看 [task.md](./task.md) 文件。
+### 1. 智能查询系统
+- 自然语言转 SQL 查询
+- 支持复杂查询条件
+- 自动查询优化
+- 查询结果缓存
 
-### 开发阶段
-- ✅ 需求分析和架构设计 - 已完成详细的功能设计和技术方案
-- ✅ 场景规则模板系统设计 - 已完成预设模板和自定义配置设计
-- ✅ 流程配置引擎设计 - 已完成工作流和节点配置方案
-- ✅ 用户交互界面设计 - 已完成5个主要页面的设计规划
-- ✅ 系统架构图和流程图 - 已创建可视化设计文档
-- 🔄 第一阶段：基础框架搭建 (1-2周)
-- ⏳ 第二阶段：核心功能开发 (4-6周)
-- ⏳ 第三阶段：界面和集成 (3-4周)
-- ⏳ 第四阶段：部署和文档 (1-2周)
+### 2. 批量查询
+- 支持多个查询并发执行
+- 查询状态跟踪
+- 失败重试机制
+- 结果聚合
 
-## 贡献指南
+### 3. 异步查询
+- 长时间查询异步处理
+- 实时状态更新
+- 超时控制
+- 查询取消功能
 
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 打开 Pull Request
+### 4. PDF 报告生成
+- HTML 转 PDF
+- URL 转 PDF
+- 支持中文文件名
+- 自定义页面样式
+
+### 5. 数据导出
+- CSV 格式导出
+- Excel 格式导出
+- 大数据量分批导出
+- 压缩打包下载
+
+## 技术栈
+
+### 后端
+- **Node.js** - 运行环境
+- **Express** - Web 框架
+- **AWS SDK** - AWS 服务集成
+  - Athena - 数据查询
+  - S3 - 文件存储
+- **Puppeteer** - PDF 生成
+- **Winston** - 日志管理
+- **Joi** - 数据验证
+
+### 数据库
+- **AWS Athena** - 数据查询引擎
+- **S3** - 数据存储
+
+### 工作流
+- **n8n** - 工作流自动化
+
+## 快速开始
+
+### 前置要求
+
+- Node.js 14+
+- Google Chrome（用于 PDF 生成）
+- AWS 账号和凭证
+- n8n（可选，用于工作流）
+
+### 安装
+
+1. 克隆仓库
+```bash
+git clone <repository-url>
+cd "Auto data"
+```
+
+2. 安装后端依赖
+```bash
+cd backend
+npm install
+```
+
+3. 安装 PDF 服务依赖
+```bash
+cd backend/pdf-service
+npm install
+```
+
+4. 配置环境变量
+
+复制 `backend/.env.example` 到 `backend/.env` 并填写配置：
+
+```env
+# AWS 配置
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_REGION=us-west-2
+
+# Athena 配置
+ATHENA_DATABASE=your_database
+ATHENA_OUTPUT_LOCATION=s3://your-bucket/
+ATHENA_WORKGROUP=primary
+
+# 服务器配置
+PORT=8000
+NODE_ENV=development
+
+# API Key
+API_KEY=your_api_key
+```
+
+### 启动服务
+
+#### 方式1：使用启动脚本（推荐）
+
+```cmd
+# 启动主后端服务
+start-server.bat
+
+# 启动 PDF 服务
+start-pdf-here.bat
+```
+
+#### 方式2：手动启动
+
+```bash
+# 启动主后端服务（端口 8000）
+cd backend
+node server.js
+
+# 启动 PDF 服务（端口 8787）
+cd backend/pdf-service
+node server.js
+```
+
+### 验证服务
+
+```bash
+# 检查主后端服务
+curl http://localhost:8000/api/health
+
+# 检查 PDF 服务
+curl http://localhost:8787/health
+```
+
+## API 文档
+
+### 主后端服务（端口 8000）
+
+#### 1. 健康检查
+```
+GET /api/health
+```
+
+#### 2. 执行查询
+```
+POST /api/query/execute
+Content-Type: application/json
+
+{
+  "sql": "SELECT * FROM table LIMIT 10",
+  "database": "gmp"
+}
+```
+
+#### 3. 批量查询
+```
+POST /api/batch/start
+Content-Type: application/json
+
+{
+  "queries": [
+    {"name": "query1", "sql": "SELECT ..."},
+    {"name": "query2", "sql": "SELECT ..."}
+  ],
+  "database": "gmp"
+}
+```
+
+#### 4. 异步查询
+```
+POST /api/async/start
+Content-Type: application/json
+
+{
+  "sql": "SELECT * FROM large_table",
+  "database": "gmp"
+}
+```
+
+#### 5. 查询状态
+```
+GET /api/async/status/:queryId
+```
+
+### PDF 服务（端口 8787）
+
+#### 1. HTML 转 PDF
+```
+POST /render
+Content-Type: application/json
+
+{
+  "html": "<html>...</html>",
+  "filename": "report.pdf",
+  "options": {
+    "format": "A4",
+    "margin": {
+      "top": "20px",
+      "right": "20px",
+      "bottom": "20px",
+      "left": "20px"
+    }
+  }
+}
+```
+
+#### 2. URL 转 PDF
+```
+POST /render-url
+Content-Type: application/json
+
+{
+  "url": "https://example.com",
+  "filename": "webpage.pdf"
+}
+```
+
+## 配置说明
+
+### AWS 凭证
+
+系统需要以下 AWS 权限：
+- Athena: 查询执行权限
+- S3: 读写权限（用于查询结果存储）
+
+### Chrome 浏览器
+
+PDF 服务需要 Chrome 浏览器。系统会自动检测以下路径：
+- `C:\Program Files\Google\Chrome\Application\chrome.exe`
+- `C:\Program Files (x86)\Google\Chrome\Application\chrome.exe`
+
+如果自动检测失败，可以设置环境变量：
+```bash
+set CHROME_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe
+```
+
+## n8n 集成
+
+项目包含多个 n8n 工作流配置，用于：
+- 数据查询自动化
+- 报告生成
+- 数据同步
+- 通知发送
+
+工作流配置文件位于 `n8n-workflows/` 目录。
+
+## 故障排查
+
+### 端口被占用
+
+```cmd
+# 查找占用端口的进程
+netstat -ano | findstr "8000 8787"
+
+# 终止进程
+taskkill /F /PID <进程ID>
+```
+
+### Chrome 未找到
+
+安装 Google Chrome：https://www.google.com/chrome/
+
+或设置 `CHROME_PATH` 环境变量。
+
+### AWS 凭证错误
+
+检查 `.env` 文件中的 AWS 凭证是否正确。
+
+### 查询超时
+
+调整 `MAX_QUERY_TIMEOUT` 环境变量（默认 5 分钟）。
+
+## 开发指南
+
+### 添加新的 API 端点
+
+1. 在 `backend/routes/` 创建新的路由文件
+2. 在 `backend/server.js` 注册路由
+3. 在 `backend/services/` 添加业务逻辑
+
+### 添加新的查询功能
+
+1. 在 `backend/services/athenaService.js` 添加方法
+2. 在相应的路由中调用
+3. 添加错误处理和日志
+
+### 测试
+
+```bash
+# 运行测试
+npm test
+
+# 测试 PDF API
+node test-pdf-api.js
+```
+
+## 文档
+
+- [如何启动服务](如何启动服务.md)
+- [PDF 服务文档](backend/pdf-service/README.md)
+- [n8n 使用说明](N8N使用说明.md)
+- [问题修复总结](问题修复总结.md)
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！
 
 ## 许可证
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+ISC
 
 ## 联系方式
 
-如有问题或建议，请通过以下方式联系：
-
-- 项目Issues: [GitHub Issues]()
-- 邮箱: [your-email@example.com]()
-
-## 更新日志
-
-### v1.0.0 (计划中)
-- 初始版本发布
-- 基础查询、导出、发送功能
-- Web管理界面
-- Docker部署支持
+如有问题，请联系项目维护者。
 
 ---
 
-**注意**: 本项目目前处于开发阶段，功能和文档会持续更新。
+**最后更新**: 2026-01-27
