@@ -13,6 +13,10 @@ RUN npm ci --only=production
 # 复制应用代码
 COPY backend/ .
 
+# 设置环境变量
+ENV NODE_ENV=production
+ENV PORT=8000
+
 # 暴露端口
 EXPOSE 8000
 
