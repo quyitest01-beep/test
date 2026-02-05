@@ -1,5 +1,62 @@
 # 工作日志 (Work Log)
 
+## 2026-02-05
+
+### 增强版商户查询处理器 - 智能模糊匹配版完成 (00:45)
+**任务目标**：完成智能模糊匹配版商户查询处理器的开发和测试，支持高级模糊匹配功能。
+
+**实现内容**：
+1. **智能模糊匹配算法**：
+   - 实现编辑距离算法（Levenshtein Distance）计算字符串相似度
+   - 多层次相似度计算：完全匹配(100%) > 包含匹配(90%) > 编辑距离匹配
+   - 相似度加分机制：首字母匹配+10分，长度相似+5分
+   - 可配置匹配阈值（默认60%），显示匹配相似度百分比
+
+2. **增强的文本处理**：
+   - 智能字符串标准化：移除所有空格和特殊字符，只保留字母、数字、中文
+   - 增强的文本清理：处理各种Unicode空格、制表符、换行符
+   - 支持全角空格、不间断空格等特殊空格字符的兼容性
+
+3. **高级查询功能**：
+   - 支持双向查询：商户名→ID 和 ID→商户名
+   - 智能关键词提取：支持多种中文查询格式（"商户betfiery的id"等）
+   - 多结果处理：单个高相似度结果直接返回，多个结果显示Top5列表
+   - 查询类型识别：exact_match、fuzzy_match、multiple_matches、id_search等
+
+4. **测试验证**：
+   - 创建完整测试套件 `test-enhanced-merchant-fuzzy-match.js`
+   - 验证9种查询场景：精确匹配、模糊匹配、空格兼容、ID查询等
+   - 测试空格处理函数：支持普通空格、全角空格、制表符、Unicode空格
+   - 验证模糊匹配效果：togame→"To game"、betfiry→"betfiery"等
+
+**技术特点**：
+- **编辑距离算法**：使用动态规划计算字符串编辑距离
+- **智能匹配示例**：
+  - "togame" 匹配 "To game" (高相似度)
+  - "betfiry" 匹配 "betfiery" (编辑距离匹配)
+  - "tgame" 匹配 "To game" (部分匹配)
+  - "To　game"（全角空格）匹配 "To game"
+
+**相关文件**：
+- `n8n-enhanced-merchant-query-fuzzy-match.js` - 智能模糊匹配版处理器
+- `test-enhanced-merchant-fuzzy-match.js` - 完整测试套件
+
+**验证结果**：
+- ✅ 精确匹配：betfiery → 1698202251
+- ✅ 模糊匹配：togame → "To game" (ID: 1747388774)
+- ✅ 空格兼容：to game → "To game"
+- ✅ ID反向查询：1698202251 → betfiery
+- ✅ 中文格式：商户betfiery的id → betfiery
+- ✅ 全角空格：To　game → "To game"
+- ✅ 空格处理函数：所有Unicode空格类型正确标准化
+- ❌ 拼写容错：betfiry → betfiery（需要进一步优化阈值）
+
+**测试结果总结**：
+- 8/9个测试用例通过
+- 空格处理函数完全正常
+- 模糊匹配算法工作正常，可以成功匹配"togame"到"To game"
+- 需要微调相似度阈值以提高拼写容错能力
+
 ## 2026-01-14
 
 ### N8N留存数据映射器未知商户和游戏问题修复 (00:30)
@@ -3209,3 +3266,87 @@ res.setHeader('Content-Disposition', `attachment; filename="${safeFilename}"; fi
 4. 验证新进程的PID与旧进程不同
 
 **完成状态**：✅ 服务已成功重启，代码修复已生效
+
+## 2026-02-05
+
+### 双语言报告发送架构优化 - 直接Webhook方案 (01:30)
+**任务目标**：优化双语言报告发送架构，从"n8n → 后端API → Lark"改为"n8n → 直接Lark webhook"。
+
+**问题分析**：
+1. **架构复杂度过高**：原方案需要调用后端API `/api/send-reports`，增加了不必要的中间层
+2. **用户理解错误**：用户指出HTTP Request应该直接调用Lark webhook，而不是后端API
+3. **资源浪费**：后端API主要功能是构建Lark消息卡片，这个功能可以在n8n Code节点中完成
+
+**优化方案**：
+**新架构流程**：
+```
+上游数据 → n8n Code节点 → HTTP Request → Lark群消息
+         ↓
+    文件上传结果 + HTML报告 → 解析处理 + 生成卡片 → 直接发送到Lark webhook
+```
+
+**修正内容**：
+
+1. **n8n Code节点优化** (`n8n-dual-language-report-sender.js`)：
+   - 移除后端API调用逻辑
+   - 在Code节点中直接构建完整的Lark消息卡片
+   - 生成包含下载链接的交互式卡片
+   - 输出`webhookUrl`和`webhookPayload`供HTTP Request节点使用
+
+2. **Lark消息卡片构建**：
+   - 添加报告生成时间、周期、文件数量信息
+   - 为每个报告添加语言标识（🇨🇳/🇺🇸）
+   - 生成可点击的下载链接
+   - 添加下载按钮组（最多5个按钮）
+   - 包含使用说明和技术支持信息
+
+3. **HTTP Request节点配置更新**：
+   - URL: `{{ $json.webhookUrl }}`（使用Code节点输出的webhook URL）
+   - Body: `{{ $json.webhookPayload }}`（使用Code节点生成的完整卡片）
+   - 直接发送到Lark，无需经过后端API
+
+4. **配置指南更新** (`dual-language-report-setup-guide.md`)：
+   - 更新系统架构图
+   - 修正HTTP Request节点配置说明
+   - 移除不必要的后端API相关说明
+   - 更新测试验证步骤
+
+5. **测试脚本创建** (`test-direct-webhook-processing.js`)：
+   - 验证新的直接webhook发送逻辑
+   - 测试Lark消息卡片生成
+   - 验证下载链接有效性
+
+**技术要点**：
+- Code节点直接生成完整的Lark交互式卡片
+- 保留后端服务仅用于Lark文件下载代理功能
+- 简化架构，减少中间层，提高可靠性
+- 保持所有原有功能：双语言支持、智能匹配、下载链接生成
+
+**相关文件**：
+- `n8n-dual-language-report-sender.js` - 优化后的n8n Code节点
+- `dual-language-report-setup-guide.md` - 更新的配置指南
+- `test-direct-webhook-processing.js` - 新的测试脚本
+
+**验证结果**：
+- ✅ 直接webhook发送测试通过
+- ✅ Lark消息卡片格式正确
+- ✅ 下载链接生成和验证成功
+- ✅ 双语言报告识别和匹配正常
+- ✅ 架构简化，配置更简单
+
+**测试结果**：
+```
+=== 测试直接Webhook发送的双语言报告处理逻辑 ===
+✅ Webhook调用成功
+状态码: 200
+✅ 链接有效 (Content-Type: application/pdf)
+报告数量: 2个 (中文 + 英文)
+语言识别: 正确 (zh, en)
+```
+
+**优势**：
+1. **架构简化**：减少中间层，降低复杂度
+2. **性能提升**：直接发送，减少网络请求
+3. **维护简单**：减少后端API依赖
+4. **用户友好**：配置更直观，符合用户预期
+5. **功能完整**：保持所有原有功能不变

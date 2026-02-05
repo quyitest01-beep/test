@@ -1,0 +1,1152 @@
+[
+  {
+    "status": "success",
+    "timestamp": "2026-02-05T04:08:05.286Z",
+    "statistics": {
+      "total_rows": 1998,
+      "processed_rows": 219,
+      "skipped_rows": 1779,
+      "production_merchants": 219,
+      "success_rate": "11.0%"
+    },
+    "filtered_merchants": [
+      {
+        "sub_merchant_name": "betfiery",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1698202251
+      },
+      {
+        "sub_merchant_name": "aajogo",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1698202662
+      },
+      {
+        "sub_merchant_name": "rico100",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1698202814
+      },
+      {
+        "sub_merchant_name": "philucky",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1698202902
+      },
+      {
+        "sub_merchant_name": "apanalo",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1698202968
+      },
+      {
+        "sub_merchant_name": "mexlucky",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1698203058
+      },
+      {
+        "sub_merchant_name": "mexswin",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1713329090
+      },
+      {
+        "sub_merchant_name": "megawin001",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1698203185
+      },
+      {
+        "sub_merchant_name": "kelucky",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1701323638
+      },
+      {
+        "sub_merchant_name": "psewin",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1709001663
+      },
+      {
+        "sub_merchant_name": "711bet",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1709709605
+      },
+      {
+        "sub_merchant_name": "777bar",
+        "main_merchant_name": "RD1",
+        "merchant_id": 1715080089
+      },
+      {
+        "sub_merchant_name": "马赛克",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1698231512
+      },
+      {
+        "sub_merchant_name": "jrn2        ",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1704372376
+      },
+      {
+        "sub_merchant_name": "jrb7",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1706497315
+      },
+      {
+        "sub_merchant_name": "jrb57",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1708226045
+      },
+      {
+        "sub_merchant_name": "mosaic01",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1708591996
+      },
+      {
+        "sub_merchant_name": "mosaic02",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1710997312
+      },
+      {
+        "sub_merchant_name": "mosaic03",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1711248696
+      },
+      {
+        "sub_merchant_name": "mosaic04",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1711352514
+      },
+      {
+        "sub_merchant_name": "mosaic05",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1714984588
+      },
+      {
+        "sub_merchant_name": "mosaic06",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1715753996
+      },
+      {
+        "sub_merchant_name": "mosaic07",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1716953396
+      },
+      {
+        "sub_merchant_name": "mosaic08",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1717660846
+      },
+      {
+        "sub_merchant_name": "mosaic09",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1718179225
+      },
+      {
+        "sub_merchant_name": "tumiwin",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1723447475
+      },
+      {
+        "sub_merchant_name": "JR-F4",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1723801345
+      },
+      {
+        "sub_merchant_name": "JR-Y3",
+        "main_merchant_name": "Mosaic",
+        "merchant_id": 1724746162
+      },
+      {
+        "sub_merchant_name": "Lotus11",
+        "main_merchant_name": "winwinbet",
+        "merchant_id": 1713865100
+      },
+      {
+        "sub_merchant_name": "winwin",
+        "main_merchant_name": "winwinbet",
+        "merchant_id": 1714987937
+      },
+      {
+        "sub_merchant_name": "winwinbet",
+        "main_merchant_name": "winwinbet",
+        "merchant_id": 1750762420
+      },
+      {
+        "sub_merchant_name": "brabet",
+        "main_merchant_name": "Barbet",
+        "merchant_id": 1714096316
+      },
+      {
+        "sub_merchant_name": "sortebot",
+        "main_merchant_name": "sortebot",
+        "merchant_id": 1716179958
+      },
+      {
+        "sub_merchant_name": "Game Plus",
+        "main_merchant_name": "Game Plus",
+        "merchant_id": 1718444707
+      },
+      {
+        "sub_merchant_name": "GamePlus1",
+        "main_merchant_name": "Game Plus",
+        "merchant_id": 1747302129
+      },
+      {
+        "sub_merchant_name": "Game Plus",
+        "main_merchant_name": "Game Plus",
+        "merchant_id": 1747037048
+      },
+      {
+        "sub_merchant_name": "GSCPLUS",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1757387300
+      },
+      {
+        "sub_merchant_name": "GSCFTBRL",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760933687
+      },
+      {
+        "sub_merchant_name": "GSCFTPHP",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760940261
+      },
+      {
+        "sub_merchant_name": "GSCFTMXN",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760940466
+      },
+      {
+        "sub_merchant_name": "GSCFTNGN",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760941118
+      },
+      {
+        "sub_merchant_name": "GSCFTKES",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760941416
+      },
+      {
+        "sub_merchant_name": "GSCFTCOP",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760941550
+      },
+      {
+        "sub_merchant_name": "GSCFTINR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760941656
+      },
+      {
+        "sub_merchant_name": "GSCFTTHB",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760941791
+      },
+      {
+        "sub_merchant_name": "GSCFTIDR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760941917
+      },
+      {
+        "sub_merchant_name": "GSCFTMYR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760942032
+      },
+      {
+        "sub_merchant_name": "GSCFTGHS",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760942176
+      },
+      {
+        "sub_merchant_name": "GSCFTPKR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760942283
+      },
+      {
+        "sub_merchant_name": "GSCFTCLP",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760942763
+      },
+      {
+        "sub_merchant_name": "GSCFTXAF",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760942866
+      },
+      {
+        "sub_merchant_name": "GSCFTAED",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760942973
+      },
+      {
+        "sub_merchant_name": "GSCFTSAR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760943084
+      },
+      {
+        "sub_merchant_name": "GSCFTTND",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760943263
+      },
+      {
+        "sub_merchant_name": "GSCFTUSD",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760943367
+      },
+      {
+        "sub_merchant_name": "GSCFTEUR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760943612
+      },
+      {
+        "sub_merchant_name": "GSCFTSEK",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760943719
+      },
+      {
+        "sub_merchant_name": "GSCFTUGX",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760943811
+      },
+      {
+        "sub_merchant_name": "GSCFTZAR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760943931
+      },
+      {
+        "sub_merchant_name": "GSCFTETB",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760944035
+      },
+      {
+        "sub_merchant_name": "GSCFTTRY",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760944190
+      },
+      {
+        "sub_merchant_name": "GSCFTLBP",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760944315
+      },
+      {
+        "sub_merchant_name": "GSCFTKRW",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760944413
+      },
+      {
+        "sub_merchant_name": "GSCFTXOF",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760944619
+      },
+      {
+        "sub_merchant_name": "GSCFTEGP",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760944731
+      },
+      {
+        "sub_merchant_name": "GSCFTBDT",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760945085
+      },
+      {
+        "sub_merchant_name": "GSCFTKWD",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760945194
+      },
+      {
+        "sub_merchant_name": "GSCFTMMK",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760945294
+      },
+      {
+        "sub_merchant_name": "GSCFTVND",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760945389
+      },
+      {
+        "sub_merchant_name": "GSCFTAUD",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760945840
+      },
+      {
+        "sub_merchant_name": "GSCFTNPR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760945972
+      },
+      {
+        "sub_merchant_name": "GSCFTPEN",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760952227
+      },
+      {
+        "sub_merchant_name": "GSCFTRUB",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760952488
+      },
+      {
+        "sub_merchant_name": "GSCFTARS",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760952919
+      },
+      {
+        "sub_merchant_name": "GSCFTTWD",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760953043
+      },
+      {
+        "sub_merchant_name": "GSCFTCAD",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760953164
+      },
+      {
+        "sub_merchant_name": "GSCFTSGD",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760953265
+      },
+      {
+        "sub_merchant_name": "GSCFTJPY",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760953450
+      },
+      {
+        "sub_merchant_name": "GSCFTNZD",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760953558
+      },
+      {
+        "sub_merchant_name": "GSCFTIRR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760953665
+      },
+      {
+        "sub_merchant_name": "GSCFTLKR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760953766
+      },
+      {
+        "sub_merchant_name": "GSCFTLAK",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1760953881
+      },
+      {
+        "sub_merchant_name": "GSCFTUSD",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1767665196
+      },
+      {
+        "sub_merchant_name": "GSCFT",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1753179859
+      },
+      {
+        "sub_merchant_name": "AURORAGAMINGIDR",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1756880488
+      },
+      {
+        "sub_merchant_name": "Godfather ",
+        "main_merchant_name": "GSCPLUS",
+        "merchant_id": 1752747448
+      },
+      {
+        "sub_merchant_name": "brabet01",
+        "main_merchant_name": "Brabet",
+        "merchant_id": 1719571148
+      },
+      {
+        "sub_merchant_name": "brabet02",
+        "main_merchant_name": "Brabet",
+        "merchant_id": 1719571645
+      },
+      {
+        "sub_merchant_name": "brabet03",
+        "main_merchant_name": "Brabet",
+        "merchant_id": 1719571988
+      },
+      {
+        "sub_merchant_name": "brabet04",
+        "main_merchant_name": "Brabet",
+        "merchant_id": 1719574668
+      },
+      {
+        "sub_merchant_name": "brabet05",
+        "main_merchant_name": "Brabet",
+        "merchant_id": 1719973407
+      },
+      {
+        "sub_merchant_name": "brabet06",
+        "main_merchant_name": "Brabet",
+        "merchant_id": 1751602642
+      },
+      {
+        "sub_merchant_name": "Clubs7",
+        "main_merchant_name": "Clubs7",
+        "merchant_id": 1728714808
+      },
+      {
+        "sub_merchant_name": "Epoch Game",
+        "main_merchant_name": "Epoch Game",
+        "merchant_id": 1740973068
+      },
+      {
+        "sub_merchant_name": "Betfarms",
+        "main_merchant_name": "Betfarms",
+        "merchant_id": 1737978166
+      },
+      {
+        "sub_merchant_name": "slotsapi",
+        "main_merchant_name": "SlotsMaker",
+        "merchant_id": 1735282015
+      },
+      {
+        "sub_merchant_name": "To game",
+        "main_merchant_name": "Togame",
+        "merchant_id": 1747388774
+      },
+      {
+        "sub_merchant_name": "Nicegame",
+        "main_merchant_name": "Nicegame",
+        "merchant_id": 1746793106
+      },
+      {
+        "sub_merchant_name": "JWgame",
+        "main_merchant_name": "JWgame",
+        "merchant_id": 1754913084
+      },
+      {
+        "sub_merchant_name": "JB game",
+        "main_merchant_name": "JBgame",
+        "merchant_id": 1752222840
+      },
+      {
+        "sub_merchant_name": "KKGJ game",
+        "main_merchant_name": "KKGJ game",
+        "merchant_id": 1755835322
+      },
+      {
+        "sub_merchant_name": "JINDINGgame",
+        "main_merchant_name": "JINgame",
+        "merchant_id": 1761285994
+      },
+      {
+        "sub_merchant_name": "JINBEI3game",
+        "main_merchant_name": "JINgame",
+        "merchant_id": 1761285864
+      },
+      {
+        "sub_merchant_name": "JIN1game",
+        "main_merchant_name": "JINgame",
+        "merchant_id": 1761285739
+      },
+      {
+        "sub_merchant_name": "Isnbet",
+        "main_merchant_name": "Barbet",
+        "merchant_id": 1744598295
+      },
+      {
+        "sub_merchant_name": "Mxlobo(PKR)",
+        "main_merchant_name": "Mxlobo",
+        "merchant_id": 1742289481
+      },
+      {
+        "sub_merchant_name": "Mxlobo(INR)",
+        "main_merchant_name": "Mxlobo",
+        "merchant_id": 1742269234
+      },
+      {
+        "sub_merchant_name": "Mxlobo(BRL)",
+        "main_merchant_name": "Mxlobo",
+        "merchant_id": 1742267850
+      },
+      {
+        "sub_merchant_name": "Mxlobo(MXN)",
+        "main_merchant_name": "Mxlobo",
+        "merchant_id": 1741762027
+      },
+      {
+        "sub_merchant_name": "MXLOBO01",
+        "main_merchant_name": "Mxlobo",
+        "merchant_id": 1757302420
+      },
+      {
+        "sub_merchant_name": "7COME",
+        "main_merchant_name": "Mxlobo",
+        "merchant_id": 1760338096
+      },
+      {
+        "sub_merchant_name": "RunWin666",
+        "main_merchant_name": "Mxlobo",
+        "merchant_id": 1760956889
+      },
+      {
+        "sub_merchant_name": "vg777",
+        "main_merchant_name": "VG",
+        "merchant_id": 1742280059
+      },
+      {
+        "sub_merchant_name": "Unicorn66",
+        "main_merchant_name": "Unicorn66",
+        "merchant_id": 1749463700
+      },
+      {
+        "sub_merchant_name": "WON66",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750662197
+      },
+      {
+        "sub_merchant_name": "1UWIN",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750650330
+      },
+      {
+        "sub_merchant_name": "12POKIES",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750650532
+      },
+      {
+        "sub_merchant_name": "UPOKIES",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750649868
+      },
+      {
+        "sub_merchant_name": "WAWAWIN",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750650168
+      },
+      {
+        "sub_merchant_name": "5GAMING",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750648971
+      },
+      {
+        "sub_merchant_name": "A9GAMING",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750648058
+      },
+      {
+        "sub_merchant_name": "BCWIN",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750648580
+      },
+      {
+        "sub_merchant_name": "URUSWIN",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1751255752
+      },
+      {
+        "sub_merchant_name": "CASHNET",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750647705
+      },
+      {
+        "sub_merchant_name": "FAFA",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750648292
+      },
+      {
+        "sub_merchant_name": "GXBET",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750649209
+      },
+      {
+        "sub_merchant_name": "1XPOKIES",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750649720
+      },
+      {
+        "sub_merchant_name": "ADVANTPLAY",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1751256462
+      },
+      {
+        "sub_merchant_name": "RICHMAMA",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750649540
+      },
+      {
+        "sub_merchant_name": "RICHPAPA",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750647418
+      },
+      {
+        "sub_merchant_name": "UUSPIN",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750646521
+      },
+      {
+        "sub_merchant_name": "RedSpin",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1749627491
+      },
+      {
+        "sub_merchant_name": "YAYAWIN",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1750647002
+      },
+      {
+        "sub_merchant_name": "RICHPGK",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1755486340
+      },
+      {
+        "sub_merchant_name": "ROCKET",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1758696142
+      },
+      {
+        "sub_merchant_name": "JDB",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1758696175
+      },
+      {
+        "sub_merchant_name": "NLC",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1758696214
+      },
+      {
+        "sub_merchant_name": "Besoft",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1757656822
+      },
+      {
+        "sub_merchant_name": "YBG",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1757657097
+      },
+      {
+        "sub_merchant_name": "JIBET855",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1759990133
+      },
+      {
+        "sub_merchant_name": "RichCity",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1757656943
+      },
+      {
+        "sub_merchant_name": "BBSPIN",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1757656640
+      },
+      {
+        "sub_merchant_name": "RICH676",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1759993246
+      },
+      {
+        "sub_merchant_name": "THESPIN",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1760608379
+      },
+      {
+        "sub_merchant_name": "DPOKIES",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1760608478
+      },
+      {
+        "sub_merchant_name": "AskMeBet",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1760608576
+      },
+      {
+        "sub_merchant_name": "AskMePlay",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": 1760163302
+      },
+      {
+        "sub_merchant_name": "MxnGame777",
+        "main_merchant_name": "MxnGame777",
+        "merchant_id": 1750413710
+      },
+      {
+        "sub_merchant_name": "BossCuci",
+        "main_merchant_name": "BossCuci",
+        "merchant_id": 1749626746
+      },
+      {
+        "sub_merchant_name": "OLE777",
+        "main_merchant_name": "OLE777",
+        "merchant_id": 1750306826
+      },
+      {
+        "sub_merchant_name": "A99AU",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751256811
+      },
+      {
+        "sub_merchant_name": "E99AU",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751613072
+      },
+      {
+        "sub_merchant_name": "M99AU",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751613789
+      },
+      {
+        "sub_merchant_name": "JACKDOM",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751613252
+      },
+      {
+        "sub_merchant_name": "YES77AU",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751615500
+      },
+      {
+        "sub_merchant_name": "PP99AU",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751614936
+      },
+      {
+        "sub_merchant_name": "W99AU",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751615402
+      },
+      {
+        "sub_merchant_name": "BS22AU",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751612625
+      },
+      {
+        "sub_merchant_name": "TAB77AU",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751615284
+      },
+      {
+        "sub_merchant_name": "SOUTHERN9",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751615160
+      },
+      {
+        "sub_merchant_name": "SLOTIFY7",
+        "main_merchant_name": "EG",
+        "merchant_id": 1751615057
+      },
+      {
+        "sub_merchant_name": "Win777",
+        "main_merchant_name": "Win777",
+        "merchant_id": 1751438771
+      },
+      {
+        "sub_merchant_name": "EpicWin",
+        "main_merchant_name": "EpicWin",
+        "merchant_id": 1741932733
+      },
+      {
+        "sub_merchant_name": "CasinoXen",
+        "main_merchant_name": "CasinoXen",
+        "merchant_id": 1752052404
+      },
+      {
+        "sub_merchant_name": "CAPYWIN",
+        "main_merchant_name": "Sortebot2",
+        "merchant_id": 1752206048
+      },
+      {
+        "sub_merchant_name": "Jogar",
+        "main_merchant_name": "Jogar",
+        "merchant_id": 1752566036
+      },
+      {
+        "sub_merchant_name": "Richpanda",
+        "main_merchant_name": "Richpanda",
+        "merchant_id": 1752730793
+      },
+      {
+        "sub_merchant_name": "BSGame",
+        "main_merchant_name": "BSGame",
+        "merchant_id": 1752474506
+      },
+      {
+        "sub_merchant_name": "AAFUN",
+        "main_merchant_name": "AAFUN",
+        "merchant_id": 1751632483
+      },
+      {
+        "sub_merchant_name": "ZFRT394Test",
+        "main_merchant_name": "ZF",
+        "merchant_id": 1753174385
+      },
+      {
+        "sub_merchant_name": "ZF1544Test",
+        "main_merchant_name": "ZF",
+        "merchant_id": "未开通"
+      },
+      {
+        "sub_merchant_name": "ZFRT174xtu_xtuagent1",
+        "main_merchant_name": "ZF",
+        "merchant_id": 1756115437
+      },
+      {
+        "sub_merchant_name": "ZF886Phk77",
+        "main_merchant_name": "ZF",
+        "merchant_id": 1756201112
+      },
+      {
+        "sub_merchant_name": "ZF403TomateBet",
+        "main_merchant_name": "ZF",
+        "merchant_id": 1758161683
+      },
+      {
+        "sub_merchant_name": "ZF1367RUVIA",
+        "main_merchant_name": "ZF",
+        "merchant_id": 1761632643
+      },
+      {
+        "sub_merchant_name": "ZFRT644matrix777",
+        "main_merchant_name": "ZF",
+        "merchant_id": 1761821883
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_MX01",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353096
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M6",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353246
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M7",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353294
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M8",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353340
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_COL1",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353371
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M9",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353412
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M10",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353447
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M11",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353483
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_ID1",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353518
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M15",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353551
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M16",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353584
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M17",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353682
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M18",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353710
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M19",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353739
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_M20",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353849
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_AU1",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353877
+      },
+      {
+        "sub_merchant_name": "MARSBINGO_CL1",
+        "main_merchant_name": "MARSBINGO",
+        "merchant_id": 1753353907
+      },
+      {
+        "sub_merchant_name": "Juwa X",
+        "main_merchant_name": "JuwaX",
+        "merchant_id": 1750836806
+      },
+      {
+        "sub_merchant_name": "SonaGame",
+        "main_merchant_name": "SonaGame",
+        "merchant_id": 1753698976
+      },
+      {
+        "sub_merchant_name": "JackpotParty",
+        "main_merchant_name": "JackpotParty",
+        "merchant_id": 1753754814
+      },
+      {
+        "sub_merchant_name": "JackpotParty02",
+        "main_merchant_name": "JackpotParty",
+        "merchant_id": 1754281426
+      },
+      {
+        "sub_merchant_name": "SCR888H5",
+        "main_merchant_name": "SCR888H5",
+        "merchant_id": 1754148458
+      },
+      {
+        "sub_merchant_name": "TADAGAMING",
+        "main_merchant_name": "TADAGAMING",
+        "merchant_id": 1754279769
+      },
+      {
+        "sub_merchant_name": "WFGaming",
+        "main_merchant_name": "SlotsMaker",
+        "merchant_id": 1755246422
+      },
+      {
+        "sub_merchant_name": "MetaGaming",
+        "main_merchant_name": "SlotsMaker",
+        "merchant_id": 1755248023
+      },
+      {
+        "sub_merchant_name": "BOTO",
+        "main_merchant_name": "BOTO",
+        "merchant_id": 1754625779
+      },
+      {
+        "sub_merchant_name": "jayagaming",
+        "main_merchant_name": "jayagaming",
+        "merchant_id": 1756280066
+      },
+      {
+        "sub_merchant_name": "solya777",
+        "main_merchant_name": "solya777",
+        "merchant_id": 1757738096
+      },
+      {
+        "sub_merchant_name": "Vigor",
+        "main_merchant_name": "Vigor",
+        "merchant_id": "未开通"
+      },
+      {
+        "sub_merchant_name": "Filbet",
+        "main_merchant_name": "Filbet",
+        "merchant_id": 1756783981
+      },
+      {
+        "sub_merchant_name": "FilSlots",
+        "main_merchant_name": "Filbet",
+        "merchant_id": 1761123158
+      },
+      {
+        "sub_merchant_name": "SorteTop",
+        "main_merchant_name": "SorteTop",
+        "merchant_id": 1758528494
+      },
+      {
+        "sub_merchant_name": "Shark7777",
+        "main_merchant_name": "Shark7777",
+        "merchant_id": 1758629060
+      },
+      {
+        "sub_merchant_name": "iGpixel Limited",
+        "main_merchant_name": "iGpixel",
+        "merchant_id": 1762222777
+      },
+      {
+        "sub_merchant_name": "Mola",
+        "main_merchant_name": "SonaGame",
+        "merchant_id": 1762919541
+      },
+      {
+        "sub_merchant_name": "mobilegame",
+        "main_merchant_name": "Filbet",
+        "merchant_id": "1763446639"
+      },
+      {
+        "sub_merchant_name": "JINQI game",
+        "main_merchant_name": "RichGroup",
+        "merchant_id": "1763447356"
+      },
+      {
+        "sub_merchant_name": "goldbet",
+        "main_merchant_name": "goldbet",
+        "merchant_id": "1763522172"
+      },
+      {
+        "sub_merchant_name": "25yx",
+        "main_merchant_name": "25yx",
+        "merchant_id": 1766127767
+      },
+      {
+        "sub_merchant_name": "Fairy",
+        "main_merchant_name": "Fairy",
+        "merchant_id": "1766396139"
+      },
+      {
+        "sub_merchant_name": "supergaming",
+        "main_merchant_name": "supergaming",
+        "merchant_id": "1767603071"
+      },
+      {
+        "sub_merchant_name": "amark",
+        "main_merchant_name": "amark",
+        "merchant_id": "1768464209"
+      },
+      {
+        "sub_merchant_name": "7comeidr",
+        "main_merchant_name": "Mxlobo",
+        "merchant_id": "1768647838"
+      }
+    ]
+  },
+  {
+    "isChallenge": false,
+    "source": "lark",
+    "messageId": "om_x100b5774b9108080e2cd44f02f667e2",
+    "chatId": "oc_e46da96de55cf0562f4c1824fb17d8e9",
+    "senderId": "22779g92",
+    "senderName": "未知用户",
+    "messageText": "商户betfiery的id",
+    "messageTime": "+058067-05-20T02:57:53.000Z",
+    "timestamp": 1770262397873,
+    "rawEvent": {
+      "schema": "2.0",
+      "header": {
+        "event_id": "47270c28ad669b66b3e503d82368fafa",
+        "token": "gwOf5CAHP3hyca0lqb06SeJwn4z3g17P",
+        "create_time": "1770262398051",
+        "event_type": "im.message.receive_v1",
+        "tenant_key": "16390ff6025f577c",
+        "app_id": "cli_a9978e93ce389ed2"
+      },
+      "event": {
+        "message": {
+          "chat_id": "oc_e46da96de55cf0562f4c1824fb17d8e9",
+          "chat_type": "group",
+          "content": "{\"text\":\"商户betfiery的id\"}",
+          "create_time": "1770262397873",
+          "message_id": "om_x100b5774b9108080e2cd44f02f667e2",
+          "message_type": "text",
+          "update_time": "1770262397873"
+        },
+        "sender": {
+          "sender_id": {
+            "open_id": "ou_a7c7890e14f916de17ed9a3956d11317",
+            "union_id": "on_f58e00e3f0332132ea1223a1d1af6691",
+            "user_id": "22779g92"
+          },
+          "sender_type": "user",
+          "tenant_key": "16390ff6025f577c"
+        }
+      }
+    }
+  }
+]

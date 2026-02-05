@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  main-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+      - PDF_SERVICE_URL=http://pdf-service:8787
+      # 其他环境变量将在Dokploy中配置
+    networks:
+      - gmp-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.main-api.rule=Host(`your-domain.com`)"
+      - "traefik.http.services.main-api.loadbalancer.server.port=8000"
+
+  pdf-service:
+    build:
+      context: ./backend/pdf-service
+      dockerfile: Dockerfile
+    ports:
+      - "8787"  # 仅内部访问
+    environment:
+      - PORT=8787
+      - CHROME_PATH=/usr/bin/chromium-browser
+    networks:
+      - gmp-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8787/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  gmp-network:
+    driver: bridge

@@ -603,6 +603,16 @@ router.post('/file-size/batch', async (req, res, next) => {
           // 获取处理建议
           const recommendation = athenaService.getProcessingRecommendation(fileSize.totalSizeMB);
 
+          // 如果文件大小超过500KB，生成预签名下载URL
+          let downloadUrl = null;
+          if (fileSize.totalSizeBytes > 500 * 1024) { // 500KB = 500 * 1024 bytes
+            downloadUrl = await athenaService.generatePresignedDownloadUrl(
+              fileSize.bucket, 
+              fileSize.fileKey, 
+              900 // 15分钟过期
+            );
+          }
+
           return {
             queryId,
             success: true,
@@ -617,7 +627,8 @@ router.post('/file-size/batch', async (req, res, next) => {
             },
             recommendation: recommendation,
             bucket: fileSize.bucket,
-            fileKey: fileSize.fileKey
+            fileKey: fileSize.fileKey,
+            downloadUrl: downloadUrl // 新增：预签名下载URL（仅当文件>500KB时）
           };
 
         } catch (error) {

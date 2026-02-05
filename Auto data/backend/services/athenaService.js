@@ -1,5 +1,6 @@
 const { AthenaClient, StartQueryExecutionCommand, GetQueryExecutionCommand, StopQueryExecutionCommand, GetQueryResultsCommand } = require('@aws-sdk/client-athena')
 const { S3Client, GetObjectCommand, ListObjectsV2Command, HeadObjectCommand } = require('@aws-sdk/client-s3')
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
 const { v4: uuidv4 } = require('uuid')
 const https = require('https')
 const logger = require('../utils/logger')
@@ -461,6 +462,41 @@ class AthenaService {
       logger.error('Failed to get result file size by queryId', { 
         error: error.message, 
         queryId 
+      })
+      return null
+    }
+  }
+
+  /**
+   * 生成S3文件的预签名下载URL
+   */
+  async generatePresignedDownloadUrl(bucket, fileKey, expiresIn = 900) {
+    try {
+      if (!bucket || !fileKey) {
+        logger.warn('Bucket or fileKey is empty for presigned URL generation', { bucket, fileKey })
+        return null
+      }
+
+      const command = new GetObjectCommand({
+        Bucket: bucket,
+        Key: fileKey
+      })
+
+      const signedUrl = await getSignedUrl(s3Client, command, { expiresIn })
+      
+      logger.info('Generated presigned URL', { 
+        bucket, 
+        fileKey, 
+        expiresIn,
+        urlLength: signedUrl.length 
+      })
+      
+      return signedUrl
+    } catch (error) {
+      logger.error('Failed to generate presigned URL', { 
+        error: error.message, 
+        bucket, 
+        fileKey 
       })
       return null
     }
