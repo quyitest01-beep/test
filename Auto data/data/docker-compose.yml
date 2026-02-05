@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  main-api:
+    build: 
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+      - PDF_SERVICE_URL=http://pdf-service:8787
+    depends_on:
+      - pdf-service
+    restart: unless-stopped
+
+  pdf-service:
+    build:
+      context: ../backend/pdf-service
+      dockerfile: Dockerfile
+    ports:
+      - "8787"
+    environment:
+      - PORT=8787
+      - CHROME_PATH=/usr/bin/chromium-browser
+    restart: unless-stopped
