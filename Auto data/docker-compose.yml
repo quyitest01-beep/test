@@ -21,7 +21,7 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.main-api.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.main-api.rule=Host(`gmp-api.flashflock.app`)"
       - "traefik.http.services.main-api.loadbalancer.server.port=8000"
 
   pdf-service:
