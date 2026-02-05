@@ -1,4 +1,4 @@
-# 主API服务的Dockerfile
+# 主API服务的Dockerfile - 根目录部署版本
 FROM node:18-alpine
 
 # 安装必要的系统依赖
@@ -8,13 +8,13 @@ RUN apk add --no-cache wget
 WORKDIR /app
 
 # 复制package.json和package-lock.json
-COPY backend/package*.json ./
+COPY package*.json ./
 
 # 安装依赖
 RUN npm ci --only=production && npm cache clean --force
 
 # 复制应用代码
-COPY backend/ .
+COPY . .
 
 # 创建非root用户
 RUN addgroup -g 1001 -S nodejs && \
