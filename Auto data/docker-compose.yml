@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  gmp-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - ATHENA_DATABASE=${ATHENA_DATABASE}
+      - ATHENA_OUTPUT_LOCATION=${ATHENA_OUTPUT_LOCATION}
+      - ATHENA_WORKGROUP=${ATHENA_WORKGROUP}
+      - API_KEY=${API_KEY}
+      - LARK_APP_ID=${LARK_APP_ID}
+      - LARK_APP_SECRET=${LARK_APP_SECRET}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
