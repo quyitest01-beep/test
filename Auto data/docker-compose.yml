@@ -10,13 +10,18 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8000
+      # AWS配置
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_REGION=${AWS_REGION}
+      # Athena配置
       - ATHENA_DATABASE=${ATHENA_DATABASE}
       - ATHENA_OUTPUT_LOCATION=${ATHENA_OUTPUT_LOCATION}
       - ATHENA_WORKGROUP=${ATHENA_WORKGROUP}
+      # API配置
       - API_KEY=${API_KEY}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:3000}
+      # Lark配置
       - LARK_APP_ID=${LARK_APP_ID}
       - LARK_APP_SECRET=${LARK_APP_SECRET}
     restart: unless-stopped
@@ -26,3 +31,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    volumes:
+      - ./exports:/app/exports
+      - ./logs:/app/logs
