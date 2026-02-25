@@ -2,12 +2,22 @@
 
 ## ✅ 配置检查清单
 
-### 1. Dokploy 设置（你已完成）
+### 1. Dokploy 设置
+
+**重要：文件路径配置**
+
+由于 Git 仓库结构，文件位于 `Auto data/` 子目录中，需要在 Dokploy 中配置：
+
 - ✅ Provider: GitHub
 - ✅ Repository: Atuo-billing
 - ✅ Branch: dokploy-root-deployment
-- ✅ Compose Path: /docker-compose.yml
+- ⚠️ Compose Path: `Auto data/docker-compose.yml` （注意：不要加前导斜杠）
 - ✅ Trigger Type: On Push
+
+**注意事项：**
+- Compose Path 必须是 `Auto data/docker-compose.yml`（相对于仓库根目录）
+- 不要使用 `/Auto data/docker-compose.yml`（不要前导斜杠）
+- Dockerfile 会自动从同一目录找到
 
 ### 2. 需要在 Dokploy 中配置的环境变量
 
@@ -56,12 +66,29 @@ Dokploy 会自动提供子域名，在 Domains 配置：
 
 ## 📋 部署步骤
 
-### 步骤 1: 推送代码到 GitHub
+### 步骤 1: 验证代码已推送到 GitHub
+
+代码已经提交到本地仓库（commit: 742ac12e）。
+
+**如果需要推送到 GitHub：**
 ```bash
-git add .
-git commit -m "Update Docker configuration for Dokploy"
+# 检查网络连接
+ping github.com
+
+# 如果网络正常，推送代码
 git push origin dokploy-root-deployment
+
+# 如果遇到网络问题，可能需要：
+# 1. 检查代理设置
+# 2. 使用 VPN
+# 3. 或者在 Dokploy 中手动触发部署
 ```
+
+**当前状态：**
+- ✅ Dockerfile 已提交（位于 `Auto data/Dockerfile`）
+- ✅ docker-compose.yml 已提交（位于 `Auto data/docker-compose.yml`）
+- ✅ DOKPLOY-DEPLOYMENT-GUIDE.md 已提交
+- ⚠️ 需要推送到 GitHub（如果网络连接正常）
 
 ### 步骤 2: 在 Dokploy 中部署
 1. 点击 "Deploy" 按钮
