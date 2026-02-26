@@ -8,13 +8,13 @@ RUN apk add --no-cache wget curl
 WORKDIR /app
 
 # 复制backend目录的package.json和package-lock.json
-COPY backend/package*.json ./
+COPY package*.json ./
 
 # 安装依赖
 RUN npm install --omit=dev && npm cache clean --force
 
-# 复制backend目录的所有代码
-COPY backend/ ./
+# 复制所有代码
+COPY . ./
 
 # 创建必要的目录
 RUN mkdir -p exports logs
