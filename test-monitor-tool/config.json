@@ -1,0 +1,15 @@
+{
+  "watchDir": "D:\\cursor\\sc\\e2e",
+  "issueProvider": "github",
+  "issueApiUrl": "https://api.github.com",
+  "issueApiToken": "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",
+  "issueRepo": "LambdaTheory/scratch",
+  "testCaseDir": "D:\\cursor\\sc\\test-results",
+  "serverPort": 3001,
+  "retryCount": 3,
+  "retryInterval": 10000,
+  "aiProvider": "openai",
+  "aiApiKey": "sk-0S-6U9_wEvEeJLXToEauGw",
+  "aiModel": "kiro/claude-opus-4.6",
+  "aiBaseUrl": "http://litellm.flashflock.com/v1"
+}
