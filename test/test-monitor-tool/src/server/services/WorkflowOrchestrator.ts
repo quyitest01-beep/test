@@ -121,12 +121,25 @@ export class WorkflowOrchestrator {
       return { success: false, error: errorMsg };
     }
 
-    // Step 4: Save test case
+    // Step 4: Save or update test case
     try {
-      await this.testCaseManager.save(testCase, event.filePath);
-      console.info(
-        `[WorkflowOrchestrator] Saved test case: ${testCase.id}`
-      );
+      if (existing) {
+        // Update existing record instead of creating a new one
+        await this.testCaseManager.update(existing, {
+          automationScript: testCase.automationScript,
+          steps: testCase.steps,
+          expectedResults: testCase.expectedResults,
+        });
+        testCase.id = existing;
+        console.info(
+          `[WorkflowOrchestrator] Updated existing test case: ${existing}`
+        );
+      } else {
+        await this.testCaseManager.save(testCase, event.filePath);
+        console.info(
+          `[WorkflowOrchestrator] Saved test case: ${testCase.id}`
+        );
+      }
     } catch (err) {
       const errorMsg = `Failed to save test case ${testCase.id}: ${err}`;
       console.error(`[WorkflowOrchestrator] ${errorMsg}`);
@@ -197,10 +210,25 @@ export class WorkflowOrchestrator {
   private findExistingBySourcePath(filePath: string): string | null {
     try {
       const db = getDatabase();
+      // Check by exact source_path
       const row = db.prepare(
         'SELECT id FROM test_cases WHERE source_path = ? LIMIT 1'
       ).get(filePath) as { id: string } | undefined;
-      return row?.id ?? null;
+      if (row) return row.id;
+
+      // Also check if the filename is a test case ID (UUID format)
+      const fileName = filePath.replace(/\\/g, '/').split('/').pop()?.replace('.spec.ts', '') || '';
+      const uuidMatch = fileName.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
+      if (uuidMatch) {
+        const byId = db.prepare('SELECT id FROM test_cases WHERE id = ? LIMIT 1').get(fileName) as { id: string } | undefined;
+        if (byId) {
+          // Update source_path to the new path
+          db.prepare('UPDATE test_cases SET source_path = ? WHERE id = ?').run(filePath, byId.id);
+          return byId.id;
+        }
+      }
+
+      return null;
     } catch {
       return null;
     }

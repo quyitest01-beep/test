@@ -89,6 +89,12 @@ export class TestRunner {
     const projectRoot = this.findProjectRoot(testFile);
     this.currentTestCaseId = testCaseId;
 
+    // Ensure screenshots directory exists
+    const screenshotDir = path.join(projectRoot, 'test-results', 'screenshots');
+    if (!fs.existsSync(screenshotDir)) {
+      fs.mkdirSync(screenshotDir, { recursive: true });
+    }
+
     // Emit "running" step
     if (this.onStep) {
       this.onStep({ testCaseId, message: '测试开始执行...', status: 'running' });
@@ -104,11 +110,38 @@ export class TestRunner {
 
     try {
       const { stdout, stderr, exitCode } = await this.execPlaywright([testFile], projectRoot);
+      console.log(`[TestRunner] exitCode=${exitCode}, stdout length=${stdout.length}, stderr length=${stderr.length}`);
+      if (exitCode !== 0) {
+        // Extract error from JSON report
+        try {
+          const report = JSON.parse(stdout);
+          const errors: string[] = [];
+          const findErrors = (suites: any[]) => {
+            for (const suite of suites || []) {
+              for (const spec of suite.specs || []) {
+                for (const test of spec.tests || []) {
+                  for (const result of test.results || []) {
+                    if (result.error) errors.push(result.error.message || result.error.stack || JSON.stringify(result.error));
+                  }
+                }
+              }
+              findErrors(suite.suites || []);
+            }
+          };
+          findErrors(report.suites || []);
+          if (errors.length) console.log(`[TestRunner] Errors from report: ${errors.join('\n---\n').substring(0, 2000)}`);
+          else console.log(`[TestRunner] No errors in report suites. Report has ${(report.suites || []).length} suites`);
+        } catch { console.log(`[TestRunner] stdout (first 2000): ${stdout.substring(0, 2000)}`); }
+        if (stderr) console.log(`[TestRunner] stderr: ${stderr.substring(0, 500)}`);
+      }
       const results = this.parseJsonReport(stdout, [testCaseId]);
 
       const result: TestRunResult = results.length > 0
         ? results[0]
         : this.buildResultFromExit(testCaseId, exitCode, stderr, stdout);
+
+      // Collect step screenshots
+      result.screenshots = this.collectStepScreenshots(screenshotDir, testCaseId);
 
       this.saveTestRun(result);
 
@@ -267,8 +300,7 @@ export class TestRunner {
         '--headed',
         '--project=chromium',
         '--workers=1',
-        '--reporter=json,line',
-        '--screenshot=on',
+        '--reporter=json',
         ...relativeFiles,
       ];
 
@@ -443,7 +475,9 @@ export class TestRunner {
         result.status,
         result.duration,
         result.errorMessage ?? null,
-        result.screenshot ?? null,
+        result.screenshots && result.screenshots.length > 0
+          ? JSON.stringify(result.screenshots)
+          : result.screenshot ?? null,
         result.logs,
         new Date().toISOString(),
       );
@@ -506,5 +540,27 @@ export class TestRunner {
 
       return path.dirname(path.resolve(filePath));
     }
+
+  /**
+   * Scan the screenshots directory for step screenshots matching a test case.
+   * Returns an array of objects with step number and relative URL path.
+   */
+  private collectStepScreenshots(screenshotDir: string, _testCaseId: string): Array<{ step: number; path: string }> {
+    try {
+      if (!fs.existsSync(screenshotDir)) return [];
+      const files = fs.readdirSync(screenshotDir)
+        .filter(f => f.endsWith('.png') && f.includes('-step-'))
+        .sort();
+
+      return files.map(f => {
+        const match = f.match(/step-(\d+)\.png$/);
+        const step = match ? parseInt(match[1], 10) : 0;
+        return { step, path: `/api/screenshots/${f}` };
+      });
+    } catch (err) {
+      console.warn('[TestRunner] Failed to collect screenshots:', err);
+      return [];
+    }
+  }
 
 }

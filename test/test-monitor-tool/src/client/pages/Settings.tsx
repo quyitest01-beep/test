@@ -15,6 +15,17 @@ interface AppConfig {
   aiApiKey: string;
   aiModel: string;
   aiBaseUrl: string;
+  testEnv: 'staging' | 'production';
+}
+
+interface Snippet {
+  id: string;
+  category: string;
+  name: string;
+  description: string;
+  code: string;
+  env: string;
+  tags: string[];
 }
 
 const styles = {
@@ -66,6 +77,7 @@ const defaultConfig: AppConfig = {
   aiApiKey: '',
   aiModel: 'gpt-4o-mini',
   aiBaseUrl: 'https://api.openai.com/v1',
+  testEnv: 'staging',
 };
 
 export default function Settings() {
@@ -74,6 +86,9 @@ export default function Settings() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [snippets, setSnippets] = useState<Snippet[]>([]);
+  const [editingSnippet, setEditingSnippet] = useState<Partial<Snippet> | null>(null);
+  const [snippetSaving, setSnippetSaving] = useState(false);
 
   useEffect(() => {
     fetch('/api/config')
@@ -81,7 +96,43 @@ export default function Settings() {
       .then(setConfig)
       .catch(() => setConfig(defaultConfig))
       .finally(() => setLoading(false));
+    fetch('/api/snippets').then(r => r.ok ? r.json() : []).then(setSnippets).catch(() => {});
   }, []);
+
+  const loadSnippets = () => {
+    fetch('/api/snippets').then(r => r.ok ? r.json() : []).then(setSnippets).catch(() => {});
+  };
+
+  const handleSaveSnippet = async () => {
+    if (!editingSnippet?.category || !editingSnippet?.name || !editingSnippet?.code) {
+      alert('分类、名称、代码为必填项');
+      return;
+    }
+    setSnippetSaving(true);
+    try {
+      const isNew = !editingSnippet.id;
+      const url = isNew ? '/api/snippets' : `/api/snippets/${editingSnippet.id}`;
+      const res = await fetch(url, {
+        method: isNew ? 'POST' : 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editingSnippet),
+      });
+      if (res.ok) {
+        loadSnippets();
+        setEditingSnippet(null);
+      } else {
+        const err = await res.json();
+        alert(`保存失败: ${err.error}`);
+      }
+    } catch { alert('保存失败'); }
+    finally { setSnippetSaving(false); }
+  };
+
+  const handleDeleteSnippet = async (id: string) => {
+    if (!confirm('确定删除此知识条目？')) return;
+    await fetch(`/api/snippets/${id}`, { method: 'DELETE' });
+    loadSnippets();
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -133,6 +184,19 @@ export default function Settings() {
       </div>
 
       {message && <div style={styles.toast(message.type)}>{message.text}</div>}
+
+      <div style={styles.card}>
+        <div style={styles.sectionTitle}>🌍 测试环境</div>
+        <div style={styles.field}>
+          <label style={styles.label} htmlFor="testEnv">当前测试环境</label>
+          <select id="testEnv" style={styles.select} value={config.testEnv}
+            onChange={(e) => updateField('testEnv', e.target.value as 'staging' | 'production')}>
+            <option value="staging">🧪 测试环境 (staging)</option>
+            <option value="production">🚀 正式环境 (production)</option>
+          </select>
+          <div style={styles.hint}>AI 生成脚本时会根据此设置加载对应环境的知识库（域名、账号等）</div>
+        </div>
+      </div>
 
       <div style={styles.card}>
         <div style={styles.sectionTitle}>📁 监听设置</div>
@@ -244,6 +308,94 @@ export default function Settings() {
           {saving ? '保存中...' : '💾 保存配置'}
         </button>
         <button style={styles.btn(false)} onClick={handleReset}>恢复默认</button>
+      </div>
+
+      {/* Knowledge Base Section */}
+      <div style={{ ...styles.card, marginTop: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div style={styles.sectionTitle as React.CSSProperties}>🧠 测试知识库</div>
+          <button
+            onClick={() => setEditingSnippet({ category: '通用流程', name: '', description: '', code: '', env: 'staging', tags: [] })}
+            style={{ padding: '6px 14px', border: '1px dashed #8b5cf6', borderRadius: '6px', backgroundColor: '#faf5ff', cursor: 'pointer', fontSize: '13px', color: '#7c3aed', fontWeight: 600 }}
+          >
+            ＋ 添加知识条目
+          </button>
+        </div>
+        <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '12px' }}>
+          AI 生成脚本时会自动参考知识库中的代码片段、页面地址、API 信息等。请区分环境（staging/production/all）。
+        </div>
+
+        {editingSnippet && (
+          <div style={{ border: '2px solid #8b5cf6', borderRadius: '8px', padding: '16px', backgroundColor: '#faf5ff', marginBottom: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+              <div>
+                <label style={styles.label}>分类 *</label>
+                <input style={styles.input} value={editingSnippet.category || ''} onChange={e => setEditingSnippet(p => ({ ...p, category: e.target.value }))}
+                  placeholder="如: 通用流程 / 页面地址 / API" list="snippet-categories" />
+                <datalist id="snippet-categories">
+                  {[...new Set(snippets.map(s => s.category))].map(c => <option key={c} value={c} />)}
+                  <option value="通用流程" /><option value="页面地址" /><option value="API 接口" /><option value="测试账号" /><option value="选择器" />
+                </datalist>
+              </div>
+              <div>
+                <label style={styles.label}>名称 *</label>
+                <input style={styles.input} value={editingSnippet.name || ''} onChange={e => setEditingSnippet(p => ({ ...p, name: e.target.value }))} placeholder="如: 手机号登录流程" />
+              </div>
+              <div>
+                <label style={styles.label}>环境</label>
+                <select style={styles.select} value={editingSnippet.env || 'all'} onChange={e => setEditingSnippet(p => ({ ...p, env: e.target.value }))}>
+                  <option value="all">全部环境</option>
+                  <option value="staging">测试环境 (staging)</option>
+                  <option value="production">正式环境 (production)</option>
+                </select>
+              </div>
+            </div>
+            <div style={{ marginBottom: '12px' }}>
+              <label style={styles.label}>描述</label>
+              <input style={styles.input} value={editingSnippet.description || ''} onChange={e => setEditingSnippet(p => ({ ...p, description: e.target.value }))} placeholder="简要说明这个知识条目的用途" />
+            </div>
+            <div style={{ marginBottom: '12px' }}>
+              <label style={styles.label}>代码/内容 *</label>
+              <textarea value={editingSnippet.code || ''} onChange={e => setEditingSnippet(p => ({ ...p, code: e.target.value }))}
+                style={{ width: '100%', padding: '8px', border: '1px solid #e2e8f0', borderRadius: '4px', fontSize: '12px', fontFamily: 'monospace', minHeight: '120px', resize: 'vertical' as const, boxSizing: 'border-box' as const }}
+                placeholder={'// 示例：手机号登录流程\nconst phoneTab = page.getByRole(\'button\', { name: \'Telefone\' });\nawait phoneTab.click();\nawait page.getByRole(\'textbox\', { name: \'Telefone\' }).fill(\'11900000103\');\nawait page.getByRole(\'textbox\', { name: \'Digite sua senha\' }).fill(\'11111111\');\nawait page.getByRole(\'button\', { name: \'Entrar\' }).click();'} />
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button onClick={handleSaveSnippet} disabled={snippetSaving}
+                style={{ padding: '6px 16px', border: 'none', borderRadius: '6px', backgroundColor: '#8b5cf6', color: '#fff', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}>
+                {snippetSaving ? '保存中...' : editingSnippet.id ? '💾 更新' : '💾 保存'}
+              </button>
+              <button onClick={() => setEditingSnippet(null)}
+                style={{ padding: '6px 16px', border: '1px solid #cbd5e1', borderRadius: '6px', backgroundColor: '#fff', cursor: 'pointer', fontSize: '13px', color: '#475569' }}>
+                取消
+              </button>
+            </div>
+          </div>
+        )}
+
+        {snippets.length === 0 && !editingSnippet && (
+          <div style={{ padding: '24px', textAlign: 'center', color: '#94a3b8', fontSize: '13px' }}>
+            暂无知识条目。添加常用的登录流程、页面地址、API 信息等，AI 生成脚本时会自动参考。
+          </div>
+        )}
+
+        {snippets.map(s => (
+          <div key={s.id} style={{ border: '1px solid #e2e8f0', borderRadius: '6px', padding: '12px', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <span style={{ fontSize: '11px', padding: '1px 6px', borderRadius: '4px', backgroundColor: '#eff6ff', color: '#3b82f6', marginRight: '6px' }}>{s.category}</span>
+                <span style={{ fontSize: '13px', fontWeight: 600, color: '#1e293b' }}>{s.name}</span>
+                {s.env !== 'all' && <span style={{ fontSize: '11px', padding: '1px 6px', borderRadius: '4px', backgroundColor: s.env === 'staging' ? '#fef9c3' : '#dcfce7', color: s.env === 'staging' ? '#854d0e' : '#166534', marginLeft: '6px' }}>{s.env}</span>}
+              </div>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <button onClick={() => setEditingSnippet(s)} style={{ padding: '2px 8px', border: '1px solid #cbd5e1', borderRadius: '4px', backgroundColor: '#fff', cursor: 'pointer', fontSize: '11px', color: '#475569' }}>编辑</button>
+                <button onClick={() => handleDeleteSnippet(s.id)} style={{ padding: '2px 8px', border: '1px solid #fecaca', borderRadius: '4px', backgroundColor: '#fef2f2', cursor: 'pointer', fontSize: '11px', color: '#ef4444' }}>删除</button>
+              </div>
+            </div>
+            {s.description && <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{s.description}</div>}
+            <pre style={{ fontSize: '11px', fontFamily: 'monospace', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '4px', padding: '8px', marginTop: '6px', overflow: 'auto', maxHeight: '150px', whiteSpace: 'pre-wrap' as const }}>{s.code}</pre>
+          </div>
+        ))}
       </div>
     </div>
   );

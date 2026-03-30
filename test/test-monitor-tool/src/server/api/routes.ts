@@ -3,6 +3,7 @@ import testCaseRoutes from './testCaseRoutes.js';
 import testRunRoutes from './testRunRoutes.js';
 import configRoutes from './configRoutes.js';
 import issueRoutes from './issueRoutes.js';
+import snippetRoutes from './snippetRoutes.js';
 import { statsHandler } from './statsHandler.js';
 
 /**
@@ -13,5 +14,6 @@ export function registerRoutes(app: Express): void {
   app.use('/api/test-run', testRunRoutes);
   app.use('/api/config', configRoutes);
   app.use('/api/issues', issueRoutes);
+  app.use('/api/snippets', snippetRoutes);
   app.get('/api/stats', statsHandler);
 }

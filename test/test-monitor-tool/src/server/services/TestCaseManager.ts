@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { getDatabase } from '../db/database.js';
+import type { MonitorService } from './MonitorService.js';
 import type {
   TestCase,
   TestCaseFilter,
@@ -32,6 +33,12 @@ interface LatestRunRow {
 }
 
 export class TestCaseManager {
+  private monitorService: MonitorService | null = null;
+
+  setMonitorService(ms: MonitorService): void {
+    this.monitorService = ms;
+  }
+
   /**
    * Save a test case to the database.
    * Auto-creates the module directory if it doesn't exist.
@@ -188,7 +195,36 @@ export class TestCaseManager {
 
     db.prepare(`UPDATE test_cases SET ${setClauses.join(', ')} WHERE id = ?`).run(...params);
 
-    // If automationScript was updated, sync back to source file
+    // If title was updated, rename the source file to use test case ID (safe for all platforms)
+    if (updates.title !== undefined) {
+      const row = db.prepare('SELECT source_path, spec_file_path FROM test_cases WHERE id = ?').get(id) as
+        | { source_path: string | null; spec_file_path: string }
+        | undefined;
+
+      if (row) {
+        const oldPath = row.source_path || row.spec_file_path;
+        if (fs.existsSync(oldPath)) {
+          const dir = path.dirname(oldPath);
+          // Use ID-based filename to avoid encoding issues with Chinese/special chars on Windows
+          const newFileName = `${id}.spec.ts`;
+          const newPath = path.join(dir, newFileName);
+
+          if (path.basename(oldPath) !== newFileName && !fs.existsSync(newPath)) {
+            try {
+              this.monitorService?.ignoreNextChange(oldPath);
+              this.monitorService?.ignoreNextChange(newPath);
+              fs.renameSync(oldPath, newPath);
+              db.prepare('UPDATE test_cases SET source_path = ? WHERE id = ?').run(newPath, id);
+              console.info(`[TestCaseManager] Renamed source file: ${path.basename(oldPath)} → ${newFileName}`);
+            } catch (err) {
+              console.error(`[TestCaseManager] Failed to rename source file:`, err);
+            }
+          }
+        }
+      }
+    }
+
+    // If automationScript was updated, sync back to source file (use latest path after possible rename)
     if (updates.automationScript !== undefined) {
       const row = db.prepare('SELECT source_path, spec_file_path FROM test_cases WHERE id = ?').get(id) as
         | { source_path: string | null; spec_file_path: string }
@@ -199,6 +235,7 @@ export class TestCaseManager {
         try {
           const resolvedPath = path.resolve(filePath);
           this.ensureDirectoryExists(resolvedPath);
+          this.monitorService?.ignoreNextChange(resolvedPath);
           fs.writeFileSync(resolvedPath, updates.automationScript, 'utf-8');
         } catch (err) {
           console.error(`[TestCaseManager] Failed to write back to ${filePath}:`, err);

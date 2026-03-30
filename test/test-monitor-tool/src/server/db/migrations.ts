@@ -40,5 +40,26 @@ export function runMigrations(db: Database.Database): void {
       updated_at TEXT NOT NULL,
       FOREIGN KEY (test_case_id) REFERENCES test_cases(id)
     );
+
+    CREATE TABLE IF NOT EXISTS test_snippets (
+      id TEXT PRIMARY KEY,
+      category TEXT NOT NULL,
+      name TEXT NOT NULL,
+      description TEXT,
+      code TEXT NOT NULL,
+      env TEXT NOT NULL DEFAULT 'all',
+      tags TEXT,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS script_fix_logs (
+      id TEXT PRIMARY KEY,
+      test_case_id TEXT NOT NULL,
+      error_message TEXT NOT NULL,
+      explanation TEXT NOT NULL,
+      fixed_at TEXT NOT NULL,
+      FOREIGN KEY (test_case_id) REFERENCES test_cases(id)
+    );
   `);
 }

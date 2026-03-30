@@ -75,6 +75,7 @@ export interface TestRunResult {
   duration: number;
   errorMessage?: string;
   screenshot?: string;
+  screenshots?: Array<{ step: number; path: string }>;
   logs: string;
 }
 
@@ -109,6 +110,7 @@ export interface AppConfig {
   aiApiKey: string;
   aiModel: string;
   aiBaseUrl: string;
+  testEnv: 'staging' | 'production';
 }
 
 export interface ValidationResult {

@@ -17,6 +17,7 @@ const DEFAULT_CONFIG: AppConfig = {
   aiApiKey: '',
   aiModel: 'gpt-4o-mini',
   aiBaseUrl: 'https://api.openai.com/v1',
+  testEnv: 'staging',
 };
 
 export class ConfigManager {

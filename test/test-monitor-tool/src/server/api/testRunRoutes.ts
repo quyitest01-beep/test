@@ -109,16 +109,28 @@ router.get('/history', (req, res) => {
 
     const rows = db.prepare(query).all(...params) as TestRunRow[];
 
-    const history = rows.map((row) => ({
-      id: row.id,
-      testCaseId: row.test_case_id,
-      status: row.status,
-      duration: row.duration,
-      errorMessage: row.error_message,
-      screenshot: row.screenshot_path,
-      logs: row.logs,
-      runAt: row.run_at,
-    }));
+    const history = rows.map((row) => {
+      // Parse screenshots JSON if stored as array, otherwise keep as single path
+      let screenshot: string | null = row.screenshot_path;
+      let screenshots: Array<{ step: number; path: string }> | undefined;
+      if (row.screenshot_path && row.screenshot_path.startsWith('[')) {
+        try {
+          screenshots = JSON.parse(row.screenshot_path);
+          screenshot = null;
+        } catch { /* keep as string */ }
+      }
+      return {
+        id: row.id,
+        testCaseId: row.test_case_id,
+        status: row.status,
+        duration: row.duration,
+        errorMessage: row.error_message,
+        screenshot,
+        screenshots,
+        logs: row.logs,
+        runAt: row.run_at,
+      };
+    });
 
     res.json(history);
   } catch (err) {

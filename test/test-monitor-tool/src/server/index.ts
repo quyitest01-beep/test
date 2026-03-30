@@ -1,4 +1,5 @@
 import express from 'express';
+import fs from 'node:fs';
 import path from 'node:path';
 import { createServer } from 'node:http';
 import { Server as SocketIOServer } from 'socket.io';
@@ -26,6 +27,7 @@ const monitorService = new MonitorService();
 const issueConnector = new IssueConnector(configManager);
 const testCaseGenerator = new TestCaseGenerator(configManager);
 const testCaseManager = new TestCaseManager();
+testCaseManager.setMonitorService(monitorService);
 const testRunner = new TestRunner();
 
 const workflowOrchestrator = new WorkflowOrchestrator({
@@ -94,7 +96,9 @@ registerServices({
 registerRoutes(app);
 
 // Serve test-results screenshots as static files
-app.use('/api/screenshots', express.static(config.testCaseDir || path.join(config.watchDir, '..', 'test-results')));
+// Screenshots are saved in {watchDir}/../test-results/screenshots/
+const screenshotBasePath = path.resolve(config.watchDir, '..', 'test-results', 'screenshots');
+app.use('/api/screenshots', express.static(screenshotBasePath));
 
 // --- Start services ---
 
@@ -122,15 +126,30 @@ configManager.onConfigChange(async (newConfig) => {
   }
 });
 
-// POST /api/scan - manually scan existing files in watch directory
+// POST /api/scan - manually scan existing files in watch directory + cleanup orphans
 app.post('/api/scan', async (_req, res) => {
   try {
     if (!monitorService.isRunning()) {
       res.status(400).json({ error: '监听服务未运行' });
       return;
     }
+
+    // Cleanup: remove test cases whose source files no longer exist
+    const db = getDatabase();
+    const allCases = db.prepare('SELECT id, title, source_path FROM test_cases WHERE source_path IS NOT NULL').all() as Array<{ id: string; title: string; source_path: string }>;
+    let removed = 0;
+    for (const tc of allCases) {
+      if (!fs.existsSync(tc.source_path)) {
+        db.prepare('DELETE FROM test_runs WHERE test_case_id = ?').run(tc.id);
+        db.prepare('DELETE FROM script_fix_logs WHERE test_case_id = ?').run(tc.id);
+        db.prepare('DELETE FROM test_cases WHERE id = ?').run(tc.id);
+        console.info(`[Server] Removed orphan test case: ${tc.title} (source: ${tc.source_path})`);
+        removed++;
+      }
+    }
+
     const count = monitorService.scanExisting();
-    res.json({ success: true, filesScanned: count });
+    res.json({ success: true, filesScanned: count, orphansRemoved: removed });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error('[Server] POST /api/scan error:', err);

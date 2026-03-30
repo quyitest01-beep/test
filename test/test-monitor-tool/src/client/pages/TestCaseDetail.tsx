@@ -28,6 +28,7 @@ interface TestRunResult {
   duration: number;
   errorMessage?: string;
   screenshot?: string;
+  screenshots?: Array<{ step: number; path: string }>;
   logs: string;
   runAt?: string;
 }
@@ -81,11 +82,19 @@ export default function TestCaseDetail() {
   const [showIssuePanel, setShowIssuePanel] = useState(false);
   const [editingScript, setEditingScript] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [editingTitle, setEditingTitle] = useState<string | null>(null);
   const [editingSteps, setEditingSteps] = useState(false);
   const [draftPreconditions, setDraftPreconditions] = useState('');
   const [draftSteps, setDraftSteps] = useState<TestStep[]>([]);
   const [draftExpectedResults, setDraftExpectedResults] = useState('');
   const [regenerating, setRegenerating] = useState(false);
+  const [regeneratingFromIssue, setRegeneratingFromIssue] = useState(false);
+  const [fixing, setFixing] = useState(false);
+  const [fixLogs, setFixLogs] = useState<Array<{ error_message: string; explanation: string; fixed_at: string }>>([]);
+  const [reportDraft, setReportDraft] = useState<string | null>(null);
+  const [generatingReport, setGeneratingReport] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [activeTab, setActiveTab] = useState<'history' | 'fixes' | 'report' | 'screenshots'>('history');
   const [testStatus, setTestStatus] = useState<'idle' | 'running' | 'passed' | 'failed'>('idle');
   const [stepMessages, setStepMessages] = useState<string[]>([]);
   const socketRef = useRef<Socket | null>(null);
@@ -117,9 +126,11 @@ export default function TestCaseDetail() {
     Promise.all([
       fetch(`/api/test-cases/${id}`).then(r => r.ok ? r.json() : null),
       fetch(`/api/test-run/history?testCaseId=${id}`).then(r => r.ok ? r.json() : []),
-    ]).then(([tc, hist]) => {
+      fetch(`/api/test-cases/${id}/fix-logs`).then(r => r.ok ? r.json() : []),
+    ]).then(([tc, hist, logs]) => {
       setTestCase(tc);
       setHistory(Array.isArray(hist) ? hist : []);
+      setFixLogs(Array.isArray(logs) ? logs : []);
     }).catch(console.error).finally(() => setLoading(false));
   }, [id]);
 
@@ -185,6 +196,57 @@ export default function TestCaseDetail() {
     setDraftSteps(prev => prev.map((s, i) => i === index ? { ...s, [field]: value } : s));
   };
 
+  const addStep = (atIndex?: number) => {
+    setDraftSteps(prev => {
+      const insertAt = atIndex !== undefined ? atIndex + 1 : prev.length;
+      const next = [...prev];
+      next.splice(insertAt, 0, { order: 0, action: '', expected: '' });
+      return next.map((s, i) => ({ ...s, order: i + 1 }));
+    });
+  };
+
+  const removeStep = (index: number) => {
+    setDraftSteps(prev => prev.filter((_, i) => i !== index).map((s, i) => ({ ...s, order: i + 1 })));
+  };
+
+  const moveStep = (index: number, direction: 'up' | 'down') => {
+    setDraftSteps(prev => {
+      const next = [...prev];
+      const target = direction === 'up' ? index - 1 : index + 1;
+      if (target < 0 || target >= next.length) return prev;
+      [next[index], next[target]] = [next[target], next[index]];
+      return next.map((s, i) => ({ ...s, order: i + 1 }));
+    });
+  };
+
+  const handleSaveSteps = async () => {
+    if (!id) return;
+    setSaving(true);
+    try {
+      const res = await fetch(`/api/test-cases/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          preconditions: draftPreconditions,
+          steps: draftSteps,
+          expectedResults: draftExpectedResults,
+        }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setTestCase(updated);
+        setEditingSteps(false);
+      } else {
+        const err = await res.json();
+        alert(`保存失败: ${err.error}`);
+      }
+    } catch (err) {
+      alert(`保存失败: ${err}`);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleRegenerate = async () => {
     if (!id) return;
     setRegenerating(true);
@@ -238,6 +300,101 @@ export default function TestCaseDetail() {
     }
   };
 
+  const handleRegenerateFromIssue = async () => {
+    if (!id || !testCase?.issueLink) return;
+    if (!confirm('将根据 Issue 需求内容重新生成测试步骤和脚本，当前的步骤和脚本会被覆盖。确定继续？')) return;
+    setRegeneratingFromIssue(true);
+    try {
+      const res = await fetch(`/api/test-cases/${id}/regenerate-from-issue`, { method: 'POST' });
+      if (res.ok) {
+        const updated = await res.json();
+        setTestCase(updated);
+        // Refresh history
+        const hist = await fetch(`/api/test-run/history?testCaseId=${id}`).then(r => r.json());
+        setHistory(Array.isArray(hist) ? hist : []);
+      } else {
+        const err = await res.json();
+        alert(`生成失败: ${err.error}`);
+      }
+    } catch (err) {
+      alert(`生成失败: ${err}`);
+    } finally {
+      setRegeneratingFromIssue(false);
+    }
+  };
+  const handleFixScript = async () => {
+    if (!id || history.length === 0) return;
+    const lastFailed = history.find(h => h.status === 'failed');
+    if (!lastFailed) { alert('没有找到失败的运行记录'); return; }
+    setFixing(true);
+    try {
+      const res = await fetch(`/api/test-cases/${id}/fix-script`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          errorMessage: lastFailed.errorMessage || 'Unknown error',
+          logs: lastFailed.logs || '',
+        }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setTestCase(updated);
+        // Refresh fix logs
+        const logs = await fetch(`/api/test-cases/${id}/fix-logs`).then(r => r.ok ? r.json() : []);
+        setFixLogs(Array.isArray(logs) ? logs : []);
+      } else {
+        const err = await res.json();
+        alert(`修复失败: ${err.error}`);
+      }
+    } catch (err) {
+      alert(`修复失败: ${err}`);
+    } finally {
+      setFixing(false);
+    }
+  };
+
+  const handleGenerateReport = async () => {
+    if (!id) return;
+    setGeneratingReport(true);
+    try {
+      const res = await fetch(`/api/test-cases/${id}/generate-report`, { method: 'POST' });
+      if (res.ok) {
+        const { report } = await res.json();
+        setReportDraft(report);
+      } else {
+        const err = await res.json();
+        alert(`生成报告失败: ${err.error}`);
+      }
+    } catch (err) {
+      alert(`生成报告失败: ${err}`);
+    } finally {
+      setGeneratingReport(false);
+    }
+  };
+
+  const handlePublishReport = async () => {
+    if (!id || !reportDraft) return;
+    setPublishing(true);
+    try {
+      const res = await fetch(`/api/test-cases/${id}/publish-report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ report: reportDraft }),
+      });
+      if (res.ok) {
+        alert('✅ 报告已推送到 Issue 评论');
+        setReportDraft(null);
+      } else {
+        const err = await res.json();
+        alert(`推送失败: ${err.error}`);
+      }
+    } catch (err) {
+      alert(`推送失败: ${err}`);
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   if (loading) return <div style={styles.page}><p>加载中...</p></div>;
   if (!testCase) return <div style={styles.page}><p>未找到测试用例</p></div>;
 
@@ -246,13 +403,38 @@ export default function TestCaseDetail() {
       <button style={styles.backBtn} onClick={() => navigate('/')}>← 返回</button>
 
       <div style={styles.card}>
-        <h1 style={styles.title}>{testCase.title}</h1>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '4px' }}>
+          {editingTitle !== null ? (
+            <div style={{ flex: 1, display: 'flex', gap: '6px', alignItems: 'center' }}>
+              <input value={editingTitle} onChange={e => setEditingTitle(e.target.value)}
+                style={{ flex: 1, fontSize: '20px', fontWeight: 700, color: '#1e293b', padding: '4px 8px', border: '2px solid #3b82f6', borderRadius: '6px', outline: 'none' }} />
+              <button onClick={async () => {
+                if (!id || !editingTitle.trim()) return;
+                const res = await fetch(`/api/test-cases/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title: editingTitle }) });
+                if (res.ok) { const u = await res.json(); setTestCase(u); setEditingTitle(null); }
+              }} style={{ padding: '4px 12px', border: 'none', borderRadius: '4px', backgroundColor: '#3b82f6', color: '#fff', cursor: 'pointer', fontSize: '12px' }}>保存</button>
+              <button onClick={() => setEditingTitle(null)} style={{ padding: '4px 12px', border: '1px solid #cbd5e1', borderRadius: '4px', backgroundColor: '#fff', cursor: 'pointer', fontSize: '12px', color: '#475569' }}>取消</button>
+            </div>
+          ) : (
+            <h1 style={{ ...styles.title, flex: 1, cursor: 'pointer' }} onClick={() => setEditingTitle(testCase.title)} title="点击编辑标题">{testCase.title}</h1>
+          )}
+        </div>
+        <div style={{ fontSize: '11px', color: '#94a3b8', fontFamily: 'monospace', marginBottom: '8px' }}>ID: {testCase.id}</div>
         <div style={styles.meta}>
           <span style={styles.badge(testCase.status)}>{testCase.status}</span>
           {testCase.issueLink && (
-            <a href={testCase.issueLink} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6' }}>
-              🔗 {testCase.issueLink}
-            </a>
+            <>
+              <a href={testCase.issueLink} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6' }}>
+                🔗 {testCase.issueLink}
+              </a>
+              <button
+                onClick={handleRegenerateFromIssue}
+                disabled={regeneratingFromIssue}
+                style={{ padding: '2px 10px', border: '1px solid #f59e0b', borderRadius: '12px', backgroundColor: '#fffbeb', cursor: 'pointer', fontSize: '12px', color: '#92400e', fontWeight: 600 }}
+              >
+                {regeneratingFromIssue ? '🤖 读取 Issue 中...' : '🤖 从 Issue 重新生成'}
+              </button>
+            </>
           )}
           <span>创建时间: {new Date(testCase.createdAt).toLocaleString()}</span>
           <span>更新时间: {new Date(testCase.updatedAt).toLocaleString()}</span>
@@ -307,7 +489,7 @@ export default function TestCaseDetail() {
               onClick={startEditingSteps}
               style={{ marginLeft: '12px', padding: '2px 10px', border: '1px solid #cbd5e1', borderRadius: '4px', backgroundColor: '#fff', cursor: 'pointer', fontSize: '12px', color: '#475569' }}
             >
-              ✏️ 编辑并用 AI 重新生成
+              ✏️ 编辑步骤
             </button>
           )}
         </div>
@@ -323,26 +505,72 @@ export default function TestCaseDetail() {
               />
             </div>
 
-            <label style={{ fontSize: '13px', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '8px' }}>测试步骤</label>
-            {draftSteps.map((step, i) => (
-              <div key={step.order} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'flex-start' }}>
-                <div style={styles.stepNum}>{step.order}</div>
-                <div style={{ flex: 1 }}>
-                  <input
-                    value={step.action}
-                    onChange={(e) => handleStepChange(i, 'action', e.target.value)}
-                    style={{ width: '100%', padding: '6px 8px', border: '1px solid #e2e8f0', borderRadius: '4px', fontSize: '13px', marginBottom: '4px' }}
-                    placeholder="操作描述"
-                  />
-                  <input
-                    value={step.expected}
-                    onChange={(e) => handleStepChange(i, 'expected', e.target.value)}
-                    style={{ width: '100%', padding: '6px 8px', border: '1px solid #e2e8f0', borderRadius: '4px', fontSize: '12px', color: '#64748b' }}
-                    placeholder="预期结果"
-                  />
-                </div>
-              </div>
-            ))}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <label style={{ fontSize: '13px', fontWeight: 600, color: '#334155' }}>测试步骤</label>
+              <button
+                onClick={() => addStep()}
+                style={{ padding: '3px 10px', border: '1px dashed #8b5cf6', borderRadius: '4px', backgroundColor: '#faf5ff', cursor: 'pointer', fontSize: '12px', color: '#7c3aed', fontWeight: 600 }}
+              >
+                ＋ 添加步骤
+              </button>
+            </div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr style={{ backgroundColor: '#f1f5f9' }}>
+                  <th style={{ padding: '6px 4px', width: '44px', textAlign: 'center', fontSize: '11px', color: '#64748b' }}>序号</th>
+                  <th style={{ padding: '6px 4px', textAlign: 'left', fontSize: '11px', color: '#64748b' }}>操作描述</th>
+                  <th style={{ padding: '6px 4px', textAlign: 'left', fontSize: '11px', color: '#64748b' }}>预期结果</th>
+                  <th style={{ padding: '6px 4px', width: '80px', textAlign: 'center', fontSize: '11px', color: '#64748b' }}>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {draftSteps.map((step, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                    <td style={{ padding: '4px', textAlign: 'center', verticalAlign: 'top' }}>
+                      <input
+                        type="number"
+                        value={step.order}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value) || 1;
+                          setDraftSteps(prev => prev.map((s, idx) => idx === i ? { ...s, order: val } : s));
+                        }}
+                        style={{ width: '38px', padding: '4px 2px', border: '1px solid #e2e8f0', borderRadius: '4px', fontSize: '13px', textAlign: 'center' }}
+                      />
+                    </td>
+                    <td style={{ padding: '4px', verticalAlign: 'top' }}>
+                      <textarea
+                        value={step.action}
+                        onChange={(e) => handleStepChange(i, 'action', e.target.value)}
+                        rows={2}
+                        style={{ width: '100%', padding: '4px 6px', border: '1px solid #e2e8f0', borderRadius: '4px', fontSize: '13px', resize: 'vertical' as const, boxSizing: 'border-box' as const }}
+                        placeholder="操作描述"
+                      />
+                    </td>
+                    <td style={{ padding: '4px', verticalAlign: 'top' }}>
+                      <textarea
+                        value={step.expected}
+                        onChange={(e) => handleStepChange(i, 'expected', e.target.value)}
+                        rows={2}
+                        style={{ width: '100%', padding: '4px 6px', border: '1px solid #e2e8f0', borderRadius: '4px', fontSize: '12px', color: '#64748b', resize: 'vertical' as const, boxSizing: 'border-box' as const }}
+                        placeholder="预期结果"
+                      />
+                    </td>
+                    <td style={{ padding: '4px', textAlign: 'center', verticalAlign: 'top' }}>
+                      <div style={{ display: 'flex', gap: '2px', justifyContent: 'center' }}>
+                        <button onClick={() => moveStep(i, 'up')} disabled={i === 0} title="上移"
+                          style={{ width: '22px', height: '22px', border: '1px solid #e2e8f0', borderRadius: '3px', backgroundColor: '#fff', cursor: i === 0 ? 'default' : 'pointer', fontSize: '10px', color: i === 0 ? '#cbd5e1' : '#64748b', padding: 0 }}>▲</button>
+                        <button onClick={() => moveStep(i, 'down')} disabled={i === draftSteps.length - 1} title="下移"
+                          style={{ width: '22px', height: '22px', border: '1px solid #e2e8f0', borderRadius: '3px', backgroundColor: '#fff', cursor: i === draftSteps.length - 1 ? 'default' : 'pointer', fontSize: '10px', color: i === draftSteps.length - 1 ? '#cbd5e1' : '#64748b', padding: 0 }}>▼</button>
+                        <button onClick={() => addStep(i)} title="插入"
+                          style={{ width: '22px', height: '22px', border: '1px dashed #8b5cf6', borderRadius: '3px', backgroundColor: '#faf5ff', cursor: 'pointer', fontSize: '12px', color: '#7c3aed', padding: 0 }}>+</button>
+                        <button onClick={() => removeStep(i)} disabled={draftSteps.length <= 1} title="删除"
+                          style={{ width: '22px', height: '22px', border: '1px solid #fecaca', borderRadius: '3px', backgroundColor: draftSteps.length <= 1 ? '#f8fafc' : '#fef2f2', cursor: draftSteps.length <= 1 ? 'default' : 'pointer', fontSize: '12px', color: draftSteps.length <= 1 ? '#cbd5e1' : '#ef4444', padding: 0 }}>×</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
             <div style={{ marginTop: '12px' }}>
               <label style={{ fontSize: '13px', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '4px' }}>预期结果</label>
@@ -353,7 +581,14 @@ export default function TestCaseDetail() {
               />
             </div>
 
-            <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
+            <div style={{ marginTop: '12px', display: 'flex', gap: '8px', flexWrap: 'wrap' as const }}>
+              <button
+                onClick={handleSaveSteps}
+                disabled={saving}
+                style={{ padding: '8px 16px', border: 'none', borderRadius: '6px', backgroundColor: '#3b82f6', color: '#fff', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}
+              >
+                {saving ? '💾 保存中...' : '💾 保存修改'}
+              </button>
               <button
                 onClick={handleRegenerate}
                 disabled={regenerating}
@@ -430,7 +665,7 @@ export default function TestCaseDetail() {
           <pre style={styles.pre}>{testCase.automationScript}</pre>
         )}
 
-        <div style={{ marginTop: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <div style={{ marginTop: '16px', display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' as const }}>
           <button style={styles.runBtn} onClick={handleRun} disabled={running}>
             {running ? '⏳ 运行中...' : '▶ 运行测试'}
           </button>
@@ -446,6 +681,29 @@ export default function TestCaseDetail() {
               {testStatus === 'running' ? '🔄 测试中...' : testStatus === 'passed' ? '✅ 测试通过' : '❌ 测试不通过'}
             </span>
           )}
+          {(testStatus === 'failed' || (history.length > 0 && history[0].status === 'failed')) && (
+            <button
+              onClick={handleFixScript}
+              disabled={fixing}
+              style={{ padding: '6px 16px', border: '1px solid #f59e0b', borderRadius: '6px', backgroundColor: '#fffbeb', cursor: 'pointer', fontSize: '13px', fontWeight: 600, color: '#92400e' }}
+            >
+              {fixing ? '🤖 AI 修复中...' : fixLogs.length >= 3 ? '🤖 再次修复' : '🤖 AI 修复脚本'}
+            </button>
+          )}
+          {fixLogs.length >= 3 && (testStatus === 'failed' || (history.length > 0 && history[0].status === 'failed')) && (
+            <span style={{ fontSize: '12px', color: '#f59e0b', padding: '4px 8px', backgroundColor: '#fffbeb', borderRadius: '4px' }}>
+              ⚠ 已修复 {fixLogs.length} 次仍失败，建议精简测试步骤后重新生成脚本
+            </span>
+          )}
+          {(testStatus === 'passed' || (history.length > 0 && history[0].status === 'passed')) && testCase.issueLink && (
+            <button
+              onClick={() => { setActiveTab('report'); handleGenerateReport(); }}
+              disabled={generatingReport}
+              style={{ padding: '6px 16px', border: '1px solid #10b981', borderRadius: '6px', backgroundColor: '#ecfdf5', cursor: 'pointer', fontSize: '13px', fontWeight: 600, color: '#065f46' }}
+            >
+              {generatingReport ? '📝 生成报告中...' : '📝 推送报告'}
+            </button>
+          )}
         </div>
 
         {stepMessages.length > 0 && (
@@ -458,45 +716,154 @@ export default function TestCaseDetail() {
             ))}
           </div>
         )}
+
       </div>
 
       <div style={styles.card}>
-        <div style={styles.sectionTitle}>运行历史</div>
-        {history.length === 0 ? (
-          <p style={{ color: '#94a3b8', fontSize: '13px' }}>暂无运行记录</p>
-        ) : (
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-            <thead>
-              <tr>
-                <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '12px' }}>状态</th>
-                <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '12px' }}>耗时</th>
-                <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '12px' }}>日期</th>
-                <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '12px' }}>错误信息</th>
-                <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '12px' }}>截图</th>
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((run, i) => (
-                <tr key={i}>
-                  <td style={{ padding: '6px 8px', borderBottom: '1px solid #f1f5f9' }}>
-                    <span style={styles.runBadge(run.status)}>{run.status}</span>
-                  </td>
-                  <td style={{ padding: '6px 8px', borderBottom: '1px solid #f1f5f9' }}>{run.duration}ms</td>
-                  <td style={{ padding: '6px 8px', borderBottom: '1px solid #f1f5f9' }}>
-                    {run.runAt ? new Date(run.runAt).toLocaleString() : '—'}
-                  </td>
-                  <td style={{ padding: '6px 8px', borderBottom: '1px solid #f1f5f9', color: '#ef4444', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {run.errorMessage?.replace(/\u001b\[\d+m/g, '') || '—'}
-                  </td>
-                  <td style={{ padding: '6px 8px', borderBottom: '1px solid #f1f5f9' }}>
-                    {run.screenshot ? (
-                      <a href={run.screenshot} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', fontSize: '12px' }}>📷 查看</a>
-                    ) : '—'}
-                  </td>
+        {/* Tab Bar */}
+        <div style={{ display: 'flex', gap: '0', borderBottom: '2px solid #e2e8f0', marginBottom: '12px' }}>
+          {([
+            { key: 'history' as const, label: '📋 运行历史', count: history.length },
+            { key: 'screenshots' as const, label: '📷 运行截图', count: history.length > 0 && history[0].screenshots ? history[0].screenshots.length : 0 },
+            { key: 'fixes' as const, label: '🔧 修复记录', count: fixLogs.length },
+            { key: 'report' as const, label: '📝 验收报告', count: 0 },
+          ]).map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              style={{
+                padding: '8px 16px', border: 'none', borderBottom: activeTab === tab.key ? '2px solid #3b82f6' : '2px solid transparent',
+                marginBottom: '-2px', backgroundColor: 'transparent', cursor: 'pointer',
+                fontSize: '13px', fontWeight: activeTab === tab.key ? 600 : 400,
+                color: activeTab === tab.key ? '#3b82f6' : '#64748b',
+              }}
+            >
+              {tab.label}{tab.count > 0 ? ` (${tab.count})` : ''}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab: Run History */}
+        {activeTab === 'history' && (
+          history.length === 0 ? (
+            <p style={{ color: '#94a3b8', fontSize: '13px' }}>暂无运行记录</p>
+          ) : (
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+              <thead>
+                <tr>
+                  <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '12px' }}>状态</th>
+                  <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '12px' }}>耗时</th>
+                  <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '12px' }}>日期</th>
+                  <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '12px' }}>错误信息</th>
+                  <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '2px solid #e2e8f0', color: '#64748b', fontSize: '12px' }}>截图</th>
                 </tr>
+              </thead>
+              <tbody>
+                {history.map((run, i) => (
+                  <tr key={i}>
+                    <td style={{ padding: '6px 8px', borderBottom: '1px solid #f1f5f9' }}>
+                      <span style={styles.runBadge(run.status)}>{run.status}</span>
+                    </td>
+                    <td style={{ padding: '6px 8px', borderBottom: '1px solid #f1f5f9' }}>{run.duration}ms</td>
+                    <td style={{ padding: '6px 8px', borderBottom: '1px solid #f1f5f9' }}>
+                      {run.runAt ? new Date(run.runAt).toLocaleString() : '—'}
+                    </td>
+                    <td style={{ padding: '6px 8px', borderBottom: '1px solid #f1f5f9', color: '#ef4444', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {run.errorMessage?.replace(/\u001b\[\d+m/g, '') || '—'}
+                    </td>
+                    <td style={{ padding: '6px 8px', borderBottom: '1px solid #f1f5f9' }}>
+                      {run.screenshots && run.screenshots.length > 0 ? (
+                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                          {run.screenshots.map((s, si) => (
+                            <a key={si} href={s.path} target="_blank" rel="noopener noreferrer"
+                              style={{ display: 'inline-block', padding: '2px 6px', backgroundColor: '#eff6ff', borderRadius: '4px', fontSize: '11px', color: '#3b82f6', textDecoration: 'none' }}>
+                              📷 步骤{s.step}
+                            </a>
+                          ))}
+                        </div>
+                      ) : run.screenshot ? (
+                        <a href={run.screenshot} target="_blank" rel="noopener noreferrer" style={{ color: '#3b82f6', fontSize: '12px' }}>📷 查看</a>
+                      ) : '—'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )
+        )}
+
+        {/* Tab: Screenshots */}
+        {activeTab === 'screenshots' && (
+          history.length > 0 && history[0].screenshots && history[0].screenshots.length > 0 ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '12px' }}>
+              {history[0].screenshots.map((s, i) => (
+                <div key={i} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', overflow: 'hidden' }}>
+                  <div style={{ padding: '6px 10px', backgroundColor: '#f8fafc', fontSize: '12px', fontWeight: 600, color: '#475569', borderBottom: '1px solid #e2e8f0' }}>
+                    步骤 {s.step}
+                  </div>
+                  <a href={s.path} target="_blank" rel="noopener noreferrer">
+                    <img src={s.path} alt={`步骤 ${s.step} 截图`} style={{ width: '100%', display: 'block', cursor: 'pointer' }}
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                  </a>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          ) : (
+            <p style={{ color: '#94a3b8', fontSize: '13px' }}>暂无截图，运行测试后会自动生成每个步骤的截图</p>
+          )
+        )}
+
+        {/* Tab: Fix Logs */}
+        {activeTab === 'fixes' && (
+          fixLogs.length === 0 ? (
+            <p style={{ color: '#94a3b8', fontSize: '13px' }}>暂无修复记录</p>
+          ) : (
+            fixLogs.map((log, i) => (
+              <div key={i} style={{ padding: '10px 12px', borderBottom: '1px solid #f1f5f9', fontSize: '13px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <span style={{ color: '#1e293b', fontWeight: 500 }}>🤖 {log.explanation}</span>
+                  <span style={{ color: '#94a3b8', fontSize: '11px', flexShrink: 0 }}>{new Date(log.fixed_at).toLocaleString()}</span>
+                </div>
+                <div style={{ fontSize: '11px', color: '#ef4444', fontFamily: 'monospace', backgroundColor: '#fef2f2', padding: '4px 8px', borderRadius: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>
+                  错误: {log.error_message}
+                </div>
+              </div>
+            ))
+          )
+        )}
+
+        {/* Tab: Report */}
+        {activeTab === 'report' && (
+          <div>
+            {reportDraft !== null ? (
+              <div>
+                <textarea
+                  value={reportDraft}
+                  onChange={(e) => setReportDraft(e.target.value)}
+                  style={{ width: '100%', padding: '12px', border: '1px solid #e2e8f0', borderRadius: '6px', fontSize: '13px', fontFamily: 'monospace', minHeight: '300px', resize: 'vertical' as const, boxSizing: 'border-box' as const, lineHeight: '1.6' }}
+                />
+                <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+                  <button onClick={handlePublishReport} disabled={publishing}
+                    style={{ padding: '8px 20px', border: 'none', borderRadius: '6px', backgroundColor: '#10b981', color: '#fff', cursor: 'pointer', fontSize: '13px', fontWeight: 600 }}>
+                    {publishing ? '📤 推送中...' : '📤 确认推送到 Issue'}
+                  </button>
+                  <button onClick={() => setReportDraft(null)}
+                    style={{ padding: '8px 16px', border: '1px solid #cbd5e1', borderRadius: '6px', backgroundColor: '#fff', cursor: 'pointer', fontSize: '13px', color: '#475569' }}>
+                    取消
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', padding: '24px' }}>
+                <p style={{ color: '#94a3b8', fontSize: '13px', marginBottom: '12px' }}>点击下方按钮，AI 将根据测试结果生成验收报告</p>
+                <button onClick={() => { handleGenerateReport(); }} disabled={generatingReport || !testCase.issueLink}
+                  style={{ padding: '8px 20px', border: 'none', borderRadius: '6px', backgroundColor: testCase.issueLink ? '#10b981' : '#cbd5e1', color: '#fff', cursor: testCase.issueLink ? 'pointer' : 'default', fontSize: '13px', fontWeight: 600 }}>
+                  {generatingReport ? '📝 生成中...' : '📝 生成验收报告'}
+                </button>
+                {!testCase.issueLink && <p style={{ color: '#f59e0b', fontSize: '12px', marginTop: '8px' }}>需要先关联 Issue</p>}
+              </div>
+            )}
+          </div>
         )}
       </div>
     </div>

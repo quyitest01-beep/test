@@ -272,6 +272,30 @@ export class IssueConnector {
 
   // --- Private helpers ---
 
+  /**
+   * Publish a raw markdown comment to a GitHub issue.
+   */
+  async publishComment(issueLink: string, body: string): Promise<PublishResult> {
+    const parsed = this.parseGitHubIssueUrl(issueLink);
+    if (!parsed) return { success: false, error: `Invalid GitHub issue URL: ${issueLink}` };
+
+    const config = this.configManager.getConfig();
+    const octokit = new Octokit({ auth: config.issueApiToken || undefined });
+
+    try {
+      const { data } = await octokit.rest.issues.createComment({
+        owner: parsed.owner,
+        repo: parsed.repo,
+        issue_number: parsed.issueNumber,
+        body,
+      });
+      return { success: true, commentId: String(data.id) };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return { success: false, error: message };
+    }
+  }
+
   private parseGitHubIssueUrl(
     url: string
   ): { owner: string; repo: string; issueNumber: number } | null {

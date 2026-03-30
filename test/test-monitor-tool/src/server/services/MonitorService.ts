@@ -10,6 +10,18 @@ export class MonitorService {
   private running = false;
   private watchDir: string | null = null;
   private callbacks: FileChangeCallback[] = [];
+  private ignoredPaths: Set<string> = new Set();
+
+  /**
+   * Temporarily ignore file change events for a given path.
+   * Used to prevent re-processing when we write back to source files.
+   */
+  ignoreNextChange(filePath: string): void {
+    const resolved = path.resolve(filePath);
+    this.ignoredPaths.add(resolved);
+    // Auto-clear after 2 seconds in case the change event never fires
+    setTimeout(() => this.ignoredPaths.delete(resolved), 2000);
+  }
 
   /**
    * Start watching the given directory for `.spec.ts` file additions and changes.
@@ -137,6 +149,13 @@ export class MonitorService {
    * Handle a raw file system event: read content, validate, and dispatch.
    */
   private handleFileEvent(type: 'add' | 'change', filePath: string): void {
+    const resolved = path.resolve(filePath);
+    if (this.ignoredPaths.has(resolved)) {
+      this.ignoredPaths.delete(resolved);
+      console.info(`[MonitorService] Ignoring self-triggered change for ${path.basename(filePath)}`);
+      return;
+    }
+
     let content: string;
     try {
       content = fs.readFileSync(filePath, 'utf-8');

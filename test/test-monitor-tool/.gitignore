@@ -1,0 +1,11 @@
+node_modules/
+dist/
+config.json
+data/*.db
+data/*.db-shm
+data/*.db-wal
+test-results/
+*.log
+seed-snippets.mjs
+cleanup.mjs
+rename-sync.mjs
