@@ -1,0 +1,9 @@
+# Only track test-monitor-tool and root files
+Auto billing/
+Auto data/
+gp-record-analyse/
+gp-report/
+sc/
+月报/
+.vscode/
+.kiro/
