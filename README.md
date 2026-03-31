@@ -20,4 +20,4 @@ npm run dev:server   # 启动后端
 npm run dev:client   # 启动前端（另一个终端）
 ```
 
-详细说明见 [test-monitor-tool/README.md](test-monitor-tool/README.md)
+详细说明见 [test/test-monitor-tool/README.md)
