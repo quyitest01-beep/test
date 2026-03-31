@@ -20,4 +20,4 @@ npm run dev:server   # 启动后端
 npm run dev:client   # 启动前端（另一个终端）
 ```
 
-详细说明见 [test/test-monitor-tool/README.md)
+详细说明见 [[test/test-monitor-tool/README.md](https://github.com/quyitest01-beep/test/blob/c2f595b7610cf0b21c109adea04855f65d7243fa/test/test-monitor-tool/README.md))
