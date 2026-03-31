@@ -1,7 +1,0 @@
-{
-  "bot_token": "8377174189:AAG50ZXtA946xmKh9Um-6-uXbncAZWffaSw",
-  "finance_chat_id": "-1002995523623",
-  "reconciliation_chat_id": "-1002987680134",
-  "api_base_url": "https://api.telegram.org/bot",
-  "_note": "finance_chat_id: 账单测试群5, reconciliation_chat_id: test_月度账单"
-}

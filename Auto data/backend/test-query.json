@@ -1,5 +1,0 @@
-{
-  "sql": "SELECT id, uid, merchant_id, game_id, result, amount, pay_out FROM game_records WHERE provider IN ('gp', 'popular') LIMIT 5",
-  "database": "gmp",
-  "maxRetries": 3
-}
