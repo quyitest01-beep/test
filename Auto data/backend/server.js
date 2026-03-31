@@ -17,6 +17,7 @@ const queryCountRoutes = require('./routes/queryCount')
 const downloadRoutes = require('./routes/download')
 const larkDownloadRoutes = require('./routes/lark-download')
 const multiReportRoutes = require('./routes/multi-report-sender')
+const testRoutes = require('./routes/test-route')
 
 const app = express()
 const PORT = process.env.PORT || 8000
@@ -48,9 +49,10 @@ app.use('/api/query', queryEstimateRoutes)
 app.use('/api/query', progressiveQueryRoutes)
 app.use('/api/batch', batchQueryRoutes)
 app.use('/api/query-count', queryCountRoutes)
-app.use('/', downloadRoutes) // 通用下载路由，不需要/api前缀
-app.use('/', larkDownloadRoutes) // Lark文件下载路由
+app.use('/api', downloadRoutes) // 通用下载路由
+app.use('/api', larkDownloadRoutes) // Lark文件下载路由
 app.use('/api', multiReportRoutes) // 多报告发送API
+app.use('/api', testRoutes) // 测试路由
 
 // 404处理
 app.use('*', (req, res) => {

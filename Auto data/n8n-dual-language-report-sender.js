@@ -5,7 +5,7 @@ const items = $input.all();
 
 // 配置信息 - 🔴 请根据实际情况修改
 let webhookUrl = 'https://open.larksuite.com/open-apis/bot/v2/hook/51e34423-07f5-41f3-a484-cc2bdc6b3909'; // 🔴 替换为实际webhook
-let publicBaseUrl = 'https://integrity-trembl-bare-pole.trycloudflare.com'; // 🔴 替换为你的ngrok URL
+let publicBaseUrl = 'https://gmp-gmp-hxlxyr-9d2ede-18-141-240-9.traefik.me'; // Dokploy部署URL
 
 // 解析上游数据
 let fileKeys = [];
@@ -156,7 +156,7 @@ const downloadLinks = reports.map(report => {
   return {
     title: report.title,
     language: report.language,
-    downloadUrl: `${publicBaseUrl}/lark-download/${report.file_key}?filename=${encodedTitle}`
+    downloadUrl: `${publicBaseUrl}/api/lark-download/${report.file_key}?filename=${encodedTitle}`
   };
 });
 

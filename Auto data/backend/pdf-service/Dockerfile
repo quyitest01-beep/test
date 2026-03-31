@@ -18,14 +18,11 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 # 设置工作目录
 WORKDIR /app
 
-# 复制package.json
-COPY package*.json ./
+# 复制所有文件
+COPY . .
 
 # 安装依赖
-RUN npm ci --only=production
-
-# 复制应用代码
-COPY . .
+RUN npm install --omit=dev
 
 # 暴露端口
 EXPOSE 8787

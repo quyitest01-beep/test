@@ -214,8 +214,53 @@ if (!cleanedText) {
 } else if (merchantData.length === 0) {
   replyMessage = '抱歉，当前没有可用的商户数据';
 } else {
-  // 提取查询关键词
-  queryKeyword = cleanedText;
+  // 检查是否为"全部商户"指令
+  const listAllPatterns = [
+    /^(全部|所有|全体|列出|显示)(商户|商家)(列表|信息)?$/,
+    /^商户(列表|清单|名单)$/,
+    /^(list|show|all)\s*(merchants?|商户)$/i,
+    /^查看(全部|所有)商户$/
+  ];
+  
+  let isListAllCommand = false;
+  for (const pattern of listAllPatterns) {
+    if (pattern.test(cleanedText)) {
+      isListAllCommand = true;
+      searchType = 'list_all';
+      console.log(`✅ 识别到"全部商户"指令: ${pattern.source}`);
+      break;
+    }
+  }
+  
+  if (isListAllCommand) {
+    // 返回全部商户列表 - 结构化数据格式
+    console.log(`执行全部商户列表查询，共 ${merchantData.length} 个商户`);
+    
+    // 按商户ID排序
+    const sortedMerchants = [...merchantData].sort((a, b) => {
+      const idA = parseInt(a.merchant_id || a.id || 0);
+      const idB = parseInt(b.merchant_id || b.id || 0);
+      return idA - idB;
+    });
+    
+    // 构建结构化数据数组
+    const merchantList = sortedMerchants.map(merchant => ({
+      sub_merchant_name: cleanText(merchant.sub_merchant_name || merchant.name || '未知'),
+      main_merchant_name: cleanText(merchant.main_merchant_name || merchant.main_name || ''),
+      merchant_id: parseInt(merchant.merchant_id || merchant.id || 0)
+    }));
+    
+    // 生成简单的文本提示消息
+    replyMessage = `📋 已获取商户列表，共 ${merchantData.length} 个商户\n正在生成表格...`;
+    
+    console.log(`✅ 返回商户列表: ${merchantList.length} 个`);
+    
+    // 将商户列表数据添加到输出
+    searchType = 'list_all';
+    queryKeyword = 'list_all';
+  } else {
+    // 提取查询关键词
+    queryKeyword = cleanedText;
   
   // 处理各种中文格式
   const patterns = [
@@ -330,55 +375,83 @@ if (!cleanedText) {
                     `• 当前数据库共有 ${merchantData.length} 个商户`;
     }
   }
+  }
 }
 
 console.log(`\n生成的回复消息: ${replyMessage}`);
 
 // 5. 输出结果
-const outputData = {
-  // 回复消息（格式化文本）
-  replyMessage: replyMessage,
+// 如果是"全部商户"查询，返回多个items（每个商户一行）
+if (searchType === 'list_all') {
+  const sortedMerchants = [...merchantData].sort((a, b) => {
+    const idA = parseInt(a.merchant_id || a.id || 0);
+    const idB = parseInt(b.merchant_id || b.id || 0);
+    return idA - idB;
+  });
   
-  // Lark消息格式（用于HTTP Request）
-  larkMessage: {
-    msg_type: "text",
-    content: {
-      text: replyMessage
-    }
-  },
+  console.log(`\n=== 输出全部商户列表 ===`);
+  console.log(`商户数量: ${sortedMerchants.length}`);
   
-  // Lark回复参数（从事件数据中提取）
-  larkParams: larkParams,
+  // 为每个商户创建一个独立的item（每个商户一行）
+  sortedMerchants.forEach(merchant => {
+    results.push({
+      json: {
+        sub_merchant_name: cleanText(merchant.sub_merchant_name || merchant.name || '未知'),
+        main_merchant_name: cleanText(merchant.main_merchant_name || merchant.main_name || ''),
+        merchant_id: parseInt(merchant.merchant_id || merchant.id || 0)
+      }
+    });
+  });
   
-  // 完整的回复消息体（包含回复参数）
-  larkReply: {
-    msg_type: "text",
-    content: {
-      text: replyMessage
+  console.log(`✅ 已输出 ${results.length} 个商户items（每个商户一行）`);
+  
+} else {
+  // 其他查询类型，返回单个item
+  const outputData = {
+    // 回复消息（格式化文本）
+    replyMessage: replyMessage,
+    
+    // Lark消息格式（用于HTTP Request）
+    larkMessage: {
+      msg_type: "text",
+      content: {
+        text: replyMessage
+      }
     },
-    ...larkParams
-  },
-  
-  // 数据来源信息
-  dataSource: {
-    merchantCount: merchantData.length,
-    hasLarkEvent: !!larkEventData,
-    paramCount: Object.keys(larkParams).length,
-    queryText: cleanedText,
-    originalText: messageText,
-    queryKeyword: queryKeyword,
-    searchType: searchType
-  }
-};
+    
+    // Lark回复参数（从事件数据中提取）
+    larkParams: larkParams,
+    
+    // 完整的回复消息体（包含回复参数）
+    larkReply: {
+      msg_type: "text",
+      content: {
+        text: replyMessage
+      },
+      ...larkParams
+    },
+    
+    // 数据来源信息
+    dataSource: {
+      merchantCount: merchantData.length,
+      hasLarkEvent: !!larkEventData,
+      paramCount: Object.keys(larkParams).length,
+      queryText: cleanedText,
+      originalText: messageText,
+      queryKeyword: queryKeyword,
+      searchType: searchType
+    }
+  };
 
-console.log(`\n=== 最终输出 ===`);
-console.log(`输出字段: ${Object.keys(outputData).join(', ')}`);
-console.log(`Lark参数数量: ${Object.keys(larkParams).length}`);
-console.log(`商户数据数量: ${merchantData.length}`);
-console.log(`查询关键词: "${queryKeyword}"`);
-console.log(`搜索类型: ${searchType}`);
+  console.log(`\n=== 最终输出 ===`);
+  console.log(`输出字段: ${Object.keys(outputData).join(', ')}`);
+  console.log(`Lark参数数量: ${Object.keys(larkParams).length}`);
+  console.log(`商户数据数量: ${merchantData.length}`);
+  console.log(`查询关键词: "${queryKeyword}"`);
+  console.log(`搜索类型: ${searchType}`);
 
-results.push({json: outputData});
+  results.push({json: outputData});
+}
 return results;
 
 // 智能模糊匹配版特点：
@@ -388,8 +461,21 @@ return results;
 // 4. 相似度加分机制：首字母匹配、长度相似等
 // 5. 可配置的匹配阈值（默认60%）
 // 6. 显示匹配相似度百分比
-// 7. 支持的匹配示例：
+// 7. 支持"全部商户"指令，返回结构化数据数组
+// 8. 支持的匹配示例：
 //    - "togame" 匹配 "To game" (高相似度)
 //    - "betfiry" 匹配 "betfiery" (编辑距离匹配)
 //    - "tgame" 匹配 "To game" (部分匹配)
 //    - "togam" 匹配 "To game" (编辑距离匹配)
+// 9. 支持的"全部商户"指令：
+//    - "全部商户"、"所有商户"、"商户列表"
+//    - "list merchants"、"show all merchants"
+// 10. "全部商户"输出格式：
+//    - 返回多个items，每个商户一个item（CSV中每个商户一行）
+//    - 每个item格式: {sub_merchant_name, main_merchant_name, merchant_id}
+//    - 按merchant_id排序
+//    - Convert to File会生成竖向表格：
+//      sub_merchant_name,main_merchant_name,merchant_id
+//      betfiery,RD1,1698202251
+//      aajogo,RD1,1698202662
+//      rico100,RD1,1698202814
