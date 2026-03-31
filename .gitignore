@@ -1,1 +1,4 @@
-
+﻿# Only track test/ directory
+/*
+!test/
+!.gitignore
